@@ -77,6 +77,12 @@ export interface BaileysIncomingFields {
   pushName?: string;
   /** The account's own normalized JID, for from/to on outgoing messages. */
   selfJid?: string;
+  /** Pre-extracted media: mimetype + base64 data (+ optional filename). Populated by the adapter. */
+  media?: IncomingMessage['media'];
+  /** Pre-extracted location. Populated by the adapter for `locationMessage`. */
+  location?: IncomingMessage['location'];
+  /** Pre-extracted quoted message context. Populated by the adapter when `contextInfo` is present. */
+  quotedMessage?: IncomingMessage['quotedMessage'];
 }
 
 /**
@@ -115,6 +121,18 @@ export function buildIncomingMessageFromBaileys(fields: BaileysIncomingFields): 
 
   if (fields.pushName) {
     incoming.contact = { pushName: fields.pushName };
+  }
+
+  if (fields.media) {
+    incoming.media = fields.media;
+  }
+
+  if (fields.location) {
+    incoming.location = fields.location;
+  }
+
+  if (fields.quotedMessage) {
+    incoming.quotedMessage = fields.quotedMessage;
   }
 
   return incoming;

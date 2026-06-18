@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { BufferJSON } from '@whiskeysockets/baileys';
+import type * as BaileysLib from '@whiskeysockets/baileys';
 import type { WAMessage } from '@whiskeysockets/baileys';
 import { BaileysStoredMessage } from './baileys-stored-message.entity';
 import { BaileysMessageStore } from '../types/baileys.types';
@@ -13,6 +13,13 @@ function positiveIntFromEnv(name: string, fallback: number): number {
 
 @Injectable()
 export class BaileysMessageStoreService implements BaileysMessageStore {
+  /** Lazily loaded @whiskeysockets/baileys module (ESM-only; loaded on first use, not at boot). */
+  private baileysLib?: typeof BaileysLib;
+
+  private async loadLib(): Promise<typeof BaileysLib> {
+    return (this.baileysLib ??= await import('@whiskeysockets/baileys'));
+  }
+
   constructor(
     @InjectRepository(BaileysStoredMessage, 'data')
     private readonly repo: Repository<BaileysStoredMessage>,
@@ -23,9 +30,18 @@ export class BaileysMessageStoreService implements BaileysMessageStore {
     if (!waMessageId) {
       return;
     }
+    const { BufferJSON } = await this.loadLib();
     const serializedMessage = JSON.stringify(msg, BufferJSON.replacer);
     // Idempotent: the same message arrives from the send return AND the messages.upsert echo.
-    await this.repo.upsert({ sessionId, waMessageId, serializedMessage }, ['sessionId', 'waMessageId']);
+    // createdAt is set explicitly so the stored value carries millisecond precision — matching the
+    // :createdAt bound param used in enforceLimit(). Without this, SQLite's datetime('now') stores
+    // second-precision (e.g. '…:11') while the JS Date bound serializes as '…:11.000', and SQLite
+    // string-compares '…:11' < '…:11.000' = TRUE, causing every same-second row to be over-evicted
+    // and the store to be wiped to ~0 (C1).
+    await this.repo.upsert({ sessionId, waMessageId, serializedMessage, createdAt: new Date() }, [
+      'sessionId',
+      'waMessageId',
+    ]);
     await this.enforceLimit(sessionId);
   }
 
@@ -34,6 +50,7 @@ export class BaileysMessageStoreService implements BaileysMessageStore {
     if (!row) {
       return null;
     }
+    const { BufferJSON } = await this.loadLib();
     return JSON.parse(row.serializedMessage, BufferJSON.reviver) as WAMessage;
   }
 

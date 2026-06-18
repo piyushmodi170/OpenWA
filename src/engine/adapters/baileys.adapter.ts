@@ -1,10 +1,5 @@
 import * as path from 'path';
-import makeWASocket, {
-  DisconnectReason,
-  fetchLatestBaileysVersion,
-  getContentType,
-  useMultiFileAuthState,
-} from '@whiskeysockets/baileys';
+import type * as BaileysLib from '@whiskeysockets/baileys';
 import type { AnyMessageContent, MiscMessageGenerationOptions, WAMessage, WASocket } from '@whiskeysockets/baileys';
 import { buildIncomingMessageFromBaileys, mapBaileysStatus } from './baileys-message-mapper';
 import { mapBaileysGroup, mapBaileysGroupInfo } from './baileys-group-mapper';
@@ -30,6 +25,8 @@ import {
   PaginatedProducts,
   Product,
   ProductQueryOptions,
+  ReactionEvent,
+  RevokedMessage,
   Status,
   StatusResult,
   ChatSummary,
@@ -61,6 +58,8 @@ function createSilentLogger(): BaileysLogger {
 }
 
 export class BaileysAdapter implements IWhatsAppEngine {
+  private static readonly MAX_RECONNECT_ATTEMPTS = 5;
+
   private readonly logger = createLogger('BaileysAdapter');
   private readonly authPath: string;
   private readonly sessionStore = new BaileysSessionStore();
@@ -71,6 +70,15 @@ export class BaileysAdapter implements IWhatsAppEngine {
   private pushName: string | null = null;
   private callbacks: EngineEventCallbacks = {};
   private intentionalClose = false;
+  private connecting = false;
+  private reconnectAttempts = 0;
+  private reconnectTimer?: ReturnType<typeof setTimeout>;
+  /** Lazily loaded @whiskeysockets/baileys module (ESM-only; loaded on first connect, not at boot). */
+  private lib?: typeof BaileysLib;
+
+  private async loadLib(): Promise<typeof BaileysLib> {
+    return (this.lib ??= await import('@whiskeysockets/baileys'));
+  }
 
   constructor(private readonly config: BaileysAdapterConfig) {
     // Isolate each session's auth state under its own subdirectory of the shared auth dir.
@@ -89,15 +97,41 @@ export class BaileysAdapter implements IWhatsAppEngine {
   async initialize(callbacks: EngineEventCallbacks): Promise<void> {
     this.callbacks = callbacks;
     this.intentionalClose = false;
-    await this.connect();
+    try {
+      await this.connect();
+    } catch (err) {
+      this.setStatus(EngineStatus.FAILED);
+      this.callbacks.onError?.(err instanceof Error ? err.message : String(err));
+      throw err;
+    }
   }
 
   private async connect(): Promise<void> {
-    this.setStatus(EngineStatus.INITIALIZING);
-    const { state, saveCreds } = await useMultiFileAuthState(this.authPath);
-    const { version } = await fetchLatestBaileysVersion();
+    // I4: in-flight guard — skip if a connect() is already in progress.
+    if (this.connecting) {
+      return;
+    }
+    this.connecting = true;
+    try {
+      await this.connectInner();
+    } finally {
+      this.connecting = false;
+    }
+  }
 
-    const sock = makeWASocket({
+  private async connectInner(): Promise<void> {
+    this.setStatus(EngineStatus.INITIALIZING);
+    const b = await this.loadLib();
+    const { state, saveCreds } = await b.useMultiFileAuthState(this.authPath);
+    const { version } = await b.fetchLatestBaileysVersion();
+
+    // C2: resurrect-after-stop guard — if disconnect/logout/destroy ran during the awaits above,
+    // bail now so we don't create a live socket for a session that was intentionally stopped.
+    if (this.intentionalClose) {
+      return;
+    }
+
+    const sock = b.default({
       auth: state,
       version,
       browser: BAILEYS_BROWSER,
@@ -109,8 +143,7 @@ export class BaileysAdapter implements IWhatsAppEngine {
     });
     this.sock = sock;
 
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
-    sock.ev.on('creds.update', saveCreds);
+    sock.ev.on('creds.update', () => void saveCreds());
     sock.ev.on('connection.update', update => this.handleConnectionUpdate(update));
     sock.ev.on('messages.upsert', event => this.handleMessagesUpsert(event));
     sock.ev.on('messages.update', updates => this.handleMessagesUpdate(updates));
@@ -149,6 +182,8 @@ export class BaileysAdapter implements IWhatsAppEngine {
       this.qrCode = null;
       this.phoneNumber = this.extractPhone(this.sock?.user?.id);
       this.pushName = this.sock?.user?.name ?? null;
+      // I4: reset the reconnect counter on a successful connection.
+      this.reconnectAttempts = 0;
       this.setStatus(EngineStatus.READY);
       this.callbacks.onReady?.(this.phoneNumber ?? '', this.pushName ?? '');
     }
@@ -162,26 +197,49 @@ export class BaileysAdapter implements IWhatsAppEngine {
         return;
       }
 
-      if (statusCode === DisconnectReason.loggedOut) {
+      if (statusCode === this.lib?.DisconnectReason.loggedOut) {
         // Credentials invalidated — terminal. Re-linking requires a fresh QR/pairing.
         this.setStatus(EngineStatus.DISCONNECTED);
         this.callbacks.onDisconnected?.('logged out');
         return;
       }
 
-      // Recoverable (e.g. restartRequired right after pairing, transient drop) — reconnect.
+      // Recoverable (e.g. restartRequired right after pairing, transient drop) — reconnect with backoff.
       // Do NOT fire onDisconnected here; this is a transient drop, not a terminal disconnect.
       // connect() calls setStatus(INITIALIZING) which fires onStateChanged — that is the correct signal.
       this.logger.log('Baileys connection dropped; reconnecting', { statusCode });
-      this.connect().catch(err => {
+
+      // I4: capped exponential backoff with in-flight timer guard.
+      if (this.reconnectAttempts >= BaileysAdapter.MAX_RECONNECT_ATTEMPTS) {
         this.setStatus(EngineStatus.FAILED);
-        this.callbacks.onError?.(err instanceof Error ? err.message : String(err));
-      });
+        this.callbacks.onError?.(`reconnect attempts exhausted (${this.reconnectAttempts})`);
+        return;
+      }
+      this.reconnectAttempts += 1;
+      const delay = Math.min(30_000, 1_000 * 2 ** (this.reconnectAttempts - 1));
+      // Guard: if a timer is already pending, don't stack another one.
+      if (this.reconnectTimer) {
+        return;
+      }
+      this.reconnectTimer = setTimeout(() => {
+        this.reconnectTimer = undefined;
+        if (this.intentionalClose) {
+          return; // stopped while waiting — abort
+        }
+        void this.connect().catch(err => {
+          this.setStatus(EngineStatus.FAILED);
+          this.callbacks.onError?.(err instanceof Error ? err.message : String(err));
+        });
+      }, delay);
     }
   }
 
   disconnect(): Promise<void> {
     this.intentionalClose = true;
+    if (this.reconnectTimer) {
+      clearTimeout(this.reconnectTimer);
+      this.reconnectTimer = undefined;
+    }
     this.sock?.end(undefined);
     this.sock = null;
     this.setStatus(EngineStatus.DISCONNECTED);
@@ -190,6 +248,10 @@ export class BaileysAdapter implements IWhatsAppEngine {
 
   async logout(): Promise<void> {
     this.intentionalClose = true;
+    if (this.reconnectTimer) {
+      clearTimeout(this.reconnectTimer);
+      this.reconnectTimer = undefined;
+    }
     try {
       await this.sock?.logout();
     } catch (err) {
@@ -207,6 +269,10 @@ export class BaileysAdapter implements IWhatsAppEngine {
 
   destroy(): Promise<void> {
     this.intentionalClose = true;
+    if (this.reconnectTimer) {
+      clearTimeout(this.reconnectTimer);
+      this.reconnectTimer = undefined;
+    }
     this.sock?.end(undefined);
     this.sock = null;
     this.setStatus(EngineStatus.DISCONNECTED);
@@ -581,7 +647,53 @@ export class BaileysAdapter implements IWhatsAppEngine {
       if (!msg.message || !msg.key?.remoteJid) {
         continue; // protocol/empty messages carry no neutral content
       }
-      const incoming = this.mapMessage(msg);
+      void this.processInboundMessage(msg);
+    }
+  }
+
+  private async processInboundMessage(msg: WAMessage): Promise<void> {
+    try {
+      const b = await this.loadLib();
+      const remoteJid = msg.key.remoteJid!;
+      const contentType = b.getContentType(msg.message ?? undefined);
+
+      // --- protocolMessage REVOKE: don't emit onMessage ---
+      if (contentType === 'protocolMessage') {
+        const pm = msg.message?.protocolMessage;
+        if (pm?.type === b.proto.Message.ProtocolMessage.Type.REVOKE) {
+          const from = msg.key.fromMe === true ? this.normalizedSelfJid() : remoteJid;
+          const to = msg.key.fromMe === true ? remoteJid : this.normalizedSelfJid();
+          const revoked: RevokedMessage = {
+            id: pm.key?.id ?? '',
+            chatId: remoteJid,
+            from,
+            to,
+            type: 'revoked',
+            body: '',
+            timestamp: this.toUnixSeconds(msg.messageTimestamp),
+          };
+          this.callbacks.onMessageRevoked?.(revoked);
+          return;
+        }
+        // Other protocol messages (ephemeral, history sync, etc.) — skip silently.
+        return;
+      }
+
+      // --- reactionMessage: don't emit onMessage ---
+      if (contentType === 'reactionMessage') {
+        const rm = msg.message?.reactionMessage;
+        const event: ReactionEvent = {
+          messageId: rm?.key?.id ?? '',
+          chatId: remoteJid,
+          reaction: rm?.text ?? '',
+          senderId: msg.key.participant ?? remoteJid,
+        };
+        this.callbacks.onMessageReaction?.(event);
+        return;
+      }
+
+      // --- Normal message: enrich + emit ---
+      const incoming = await this.mapMessage(msg, contentType);
       if (msg.key.fromMe === true) {
         this.callbacks.onMessageCreate?.(incoming);
       } else {
@@ -593,6 +705,11 @@ export class BaileysAdapter implements IWhatsAppEngine {
         }),
       );
       this.sessionStore.recordMessage(msg);
+    } catch (err) {
+      this.logger.error(
+        `Unhandled error processing inbound message (id=${msg.key?.id ?? 'unknown'}); dropping`,
+        err instanceof Error ? err.message : String(err),
+      );
     }
   }
 
@@ -607,10 +724,108 @@ export class BaileysAdapter implements IWhatsAppEngine {
     }
   }
 
-  private mapMessage(msg: WAMessage): IncomingMessage {
+  private async mapMessage(msg: WAMessage, contentType: string | undefined): Promise<IncomingMessage> {
+    const b = await this.loadLib();
     const content = msg.message ?? {};
-    const contentType = getContentType(msg.message ?? undefined);
-    const body = content.conversation ?? content.extendedTextMessage?.text ?? '';
+
+    // Body: text first, then media caption as fallback.
+    const body =
+      content.conversation ??
+      content.extendedTextMessage?.text ??
+      content.imageMessage?.caption ??
+      content.videoMessage?.caption ??
+      content.documentMessage?.caption ??
+      '';
+
+    // --- location ---
+    // ILocationMessage has name/address; ILiveLocationMessage does not — use the static variant only.
+    let location: IncomingMessage['location'];
+    if (contentType === 'locationMessage' || contentType === 'liveLocationMessage') {
+      const lm = content.locationMessage ?? content.liveLocationMessage;
+      if (lm) {
+        const staticLm = content.locationMessage; // only ILocationMessage has name/address
+        location = {
+          latitude: lm.degreesLatitude ?? 0,
+          longitude: lm.degreesLongitude ?? 0,
+          description: staticLm?.name ?? undefined,
+          address: staticLm?.address ?? undefined,
+        };
+      }
+    }
+
+    // --- media (image / video / audio / document / sticker) ---
+    let media: IncomingMessage['media'];
+    const isMediaType =
+      contentType === 'imageMessage' ||
+      contentType === 'videoMessage' ||
+      contentType === 'audioMessage' ||
+      contentType === 'documentMessage' ||
+      contentType === 'documentWithCaptionMessage' ||
+      contentType === 'stickerMessage';
+    if (isMediaType) {
+      try {
+        const buf = await b.downloadMediaMessage(
+          msg,
+          'buffer',
+          {},
+          {
+            logger: createSilentLogger(),
+            reuploadRequest: this.sock!.updateMediaMessage,
+          },
+        );
+        // normalizeMessageContent unwraps documentWithCaptionMessage / viewOnceMessage /
+        // ephemeralMessage wrappers so we always reach the inner media sub-message.
+        const normalizedContent = b.normalizeMessageContent(content) ?? content;
+        const subMessage =
+          normalizedContent.imageMessage ??
+          normalizedContent.videoMessage ??
+          normalizedContent.audioMessage ??
+          normalizedContent.documentMessage ??
+          normalizedContent.stickerMessage;
+        const mimetype = subMessage?.mimetype ?? '';
+        const filename = normalizedContent.documentMessage?.fileName ?? undefined;
+        media = { mimetype, data: buf.toString('base64'), filename };
+      } catch (err) {
+        this.logger.debug('Failed to download inbound media; emitting message without media', {
+          error: err instanceof Error ? err.message : String(err),
+          msgId: msg.key.id,
+        });
+      }
+    }
+
+    // --- quoted message ---
+    let quotedMessage: IncomingMessage['quotedMessage'];
+    const subForContext =
+      content.extendedTextMessage ??
+      content.imageMessage ??
+      content.videoMessage ??
+      content.audioMessage ??
+      content.documentMessage ??
+      content.stickerMessage ??
+      content.locationMessage;
+    const contextInfo = (
+      subForContext as
+        | { contextInfo?: { stanzaId?: string | null; quotedMessage?: Record<string, unknown> | null } }
+        | undefined
+    )?.contextInfo;
+    if (contextInfo?.quotedMessage && contextInfo.stanzaId) {
+      const qm = contextInfo.quotedMessage as {
+        conversation?: string | null;
+        extendedTextMessage?: { text?: string | null } | null;
+        imageMessage?: { caption?: string | null } | null;
+        videoMessage?: { caption?: string | null } | null;
+        documentMessage?: { caption?: string | null } | null;
+      };
+      const qBody =
+        qm.conversation ??
+        qm.extendedTextMessage?.text ??
+        qm.imageMessage?.caption ??
+        qm.videoMessage?.caption ??
+        qm.documentMessage?.caption ??
+        '';
+      quotedMessage = { id: contextInfo.stanzaId, body: qBody };
+    }
+
     return buildIncomingMessageFromBaileys({
       id: msg.key.id ?? '',
       remoteJid: msg.key.remoteJid!,
@@ -622,6 +837,9 @@ export class BaileysAdapter implements IWhatsAppEngine {
       timestamp: this.toUnixSeconds(msg.messageTimestamp),
       pushName: msg.pushName ?? undefined,
       selfJid: this.normalizedSelfJid(),
+      media,
+      location,
+      quotedMessage,
     });
   }
 
