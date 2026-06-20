@@ -15,6 +15,30 @@ export default defineConfig({
     __APP_VERSION__: JSON.stringify(process.env.APP_VERSION || pkgVersion),
     __BUILD_TIME__: JSON.stringify(new Date().toISOString()),
   },
+  build: {
+    chunkSizeWarningLimit: 1000,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules/react-dom') || id.includes('node_modules/react/') || id.includes('node_modules/react-router-dom')) {
+            return 'vendor-react';
+          }
+          if (id.includes('node_modules/i18next') || id.includes('node_modules/react-i18next')) {
+            return 'vendor-i18n';
+          }
+          if (id.includes('node_modules/@tanstack')) {
+            return 'vendor-query';
+          }
+          if (id.includes('node_modules/socket.io-client') || id.includes('node_modules/engine.io-client')) {
+            return 'vendor-socket';
+          }
+          if (id.includes('node_modules/lucide-react')) {
+            return 'vendor-icons';
+          }
+        },
+      },
+    },
+  },
   server: {
     host: '0.0.0.0',
     port: 5000,
