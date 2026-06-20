@@ -244,14 +244,14 @@
       "error": "Errore"
     },
     "forceKill": {
-      "title": "Kill Stuck Session",
-      "message": "Are you sure you want to force-kill session \"{{name}}\"?",
-      "warning": "This will forcefully terminate the WhatsApp browser process. The session may need to be re-scanned on restart.",
-      "confirm": "Kill Session",
-      "successTitle": "Session Killed",
-      "success": "Session has been force-killed. You can restart it now.",
-      "failedTitle": "Force-Kill Failed",
-      "failed": "Failed to force-kill the session."
+      "title": "Termina sessione bloccata",
+      "message": "Sei sicuro di voler terminare forzatamente la sessione \"{{name}}\"?",
+      "warning": "Questa operazione terminerà forzatamente il processo del browser WhatsApp. Potrebbe essere necessario eseguire una nuova scansione della sessione al riavvio.",
+      "confirm": "Termina sessione",
+      "successTitle": "Sessione terminata",
+      "success": "La sessione è stata terminata forzatamente. Puoi riavviarla ora.",
+      "failedTitle": "Terminazione forzata non riuscita",
+      "failed": "Impossibile terminare forzatamente la sessione."
     }
   },
   "webhooks": {

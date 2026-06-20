@@ -11,9 +11,13 @@ import { TemplateService } from '../template/template.service';
 import { renderTemplate } from '../../common/utils/template-render';
 import { createLogger } from '../../common/services/logger.service';
 import { SsrfBlockedError } from '../../common/security/ssrf-guard';
+import { userPart } from '../../engine/identity/wa-id';
+import { LidMappingStoreService } from '../../engine/identity/lid-mapping-store.service';
 
 export interface GetMessagesOptions {
   chatId?: string;
+  /** Filter by sender. A phone matches stored `@c.us`/`@s.whatsapp.net` ids AND any lid resolving to it. */
+  from?: string;
   limit?: number;
   offset?: number;
 }
@@ -28,6 +32,7 @@ export class MessageService {
     private readonly sessionService: SessionService,
     private readonly hookManager: HookManager,
     private readonly templateService: TemplateService,
+    private readonly lidMappingStore: LidMappingStoreService,
   ) {}
 
   async sendText(sessionId: string, dto: SendTextMessageDto): Promise<MessageResponseDto> {
@@ -253,7 +258,7 @@ export class MessageService {
     sessionId: string,
     options: GetMessagesOptions = {},
   ): Promise<{ messages: Message[]; total: number }> {
-    const { chatId } = options;
+    const { chatId, from } = options;
     // Sanitize pagination: a non-finite limit/offset — e.g. `?limit=abc` -> NaN —
     // must never reach TypeORM's take()/skip(). Clamp to sane bounds; fall back to defaults.
     const rawLimit = options.limit;
@@ -270,11 +275,35 @@ export class MessageService {
       .take(limit);
 
     if (chatId) {
-      query.andWhere('message.chatId = :chatId', { chatId });
+      // Match across dialects: a stored chatId may be `@s.whatsapp.net` (e.g. an outbound send addressed
+      // by a raw engine id) while the caller filters by the neutral `@c.us` from the chat list - same
+      // chat, different dialect. Resolving both sides through the table keeps them equal.
+      query.andWhere('message.chatId IN (:...chatIds)', { chatIds: this.resolveJidCandidates(chatId) });
+    }
+
+    if (from) {
+      // Resolve the filter through the lid->phone table so a phone matches not just the stored
+      // `<phone>@c.us` id but also any lid that resolves to the same person - turning the prior
+      // silent miss (a lid-stored author vs a phone filter) into a hit.
+      query.andWhere('message.from IN (:...froms)', { froms: this.resolveJidCandidates(from) });
     }
 
     const [messages, total] = await query.getManyAndCount();
     return { messages, total };
+  }
+
+  /**
+   * Expand a JID filter into every stored id that refers to the same chat/person: the literal input (so
+   * an exact group/lid filter still matches), the user-part in both user dialects (`@c.us` /
+   * `@s.whatsapp.net`), and every lid the resolution table maps to that phone.
+   */
+  private resolveJidCandidates(value: string): string[] {
+    const phone = userPart(value);
+    const candidates = new Set<string>([value, `${phone}@c.us`, `${phone}@s.whatsapp.net`]);
+    for (const lid of this.lidMappingStore.lidsForPhone(phone)) {
+      candidates.add(`${lid}@lid`);
+    }
+    return [...candidates];
   }
 
   // ========== Phase 3: Extended Messaging ==========
