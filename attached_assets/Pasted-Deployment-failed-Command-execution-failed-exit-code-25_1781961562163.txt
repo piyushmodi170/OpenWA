@@ -1,0 +1,404 @@
+Deployment failed: Command execution failed (exit code 255): docker exec ah0qskplj95uhg88u9b58hbo bash -c 'bash /artifacts/build.sh'
+2026-Jun-20 13:17:58.763981
+Error: #0 building with "default" instance using docker driver
+2026-Jun-20 13:17:58.763981
+2026-Jun-20 13:17:58.763981
+#1 [internal] load build definition from Dockerfile
+2026-Jun-20 13:17:58.763981
+#1 transferring dockerfile: 7.28kB done
+2026-Jun-20 13:17:58.763981
+#1 DONE 0.0s
+2026-Jun-20 13:17:58.763981
+2026-Jun-20 13:17:58.763981
+#2 [internal] load metadata for docker.io/library/node:22-slim
+2026-Jun-20 13:17:58.763981
+#2 DONE 1.2s
+2026-Jun-20 13:17:58.763981
+2026-Jun-20 13:17:58.763981
+#3 [internal] load .dockerignore
+2026-Jun-20 13:17:58.763981
+#3 transferring context: 389B done
+2026-Jun-20 13:17:58.763981
+#3 DONE 0.0s
+2026-Jun-20 13:17:58.763981
+2026-Jun-20 13:17:58.763981
+#4 [internal] load build context
+2026-Jun-20 13:17:58.763981
+#4 DONE 0.0s
+2026-Jun-20 13:17:58.763981
+2026-Jun-20 13:17:58.763981
+#5 [builder 1/8] FROM docker.io/library/node:22-slim@sha256:d9f850096136edbc402debdd8729579a288aac64574ada0ff4db26b6ae58b0b2
+2026-Jun-20 13:17:58.763981
+#5 resolve docker.io/library/node:22-slim@sha256:d9f850096136edbc402debdd8729579a288aac64574ada0ff4db26b6ae58b0b2 0.0s done
+2026-Jun-20 13:17:58.763981
+#5 DONE 0.0s
+2026-Jun-20 13:17:58.763981
+2026-Jun-20 13:17:58.763981
+#4 [internal] load build context
+2026-Jun-20 13:17:58.763981
+#4 transferring context: 9.05MB 0.2s done
+2026-Jun-20 13:17:58.763981
+#4 DONE 0.3s
+2026-Jun-20 13:17:58.763981
+2026-Jun-20 13:17:58.763981
+#6 [builder 2/8] WORKDIR /app
+2026-Jun-20 13:17:58.763981
+#6 CACHED
+2026-Jun-20 13:17:58.763981
+2026-Jun-20 13:17:58.763981
+#7 [builder 3/8] RUN apt-get update && apt-get install -y     python3     make     g++     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 13:17:58.763981
+#7 CACHED
+2026-Jun-20 13:17:58.763981
+2026-Jun-20 13:17:58.763981
+#8 [builder 4/8] COPY package*.json ./
+2026-Jun-20 13:17:58.763981
+#8 CACHED
+2026-Jun-20 13:17:58.763981
+2026-Jun-20 13:17:58.763981
+#9 [builder 5/8] RUN sed -i 's|http://package-firewall\.replit\.local/npm/|https:<REDACTED>@types/uuid@11.0.0: This is a stub types definition. uuid provides its own type definitions, so you do not need this installed.
+2026-Jun-20 13:17:58.763981
+#15 ...
+2026-Jun-20 13:17:58.763981
+2026-Jun-20 13:17:58.763981
+#16 [production  7/12] RUN npm ci --omit=dev && npm cache clean --force
+2026-Jun-20 13:17:58.763981
+#16 61.84
+2026-Jun-20 13:17:58.763981
+#16 61.84 > openwa@0.4.5 postinstall
+2026-Jun-20 13:17:58.763981
+#16 61.84 > node -e "if (require('fs').existsSync('dashboard')) require('child_process').spawnSync('npm', ['run', 'dashboard:install'], { stdio: 'inherit', shell: true });"
+2026-Jun-20 13:17:58.763981
+#16 61.84
+2026-Jun-20 13:17:58.763981
+#16 62.01
+2026-Jun-20 13:17:58.763981
+#16 62.01 added 703 packages, and audited 704 packages in 1m
+2026-Jun-20 13:17:58.763981
+#16 62.01
+2026-Jun-20 13:17:58.763981
+#16 62.02 113 packages are looking for funding
+2026-Jun-20 13:17:58.763981
+#16 62.02   run `npm fund` for details
+2026-Jun-20 13:17:58.763981
+#16 62.15
+2026-Jun-20 13:17:58.763981
+#16 62.15 22 vulnerabilities (2 low, 1 moderate, 19 high)
+2026-Jun-20 13:17:58.763981
+#16 62.15
+2026-Jun-20 13:17:58.763981
+#16 62.15 To address all issues possible (including breaking changes), run:
+2026-Jun-20 13:17:58.763981
+#16 62.15   npm audit fix --force
+2026-Jun-20 13:17:58.763981
+#16 62.15
+2026-Jun-20 13:17:58.763981
+#16 62.15 Some issues need review, and may require choosing
+2026-Jun-20 13:17:58.763981
+#16 62.15 a different dependency.
+2026-Jun-20 13:17:58.763981
+#16 62.15
+2026-Jun-20 13:17:58.763981
+#16 62.15 Run `npm audit` for details.
+2026-Jun-20 13:17:58.763981
+#16 62.16 npm notice
+2026-Jun-20 13:17:58.763981
+#16 62.16 npm notice New major version of npm available! 10.9.8 -> 11.17.0
+2026-Jun-20 13:17:58.763981
+#16 62.16 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.17.0
+2026-Jun-20 13:17:58.763981
+#16 62.16 npm notice To update run:<REDACTED>@11.17.0
+2026-Jun-20 13:17:58.763981
+#16 62.16 npm notice
+2026-Jun-20 13:17:58.763981
+#16 62.61 npm warn using --force Recommended protections disabled.
+2026-Jun-20 13:17:58.763981
+#16 DONE 65.1s
+2026-Jun-20 13:17:58.763981
+2026-Jun-20 13:17:58.763981
+#15 [builder 6/8] RUN npm ci
+2026-Jun-20 13:17:58.763981
+#15 91.68
+2026-Jun-20 13:17:58.763981
+#15 91.68 > openwa@0.4.5 postinstall
+2026-Jun-20 13:17:58.763981
+#15 91.68 > node -e "if (require('fs').existsSync('dashboard')) require('child_process').spawnSync('npm', ['run', 'dashboard:install'], { stdio: 'inherit', shell: true });"
+2026-Jun-20 13:17:58.763981
+#15 91.68
+2026-Jun-20 13:17:58.763981
+#15 91.79
+2026-Jun-20 13:17:58.763981
+#15 91.79 added 1212 packages, and audited 1213 packages in 2m
+2026-Jun-20 13:17:58.763981
+#15 91.79
+2026-Jun-20 13:17:58.763981
+#15 91.79 205 packages are looking for funding
+2026-Jun-20 13:17:58.763981
+#15 91.79   run `npm fund` for details
+2026-Jun-20 13:17:58.763981
+#15 91.95
+2026-Jun-20 13:17:58.763981
+#15 91.95 40 vulnerabilities (2 low, 18 moderate, 20 high)
+2026-Jun-20 13:17:58.763981
+#15 91.95
+2026-Jun-20 13:17:58.763981
+#15 91.95 To address issues that do not require attention, run:
+2026-Jun-20 13:17:58.763981
+#15 91.95   npm audit fix
+2026-Jun-20 13:17:58.763981
+#15 91.95
+2026-Jun-20 13:17:58.763981
+#15 91.95 To address all issues possible (including breaking changes), run:
+2026-Jun-20 13:17:58.763981
+#15 91.95   npm audit fix --force
+2026-Jun-20 13:17:58.763981
+#15 91.95
+2026-Jun-20 13:17:58.763981
+#15 91.95 Some issues need review, and may require choosing
+2026-Jun-20 13:17:58.763981
+#15 91.95 a different dependency.
+2026-Jun-20 13:17:58.763981
+#15 91.95
+2026-Jun-20 13:17:58.763981
+#15 91.95 Run `npm audit` for details.
+2026-Jun-20 13:17:58.763981
+#15 91.95 npm notice
+2026-Jun-20 13:17:58.763981
+#15 91.95 npm notice New major version of npm available! 10.9.8 -> 11.17.0
+2026-Jun-20 13:17:58.763981
+#15 91.95 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.17.0
+2026-Jun-20 13:17:58.763981
+#15 91.95 npm notice To update run:<REDACTED>@11.17.0
+2026-Jun-20 13:17:58.763981
+#15 91.95 npm notice
+2026-Jun-20 13:17:58.763981
+#15 DONE 92.8s
+2026-Jun-20 13:17:58.763981
+2026-Jun-20 13:17:58.763981
+#17 [builder 7/8] COPY . .
+2026-Jun-20 13:17:58.763981
+#17 DONE 1.3s
+2026-Jun-20 13:17:58.763981
+2026-Jun-20 13:17:58.763981
+#18 [builder 8/8] RUN npm run build && npm run dashboard:ci && npm run dashboard:build
+2026-Jun-20 13:17:58.763981
+#18 0.381
+2026-Jun-20 13:17:58.763981
+#18 0.381 > openwa@0.4.5 build
+2026-Jun-20 13:17:58.763981
+#18 0.381 > nest build
+2026-Jun-20 13:17:58.763981
+#18 0.381
+2026-Jun-20 13:17:58.763981
+#18 16.30
+2026-Jun-20 13:17:58.763981
+#18 16.30 > openwa@0.4.5 dashboard:ci
+2026-Jun-20 13:17:58.763981
+#18 16.30 > cd dashboard && npm ci
+2026-Jun-20 13:17:58.763981
+#18 16.30
+2026-Jun-20 13:17:58.763981
+#18 30.28
+2026-Jun-20 13:17:58.763981
+#18 30.28 added 176 packages, and audited 177 packages in 14s
+2026-Jun-20 13:17:58.763981
+#18 30.28
+2026-Jun-20 13:17:58.763981
+#18 30.28 49 packages are looking for funding
+2026-Jun-20 13:17:58.763981
+#18 30.28   run `npm fund` for details
+2026-Jun-20 13:17:58.763981
+#18 30.28
+2026-Jun-20 13:17:58.763981
+#18 30.28 found 0 vulnerabilities
+2026-Jun-20 13:17:58.763981
+#18 30.48
+2026-Jun-20 13:17:58.763981
+#18 30.48 > openwa@0.4.5 dashboard:build
+2026-Jun-20 13:17:58.763981
+#18 30.48 > cd dashboard && npm run build
+2026-Jun-20 13:17:58.763981
+#18 30.48
+2026-Jun-20 13:17:58.763981
+#18 30.63
+2026-Jun-20 13:17:58.763981
+#18 30.63 > dashboard@0.4.5 build
+2026-Jun-20 13:17:58.763981
+#18 30.63 > tsc -b && vite build
+2026-Jun-20 13:17:58.763981
+#18 30.63
+2026-Jun-20 13:17:58.763981
+#18 42.04 vite v8.0.16 building client environment for production...
+2026-Jun-20 13:17:58.763981
+#18 42.11 [2K
+transforming...✓ 1915 modules transformed.
+2026-Jun-20 13:17:58.763981
+#18 45.68 rendering chunks...
+2026-Jun-20 13:17:58.763981
+#18 46.43 computing gzip size...
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/index.html                            0.53 kB │ gzip:   0.32 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/postgresql-CvVbp3ks.svg       13.31 kB │ gzip:   6.38 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/PageHeader-bSeRVrlv.css        0.89 kB │ gzip:   0.35 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/Login-0qQ3Q-6B.css             3.41 kB │ gzip:   1.05 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/MessageTester-Dsa9T380.css     3.56 kB │ gzip:   1.07 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/Dashboard-BFNk9zXr.css         4.59 kB │ gzip:   1.29 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/Broadcast-D-7D20pD.css         4.73 kB │ gzip:   1.31 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/Logs-ZpWkNjx2.css              4.97 kB │ gzip:   1.29 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/Templates-BWVPCDHm.css         5.64 kB │ gzip:   1.47 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/ApiKeys-Bn-8zCBv.css           6.21 kB │ gzip:   1.50 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/Infrastructure-DQqz09tX.css    7.41 kB │ gzip:   1.80 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/Plugins-IDIfZuG8.css           7.59 kB │ gzip:   1.84 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/Webhooks-CKgLDbMC.css          7.74 kB │ gzip:   1.97 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/Sessions-Dt62oSMB.css          9.41 kB │ gzip:   2.21 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/Chats-q8eanvMo.css            14.46 kB │ gzip:   2.87 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/index-ny02k9ai.css            15.56 kB │ gzip:   3.94 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/check-D4_Q7BBf.js              0.11 kB │ gzip:   0.12 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/square-5I7j6Uv2.js             0.13 kB │ gzip:   0.14 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/plus-B9pxDgh9.js               0.14 kB │ gzip:   0.13 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/search-DQK0glwL.js             0.16 kB │ gzip:   0.16 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/play-BMJyz4Oq.js               0.17 kB │ gzip:   0.16 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/database-UaR30XUa.js           0.23 kB │ gzip:   0.19 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/external-link-CQDAxqoo.js      0.23 kB │ gzip:   0.18 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/eye-DOt-vUpA.js                0.24 kB │ gzip:   0.19 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/funnel-D7szJWwc.js             0.24 kB │ gzip:   0.20 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/triangle-alert-DbvUi-Xq.js     0.25 kB │ gzip:   0.20 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/square-pen-CesD2YdO.js         0.30 kB │ gzip:   0.22 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/trash-2-BNkfTseo.js            0.31 kB │ gzip:   0.20 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/eye-off-CNNd4l5D.js            0.41 kB │ gzip:   0.26 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/clipboard-Dpu8azMr.js          0.60 kB │ gzip:   0.41 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/PageHeader-4QzC3XKB.js         1.16 kB │ gzip:   0.44 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/Login-Davro2pf.js              5.38 kB │ gzip:   1.97 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/Dashboard-Dd-74Kb9.js          6.95 kB │ gzip:   1.99 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/Logs-Clgti_dR.js               7.37 kB │ gzip:   2.02 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/Trans-CCquW2kZ.js              9.30 kB │ gzip:   3.99 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/Broadcast-uA8CqhHn.js         10.33 kB │ gzip:   2.72 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/MessageTester-DCLSWBYh.js     10.90 kB │ gzip:   2.33 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/Templates-Qr9704PK.js         14.01 kB │ gzip:   2.99 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/queries-BGIT9CLf.js           14.51 kB │ gzip:   4.73 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/Webhooks-Dqh4rRUa.js          16.80 kB │ gzip:   3.29 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/Plugins-TdsqZC6A.js           20.04 kB │ gzip:   4.26 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/Chats-D5EB-dVR.js             24.93 kB │ gzip:   6.28 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/Sessions-CmxqZMzL.js          26.30 kB │ gzip:   4.87 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/api-B8v7_WHq.js               31.97 kB │ gzip:  10.24 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/Infrastructure-DVYZN4Mc.js    48.84 kB │ gzip:   8.85 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/useWebSocket-B6ZvhGBu.js      49.49 kB │ gzip:  15.85 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/ApiKeys-BfvV4Nap.js           59.73 kB │ gzip:  15.20 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47 dist/assets/index-Sa6hdI7g.js            702.89 kB │ gzip: 206.21 kB
+2026-Jun-20 13:17:58.763981
+#18 46.47
+2026-Jun-20 13:17:58.763981
+#18 46.47 [plugin builtin:vite-reporter]
+2026-Jun-20 13:17:58.763981
+#18 46.47 (!) Some chunks are larger than 500 kB after minification. Consider:
+2026-Jun-20 13:17:58.763981
+#18 46.47 - Using dynamic import() to code-split the application
+2026-Jun-20 13:17:58.763981
+#18 46.47 - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+2026-Jun-20 13:17:58.763981
+#18 46.47 - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+2026-Jun-20 13:17:58.763981
+#18 46.47 ✓ built in 4.43s
+2026-Jun-20 13:17:58.763981
+#18 DONE 47.6s
+2026-Jun-20 13:17:58.763981
+2026-Jun-20 13:17:58.763981
+#19 [production  8/12] COPY --from=builder /app/dist ./dist
+2026-Jun-20 13:17:58.763981
+#19 DONE 1.7s
+2026-Jun-20 13:17:58.763981
+2026-Jun-20 13:17:58.763981
+#20 [production  9/12] COPY --from=builder /app/dashboard/dist ./dashboard/dist
+2026-Jun-20 13:17:58.763981
+#20 DONE 0.1s
+2026-Jun-20 13:17:58.763981
+2026-Jun-20 13:17:58.763981
+#21 [production 10/12] RUN mkdir -p ./data/sessions ./data/media &&     chown -R openwa:openwa /app
+2026-Jun-20 13:17:58.763981
+#21 DONE 97.9s
+2026-Jun-20 13:17:58.763981
+2026-Jun-20 13:17:58.763981
+#22 [production 11/12] COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+2026-Jun-20 13:17:58.763981
+#22 DONE 0.4s
+2026-Jun-20 13:17:58.763981
+2026-Jun-20 13:17:58.763981
+#23 [production 12/12] RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+2026-Jun-20 13:17:58.763981
+#23 DONE 0.1s
+2026-Jun-20 13:17:58.763981
+2026-Jun-20 13:17:58.763981
+#24 exporting to image
+2026-Jun-20 13:17:58.763981
+#24 exporting layers
+2026-Jun-20 13:17:58.792771
+Error type: App\Exceptions\DeploymentException
+2026-Jun-20 13:17:58.842023
+Error code: 0
+2026-Jun-20 13:17:58.905749
+Location: /var/www/html/app/Traits/ExecuteRemoteCommand.php:242
+2026-Jun-20 13:17:58.971184
+Stack trace (first 5 lines):
+2026-Jun-20 13:17:58.986794
+#0 /var/www/html/app/Traits/ExecuteRemoteCommand.php(106): App\Jobs\ApplicationDeploymentJob->executeCommandWithProcess()
+2026-Jun-20 13:17:59.016568
+#1 /var/www/html/vendor/laravel/framework/src/Illuminate/Collections/Traits/EnumeratesValues.php(275): App\Jobs\ApplicationDeploymentJob->{closure:App\Traits\ExecuteRemoteCommand::execute_remote_command():72}()
+2026-Jun-20 13:17:59.041852
+#2 /var/www/html/app/Traits/ExecuteRemoteCommand.php(72): Illuminate\Support\Collection->each()
+2026-Jun-20 13:17:59.080538
+#3 /var/www/html/app/Jobs/ApplicationDeploymentJob.php(3821): App\Jobs\ApplicationDeploymentJob->execute_remote_command()
+2026-Jun-20 13:17:59.128759
+#4 /var/www/html/app/Jobs/ApplicationDeploymentJob.php(912): App\Jobs\ApplicationDeploymentJob->build_image()
+2026-Jun-20 13:17:59.189285
+========================================
+2026-Jun-20 13:17:59.242312
+Deployment failed. Removing the new version of your application.
+2026-Jun-20 13:18:00.237047
+Gracefully shutting down build container: ah0qskplj95uhg88u9b58hbo
