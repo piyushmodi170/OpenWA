@@ -1,0 +1,474 @@
+2026-Jun-20 12:05:33.304100 Docker 29.5.3 with BuildKit and Buildx detected on deployment server (localhost).
+2026-Jun-20 12:05:33.313252 Starting deployment of <REDACTED>:piyushmodi170/OpenWA:main to localhost.
+2026-Jun-20 12:05:33.777013 Preparing container with helper image: ghcr.io/coollabsio/coolify-helper:1.0.14
+2026-Jun-20 12:05:33.972572 [CMD]: docker stop --time=30 ttiy67mjjw11wkoo53i07dya
+2026-Jun-20 12:05:33.972572 Flag --time has been deprecated, use --timeout instead
+2026-Jun-20 12:05:33.987246 Error response from daemon: No such container: ttiy67mjjw11wkoo53i07dya
+2026-Jun-20 12:05:34.332289 [CMD]: docker run -d --network 'coolify' --name ttiy67mjjw11wkoo53i07dya --rm -v /root/.docker/buildx:/root/.docker/buildx -v /var/run/docker.sock:/var/run/docker.sock ghcr.io/coollabsio/coolify-helper:1.0.14
+2026-Jun-20 12:05:34.332289 dcee533bb3dc2f40c1bc6f4ea3db946b9c814ee2024c47f34cab05ea314c4515
+2026-Jun-20 12:05:38.276711 [CMD]: docker exec ttiy67mjjw11wkoo53i07dya bash -c 'GIT_SSH_COMMAND="ssh -o ConnectTimeout=30 -p 22 -o Port=22 -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /root/.ssh/id_rsa_coolify_ttiy67mjjw11wkoo53i07dya -o IdentitiesOnly=yes" git ls-remote '\''<REDACTED>:piyushmodi170/OpenWA'\'' '\''refs/heads/main'\'''
+2026-Jun-20 12:05:38.276711 fd4e08b7ff057af3a05e9138c3b666ea47cd9a20 refs/heads/main
+2026-Jun-20 12:05:38.483332 ----------------------------------------
+2026-Jun-20 12:05:38.491244 Importing <REDACTED>:piyushmodi170/OpenWA:main (commit sha fd4e08b7ff057af3a05e9138c3b666ea47cd9a20) to /artifacts/ttiy67mjjw11wkoo53i07dya.
+2026-Jun-20 12:05:38.994481 [CMD]: docker exec ttiy67mjjw11wkoo53i07dya bash -c 'mkdir -p /root/.ssh' && docker exec ttiy67mjjw11wkoo53i07dya bash -c 'echo '\''LS0tLS1CRUdJTiBPUEVOU1NIIFBSSVZBVEUgS0VZLS0tLS0KYjNCbGJuTnphQzFyWlhrdGRqRUFBQUFBQkc1dmJtVUFBQUFFYm05dVpRQUFBQUFBQUFBQkFBQUFNd0FBQUF0emMyZ3RaVwpReU5UVXhPUUFBQUNBWGVnbUFVT2tPcVV3UEFmQW1sU1NOMTZ6SXNFcXpWSzVXVFFZd0tFK3Bod0FBQUtBZUtFSTZIaWhDCk9nQUFBQXR6YzJndFpXUXlOVFV4T1FBQUFDQVhlZ21BVU9rT3FVd1BBZkFtbFNTTjE2eklzRXF6Vks1V1RRWXdLRStwaHcKQUFBRUNsVTZZaFhVc3NsSUJSUDlQK3NjVUdHdTczR0hWK3FGdzl5amVGTEl1Ymt4ZDZDWUJRNlE2cFRBOEI4Q2FWSkkzWApyTWl3U3JOVXJsWk5CakFvVDZtSEFBQUFGM0JvY0hObFkyeHBZaTFuWlc1bGNtRjBaV1F0YTJWNUFRSURCQVVHCi0tLS0tRU5EIE9QRU5TU0ggUFJJVkFURSBLRVktLS0tLQo='\'' | base64 -d | tee /root/.ssh/id_rsa_coolify_ttiy67mjjw11wkoo53i07dya > /dev/null' && docker exec ttiy67mjjw11wkoo53i07dya bash -c 'chmod 600 /root/.ssh/id_rsa_coolify_ttiy67mjjw11wkoo53i07dya' && docker exec ttiy67mjjw11wkoo53i07dya bash -c 'GIT_SSH_COMMAND="ssh -o ConnectTimeout=30 -p 22 -o Port=22 -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /root/.ssh/id_rsa_coolify_ttiy67mjjw11wkoo53i07dya -o IdentitiesOnly=yes" git clone --depth=1 --recurse-submodules --shallow-submodules -b '\''main'\'' '\''<REDACTED>:piyushmodi170/OpenWA'\'' '\''/artifacts/ttiy67mjjw11wkoo53i07dya'\'' && cd '\''/artifacts/ttiy67mjjw11wkoo53i07dya'\'' && GIT_SSH_COMMAND="ssh -o ConnectTimeout=30 -p 22 -o Port=22 -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /root/.ssh/id_rsa_coolify_ttiy67mjjw11wkoo53i07dya -o IdentitiesOnly=yes" git fetch --depth=1 origin '\''fd4e08b7ff057af3a05e9138c3b666ea47cd9a20'\'' && git -c advice.detachedHead=false checkout '\''fd4e08b7ff057af3a05e9138c3b666ea47cd9a20'\'' >/dev/null 2>&1 && cd '\''/artifacts/ttiy67mjjw11wkoo53i07dya'\'' && if [ -f .gitmodules ]; then git submodule sync && GIT_SSH_COMMAND="ssh -o ConnectTimeout=30 -p 22 -o Port=22 -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /root/.ssh/id_rsa_coolify_ttiy67mjjw11wkoo53i07dya -o IdentitiesOnly=yes" git submodule update --init --recursive --depth=1; fi && cd '\''/artifacts/ttiy67mjjw11wkoo53i07dya'\'' && GIT_SSH_COMMAND="ssh -o ConnectTimeout=30 -p 22 -o Port=22 -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i /root/.ssh/id_rsa_coolify_ttiy67mjjw11wkoo53i07dya -o IdentitiesOnly=yes" git lfs pull'
+2026-Jun-20 12:05:38.994481 Cloning into '/artifacts/ttiy67mjjw11wkoo53i07dya'...
+2026-Jun-20 12:05:45.514497 From github.com:piyushmodi170/OpenWA
+2026-Jun-20 12:05:45.514497 * branch fd4e08b7ff057af3a05e9138c3b666ea47cd9a20 -> FETCH_HEAD
+2026-Jun-20 12:05:48.301662 [CMD]: docker exec ttiy67mjjw11wkoo53i07dya bash -c 'cd /artifacts/ttiy67mjjw11wkoo53i07dya && git log -1 '\''fd4e08b7ff057af3a05e9138c3b666ea47cd9a20'\'' --pretty=%B'
+2026-Jun-20 12:05:48.301662 Merge branch 'rmyndharis:main' into main
+2026-Jun-20 12:05:48.467417 Image not found (ext53b0c1hzgywm993snyux3:fd4e08b7ff057af3a05e9138c3b666ea47cd9a20). Building new image.
+2026-Jun-20 12:05:49.510452 [CMD]: docker exec ttiy67mjjw11wkoo53i07dya bash -c 'cat /artifacts/ttiy67mjjw11wkoo53i07dya/Dockerfile'
+2026-Jun-20 12:05:49.510452 # OpenWA - Dockerfile
+2026-Jun-20 12:05:49.510452 # Multi-stage build for production-ready image
+2026-Jun-20 12:05:49.510452
+2026-Jun-20 12:05:49.510452 # ===== Stage 1: Builder =====
+2026-Jun-20 12:05:49.510452 FROM docker.io/node:22-slim AS builder
+2026-Jun-20 12:05:49.510452
+2026-Jun-20 12:05:49.510452 WORKDIR /app
+2026-Jun-20 12:05:49.510452
+2026-Jun-20 12:05:49.510452 # Install build dependencies
+2026-Jun-20 12:05:49.510452 RUN apt-get update && apt-get install -y \
+2026-Jun-20 12:05:49.510452 python3 \
+2026-Jun-20 12:05:49.510452 make \
+2026-Jun-20 12:05:49.510452 g++ \
+2026-Jun-20 12:05:49.510452 && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 12:05:49.510452
+2026-Jun-20 12:05:49.510452 # Copy package files
+2026-Jun-20 12:05:49.510452 COPY package*.json ./
+2026-Jun-20 12:05:49.510452
+2026-Jun-20 12:05:49.510452 # Install all dependencies (including devDependencies for build)
+2026-Jun-20 12:05:49.510452 RUN npm ci
+2026-Jun-20 12:05:49.510452
+2026-Jun-20 12:05:49.510452 # Copy source code
+2026-Jun-20 12:05:49.510452 COPY . .
+2026-Jun-20 12:05:49.510452
+2026-Jun-20 12:05:49.510452 # Build the API (dist/) and the dashboard SPA (dashboard/dist/). The root `npm ci` above
+2026-Jun-20 12:05:49.510452 # ran before the dashboard source was copied, so its postinstall hook skipped the dashboard
+2026-Jun-20 12:05:49.510452 # deps - install them explicitly here (npm ci, reproducible from dashboard/package-lock.json).
+2026-Jun-20 12:05:49.510452 RUN npm run build && npm run dashboard:ci && npm run dashboard:build
+2026-Jun-20 12:05:49.510452
+2026-Jun-20 12:05:49.510452 # ===== Stage 2: Production =====
+2026-Jun-20 12:05:49.510452 FROM docker.io/node:22-slim AS production
+2026-Jun-20 12:05:49.510452
+2026-Jun-20 12:05:49.510452 # Install Chrome/Chromium and required dependencies
+2026-Jun-20 12:05:49.510452 RUN apt-get update && apt-get install -y \
+2026-Jun-20 12:05:49.510452 chromium \
+2026-Jun-20 12:05:49.510452 fonts-liberation \
+2026-Jun-20 12:05:49.510452 libappindicator3-1 \
+2026-Jun-20 12:05:49.510452 libasound2 \
+2026-Jun-20 12:05:49.510452 libatk-bridge2.0-0 \
+2026-Jun-20 12:05:49.510452 libatk1.0-0 \
+2026-Jun-20 12:05:49.510452 libcups2 \
+2026-Jun-20 12:05:49.510452 libdbus-1-3 \
+2026-Jun-20 12:05:49.510452 libdrm2 \
+2026-Jun-20 12:05:49.510452 libgbm1 \
+2026-Jun-20 12:05:49.510452 libgtk-3-0 \
+2026-Jun-20 12:05:49.510452 libnspr4 \
+2026-Jun-20 12:05:49.510452 libnss3 \
+2026-Jun-20 12:05:49.510452 libx11-xcb1 \
+2026-Jun-20 12:05:49.510452 libxcomposite1 \
+2026-Jun-20 12:05:49.510452 libxdamage1 \
+2026-Jun-20 12:05:49.510452 libxrandr2 \
+2026-Jun-20 12:05:49.510452 xdg-utils \
+2026-Jun-20 12:05:49.510452 dumb-init \
+2026-Jun-20 12:05:49.510452 gosu \
+2026-Jun-20 12:05:49.510452 curl \
+2026-Jun-20 12:05:49.510452 procps \
+2026-Jun-20 12:05:49.510452 && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 12:05:49.510452
+2026-Jun-20 12:05:49.510452 # Set Chrome executable path for Puppeteer
+2026-Jun-20 12:05:49.510452 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+2026-Jun-20 12:05:49.510452 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+2026-Jun-20 12:05:49.510452
+2026-Jun-20 12:05:49.510452 # Create app user for security
+2026-Jun-20 12:05:49.510452 RUN groupadd -r openwa && useradd -r -g openwa openwa
+2026-Jun-20 12:05:49.510452
+2026-Jun-20 12:05:49.510452 WORKDIR /app
+2026-Jun-20 12:05:49.510452
+2026-Jun-20 12:05:49.510452 # Copy package files
+2026-Jun-20 12:05:49.510452 COPY package*.json ./
+2026-Jun-20 12:05:49.510452
+2026-Jun-20 12:05:49.510452 # Install production dependencies only
+2026-Jun-20 12:05:49.510452 RUN npm ci --omit=dev && npm cache clean --force
+2026-Jun-20 12:05:49.510452
+2026-Jun-20 12:05:49.510452 # Copy built application from builder stage
+2026-Jun-20 12:05:49.510452 COPY --from=builder /app/dist ./dist
+2026-Jun-20 12:05:49.510452
+2026-Jun-20 12:05:49.510452 # Copy the bundled dashboard SPA; ServeStaticModule serves it from this same process/port
+2026-Jun-20 12:05:49.510452 # (app.module.ts resolves dashboard/dist relative to dist/). Single container, single port.
+2026-Jun-20 12:05:49.510452 COPY --from=builder /app/dashboard/dist ./dashboard/dist
+2026-Jun-20 12:05:49.510452
+2026-Jun-20 12:05:49.510452 # Create data directories with correct ownership
+2026-Jun-20 12:05:49.510452 RUN mkdir -p ./data/sessions ./data/media && \
+2026-Jun-20 12:05:49.510452 chown -R openwa:openwa /app
+2026-Jun-20 12:05:49.510452
+2026-Jun-20 12:05:49.510452 # The non-root openwa user has no home of its own (`useradd -r`, no -m). Chromium resolves the home
+2026-Jun-20 12:05:49.510452 # dir from the passwd entry via glib's getpwuid() — it IGNORES $HOME — so it tries to read/write
+2026-Jun-20 12:05:49.510452 # /home/openwa, which does not exist. On hardened/read-only hosts that makes the browser HARD-CRASH
+2026-Jun-20 12:05:49.510452 # at launch (SIGTRAP/int3, logged as "chrome_crashpad_handler: --database is required"). The robust
+2026-Jun-20 12:05:49.510452 # fix is to point Chromium's config + cache at writable, pre-created dirs via XDG_* (honored directly,
+2026-Jun-20 12:05:49.510452 # bypassing the passwd lookup); docker-entrypoint.sh creates them owned by openwa. On a read_only
+2026-Jun-20 12:05:49.510452 # rootfs these live on the tmpfs /tmp. HOME is kept for any other HOME-relative tooling. See #254/#242.
+2026-Jun-20 12:05:49.510452 ENV HOME=/app/data
+2026-Jun-20 12:05:49.510452 ENV XDG_CONFIG_HOME=/tmp/.config
+2026-Jun-20 12:05:49.510452 ENV XDG_CACHE_HOME=/tmp/.cache
+2026-Jun-20 12:05:49.510452
+2026-Jun-20 12:05:49.510452 # Copy entrypoint: runs as root to fix named-volume ownership, then drops to openwa via gosu
+2026-Jun-20 12:05:49.510452 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+2026-Jun-20 12:05:49.510452 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+2026-Jun-20 12:05:49.510452
+2026-Jun-20 12:05:49.510452 # Expose port
+2026-Jun-20 12:05:49.510452 EXPOSE 2785
+2026-Jun-20 12:05:49.510452
+2026-Jun-20 12:05:49.510452 # Health check
+2026-Jun-20 12:05:49.510452 HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
+2026-Jun-20 12:05:49.510452 CMD curl -f http://localhost:2785/api/health/ready || exit 1
+2026-Jun-20 12:05:49.510452
+2026-Jun-20 12:05:49.510452 # dumb-init is PID 1 and handles signal forwarding.
+2026-Jun-20 12:05:49.510452 # It execs docker-entrypoint.sh (as root), which fixes volume ownership and
+2026-Jun-20 12:05:49.510452 # then drops to the openwa user via gosu before starting the node process.
+2026-Jun-20 12:05:49.510452 ENTRYPOINT ["dumb-init", "--", "/usr/local/bin/docker-entrypoint.sh"]
+2026-Jun-20 12:05:49.510452 CMD ["node", "dist/main"]
+2026-Jun-20 12:05:50.157681 Creating build-time .env file in /artifacts (outside Docker context).
+2026-Jun-20 12:05:50.661754 ----------------------------------------
+2026-Jun-20 12:05:50.674715 ⚠️ Build-time environment variable warning: NODE_ENV=production
+2026-Jun-20 12:05:50.685473 Affects: Node.js/npm/yarn/bun/pnpm
+2026-Jun-20 12:05:50.696405 Issue: Skips devDependencies installation which are often required for building (webpack, typescript, etc.)
+2026-Jun-20 12:05:50.705261 Recommendation: Uncheck "Available at Buildtime" or use "development" during build
+2026-Jun-20 12:05:50.714797
+2026-Jun-20 12:05:50.723531 💡 Tips to resolve build issues:
+2026-Jun-20 12:05:50.733562 1. Set these variables as "Runtime only" in the environment variables settings
+2026-Jun-20 12:05:50.742271 2. Use different values for build-time (e.g., NODE_ENV=development for build)
+2026-Jun-20 12:05:50.753299 3. Consider using multi-stage Docker builds to separate build and runtime environments
+2026-Jun-20 12:05:50.985651 [CMD]: docker exec ttiy67mjjw11wkoo53i07dya bash -c 'cat /artifacts/ttiy67mjjw11wkoo53i07dya/Dockerfile'
+2026-Jun-20 12:05:50.985651 # OpenWA - Dockerfile
+2026-Jun-20 12:05:50.985651 # Multi-stage build for production-ready image
+2026-Jun-20 12:05:50.985651
+2026-Jun-20 12:05:50.985651 # ===== Stage 1: Builder =====
+2026-Jun-20 12:05:50.985651 FROM docker.io/node:22-slim AS builder
+2026-Jun-20 12:05:50.985651
+2026-Jun-20 12:05:50.985651 WORKDIR /app
+2026-Jun-20 12:05:50.985651
+2026-Jun-20 12:05:50.985651 # Install build dependencies
+2026-Jun-20 12:05:50.985651 RUN apt-get update && apt-get install -y \
+2026-Jun-20 12:05:50.985651 python3 \
+2026-Jun-20 12:05:50.985651 make \
+2026-Jun-20 12:05:50.985651 g++ \
+2026-Jun-20 12:05:50.985651 && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 12:05:50.985651
+2026-Jun-20 12:05:50.985651 # Copy package files
+2026-Jun-20 12:05:50.985651 COPY package*.json ./
+2026-Jun-20 12:05:50.985651
+2026-Jun-20 12:05:50.985651 # Install all dependencies (including devDependencies for build)
+2026-Jun-20 12:05:50.985651 RUN npm ci
+2026-Jun-20 12:05:50.985651
+2026-Jun-20 12:05:50.985651 # Copy source code
+2026-Jun-20 12:05:50.985651 COPY . .
+2026-Jun-20 12:05:50.985651
+2026-Jun-20 12:05:50.985651 # Build the API (dist/) and the dashboard SPA (dashboard/dist/). The root `npm ci` above
+2026-Jun-20 12:05:50.985651 # ran before the dashboard source was copied, so its postinstall hook skipped the dashboard
+2026-Jun-20 12:05:50.985651 # deps - install them explicitly here (npm ci, reproducible from dashboard/package-lock.json).
+2026-Jun-20 12:05:50.985651 RUN npm run build && npm run dashboard:ci && npm run dashboard:build
+2026-Jun-20 12:05:50.985651
+2026-Jun-20 12:05:50.985651 # ===== Stage 2: Production =====
+2026-Jun-20 12:05:50.985651 FROM docker.io/node:22-slim AS production
+2026-Jun-20 12:05:50.985651
+2026-Jun-20 12:05:50.985651 # Install Chrome/Chromium and required dependencies
+2026-Jun-20 12:05:50.985651 RUN apt-get update && apt-get install -y \
+2026-Jun-20 12:05:50.985651 chromium \
+2026-Jun-20 12:05:50.985651 fonts-liberation \
+2026-Jun-20 12:05:50.985651 libappindicator3-1 \
+2026-Jun-20 12:05:50.985651 libasound2 \
+2026-Jun-20 12:05:50.985651 libatk-bridge2.0-0 \
+2026-Jun-20 12:05:50.985651 libatk1.0-0 \
+2026-Jun-20 12:05:50.985651 libcups2 \
+2026-Jun-20 12:05:50.985651 libdbus-1-3 \
+2026-Jun-20 12:05:50.985651 libdrm2 \
+2026-Jun-20 12:05:50.985651 libgbm1 \
+2026-Jun-20 12:05:50.985651 libgtk-3-0 \
+2026-Jun-20 12:05:50.985651 libnspr4 \
+2026-Jun-20 12:05:50.985651 libnss3 \
+2026-Jun-20 12:05:50.985651 libx11-xcb1 \
+2026-Jun-20 12:05:50.985651 libxcomposite1 \
+2026-Jun-20 12:05:50.985651 libxdamage1 \
+2026-Jun-20 12:05:50.985651 libxrandr2 \
+2026-Jun-20 12:05:50.985651 xdg-utils \
+2026-Jun-20 12:05:50.985651 dumb-init \
+2026-Jun-20 12:05:50.985651 gosu \
+2026-Jun-20 12:05:50.985651 curl \
+2026-Jun-20 12:05:50.985651 procps \
+2026-Jun-20 12:05:50.985651 && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 12:05:50.985651
+2026-Jun-20 12:05:50.985651 # Set Chrome executable path for Puppeteer
+2026-Jun-20 12:05:50.985651 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+2026-Jun-20 12:05:50.985651 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+2026-Jun-20 12:05:50.985651
+2026-Jun-20 12:05:50.985651 # Create app user for security
+2026-Jun-20 12:05:50.985651 RUN groupadd -r openwa && useradd -r -g openwa openwa
+2026-Jun-20 12:05:50.985651
+2026-Jun-20 12:05:50.985651 WORKDIR /app
+2026-Jun-20 12:05:50.985651
+2026-Jun-20 12:05:50.985651 # Copy package files
+2026-Jun-20 12:05:50.985651 COPY package*.json ./
+2026-Jun-20 12:05:50.985651
+2026-Jun-20 12:05:50.985651 # Install production dependencies only
+2026-Jun-20 12:05:50.985651 RUN npm ci --omit=dev && npm cache clean --force
+2026-Jun-20 12:05:50.985651
+2026-Jun-20 12:05:50.985651 # Copy built application from builder stage
+2026-Jun-20 12:05:50.985651 COPY --from=builder /app/dist ./dist
+2026-Jun-20 12:05:50.985651
+2026-Jun-20 12:05:50.985651 # Copy the bundled dashboard SPA; ServeStaticModule serves it from this same process/port
+2026-Jun-20 12:05:50.985651 # (app.module.ts resolves dashboard/dist relative to dist/). Single container, single port.
+2026-Jun-20 12:05:50.985651 COPY --from=builder /app/dashboard/dist ./dashboard/dist
+2026-Jun-20 12:05:50.985651
+2026-Jun-20 12:05:50.985651 # Create data directories with correct ownership
+2026-Jun-20 12:05:50.985651 RUN mkdir -p ./data/sessions ./data/media && \
+2026-Jun-20 12:05:50.985651 chown -R openwa:openwa /app
+2026-Jun-20 12:05:50.985651
+2026-Jun-20 12:05:50.985651 # The non-root openwa user has no home of its own (`useradd -r`, no -m). Chromium resolves the home
+2026-Jun-20 12:05:50.985651 # dir from the passwd entry via glib's getpwuid() — it IGNORES $HOME — so it tries to read/write
+2026-Jun-20 12:05:50.985651 # /home/openwa, which does not exist. On hardened/read-only hosts that makes the browser HARD-CRASH
+2026-Jun-20 12:05:50.985651 # at launch (SIGTRAP/int3, logged as "chrome_crashpad_handler: --database is required"). The robust
+2026-Jun-20 12:05:50.985651 # fix is to point Chromium's config + cache at writable, pre-created dirs via XDG_* (honored directly,
+2026-Jun-20 12:05:50.985651 # bypassing the passwd lookup); docker-entrypoint.sh creates them owned by openwa. On a read_only
+2026-Jun-20 12:05:50.985651 # rootfs these live on the tmpfs /tmp. HOME is kept for any other HOME-relative tooling. See #254/#242.
+2026-Jun-20 12:05:50.985651 ENV HOME=/app/data
+2026-Jun-20 12:05:50.985651 ENV XDG_CONFIG_HOME=/tmp/.config
+2026-Jun-20 12:05:50.985651 ENV XDG_CACHE_HOME=/tmp/.cache
+2026-Jun-20 12:05:50.985651
+2026-Jun-20 12:05:50.985651 # Copy entrypoint: runs as root to fix named-volume ownership, then drops to openwa via gosu
+2026-Jun-20 12:05:50.985651 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+2026-Jun-20 12:05:50.985651 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+2026-Jun-20 12:05:50.985651
+2026-Jun-20 12:05:50.985651 # Expose port
+2026-Jun-20 12:05:50.985651 EXPOSE 2785
+2026-Jun-20 12:05:50.985651
+2026-Jun-20 12:05:50.985651 # Health check
+2026-Jun-20 12:05:50.985651 HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
+2026-Jun-20 12:05:50.985651 CMD curl -f http://localhost:2785/api/health/ready || exit 1
+2026-Jun-20 12:05:50.985651
+2026-Jun-20 12:05:50.985651 # dumb-init is PID 1 and handles signal forwarding.
+2026-Jun-20 12:05:50.985651 # It execs docker-entrypoint.sh (as root), which fixes volume ownership and
+2026-Jun-20 12:05:50.985651 # then drops to the openwa user via gosu before starting the node process.
+2026-Jun-20 12:05:50.985651 ENTRYPOINT ["dumb-init", "--", "/usr/local/bin/docker-entrypoint.sh"]
+2026-Jun-20 12:05:50.985651 CMD ["node", "dist/main"]
+2026-Jun-20 12:05:51.362207 Final Dockerfile:
+2026-Jun-20 12:05:51.896360 [CMD]: docker exec ttiy67mjjw11wkoo53i07dya bash -c 'cat /artifacts/ttiy67mjjw11wkoo53i07dya/Dockerfile'
+2026-Jun-20 12:05:51.896360 # OpenWA - Dockerfile
+2026-Jun-20 12:05:51.896360 # Multi-stage build for production-ready image
+2026-Jun-20 12:05:51.896360
+2026-Jun-20 12:05:51.896360 # ===== Stage 1: Builder =====
+2026-Jun-20 12:05:51.896360 FROM docker.io/node:22-slim AS builder
+2026-Jun-20 12:05:51.896360 ARG NODE_ENV=production
+2026-Jun-20 12:05:51.896360 ARG PORT=2785
+2026-Jun-20 12:05:51.896360 ARG ENGINE_TYPE=whatsapp-web.js
+2026-Jun-20 12:05:51.896360 ARG DATABASE_NAME=postgres
+2026-Jun-20 12:05:51.896360 ARG SESSION_DATA_PATH=/app/data/sessions
+2026-Jun-20 12:05:51.896360 ARG PUPPETEER_HEADLESS=true
+2026-Jun-20 12:05:51.896360 ARG PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+2026-Jun-20 12:05:51.896360 ARG PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+2026-Jun-20 12:05:51.896360 ARG DATABASE_TYPE=postgres
+2026-Jun-20 12:05:51.896360 ARG DATABASE_SYNCHRONIZE=true
+2026-Jun-20 12:05:51.896360 ARG REDIS_ENABLED=true
+2026-Jun-20 12:05:51.896360 ARG WEBHOOK_MAX_RETRIES=3
+2026-Jun-20 12:05:51.896360 ARG WEBHOOK_RETRY_DELAY=5000
+2026-Jun-20 12:05:51.896360 ARG RATE_LIMIT_TTL=60
+2026-Jun-20 12:05:51.896360 ARG RATE_LIMIT_MAX=100
+2026-Jun-20 12:05:51.896360 ARG CORS_ORIGINS=*
+2026-Jun-20 12:05:51.896360 ARG AUTO_START_SESSIONS=false
+2026-Jun-20 12:05:51.896360 ARG STORAGE_TYPE=local
+2026-Jun-20 12:05:51.896360 ARG STORAGE_LOCAL_PATH=/app/data/media
+2026-Jun-20 12:05:51.896360 ARG WEBHOOK_TIMEOUT=10000
+2026-Jun-20 12:05:51.896360 ARG XDG_CACHE_HOME=/tmp/.cache
+2026-Jun-20 12:05:51.896360 ARG API_MASTER_KEY=
+2026-Jun-20 12:05:51.896360 ARG PLUGINS_DIR=/app/data/plugins
+2026-Jun-20 12:05:51.896360 ARG LOG_LEVEL=info
+2026-Jun-20 12:05:51.896360 ARG HOME=/app/data
+2026-Jun-20 12:05:51.896360 ARG XDG_CONFIG_HOME=/tmp/.config
+2026-Jun-20 12:05:51.896360 ARG PLUGINS_ENABLED=true
+2026-Jun-20 12:05:51.896360 ARG DATABASE_HOST=v7vpbbfvi3l4e4zve5a8oomf
+2026-Jun-20 12:05:51.896360 ARG REDIS_HOST=redis-database-fcyhivdua0qxcog7rgqoc8q6
+2026-Jun-20 12:05:51.896360 ARG REDIS_PORT=6379
+2026-Jun-20 12:05:51.896360 ARG DATABASE_PORT=5432
+2026-Jun-20 12:05:51.896360 ARG DATABASE_USERNAME=postgres
+2026-Jun-20 12:05:51.896360 ARG DATABASE_PASSWORD=WOUogzcjHmuL5xAXPhmShjUZHVtFsH2EVJrF8JVNi1J1rpukgWw4wjtXWrbAo8IO
+2026-Jun-20 12:05:51.896360 ARG REDIS_PASSWORD=JCajsvLIJJlDs1X2p5f3o2KQwnpDbBx39mV80YO0b4UbLyNwFYPYzc4xl8wF2lOr
+2026-Jun-20 12:05:51.896360 ARG PUPPETEER_ARGS=--no-sandbox,--disable-setuid-sandbox,--disable-dev-shm-usage,--disable-gpu
+2026-Jun-20 12:05:51.896360 ARG COOLIFY_URL=openwa.teamora.site
+2026-Jun-20 12:05:51.896360 ARG COOLIFY_FQDN=
+2026-Jun-20 12:05:51.896360 ARG COOLIFY_BRANCH='main'
+2026-Jun-20 12:05:51.896360 ARG COOLIFY_RESOURCE_UUID=ext53b0c1hzgywm993snyux3
+2026-Jun-20 12:05:51.896360
+2026-Jun-20 12:05:51.896360 WORKDIR /app
+2026-Jun-20 12:05:51.896360
+2026-Jun-20 12:05:51.896360 # Install build dependencies
+2026-Jun-20 12:05:51.896360 RUN apt-get update && apt-get install -y \
+2026-Jun-20 12:05:51.896360 python3 \
+2026-Jun-20 12:05:51.896360 make \
+2026-Jun-20 12:05:51.896360 g++ \
+2026-Jun-20 12:05:51.896360 && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 12:05:51.896360
+2026-Jun-20 12:05:51.896360 # Copy package files
+2026-Jun-20 12:05:51.896360 COPY package*.json ./
+2026-Jun-20 12:05:51.896360
+2026-Jun-20 12:05:51.896360 # Install all dependencies (including devDependencies for build)
+2026-Jun-20 12:05:51.896360 RUN npm ci
+2026-Jun-20 12:05:51.896360
+2026-Jun-20 12:05:51.896360 # Copy source code
+2026-Jun-20 12:05:51.896360 COPY . .
+2026-Jun-20 12:05:51.896360
+2026-Jun-20 12:05:51.896360 # Build the API (dist/) and the dashboard SPA (dashboard/dist/). The root `npm ci` above
+2026-Jun-20 12:05:51.896360 # ran before the dashboard source was copied, so its postinstall hook skipped the dashboard
+2026-Jun-20 12:05:51.896360 # deps - install them explicitly here (npm ci, reproducible from dashboard/package-lock.json).
+2026-Jun-20 12:05:51.896360 RUN npm run build && npm run dashboard:ci && npm run dashboard:build
+2026-Jun-20 12:05:51.896360
+2026-Jun-20 12:05:51.896360 # ===== Stage 2: Production =====
+2026-Jun-20 12:05:51.896360 FROM docker.io/node:22-slim AS production
+2026-Jun-20 12:05:51.896360 ARG NODE_ENV=production
+2026-Jun-20 12:05:51.896360 ARG PORT=2785
+2026-Jun-20 12:05:51.896360 ARG ENGINE_TYPE=whatsapp-web.js
+2026-Jun-20 12:05:51.896360 ARG DATABASE_NAME=postgres
+2026-Jun-20 12:05:51.896360 ARG SESSION_DATA_PATH=/app/data/sessions
+2026-Jun-20 12:05:51.896360 ARG PUPPETEER_HEADLESS=true
+2026-Jun-20 12:05:51.896360 ARG PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+2026-Jun-20 12:05:51.896360 ARG PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+2026-Jun-20 12:05:51.896360 ARG DATABASE_TYPE=postgres
+2026-Jun-20 12:05:51.896360 ARG DATABASE_SYNCHRONIZE=true
+2026-Jun-20 12:05:51.896360 ARG REDIS_ENABLED=true
+2026-Jun-20 12:05:51.896360 ARG WEBHOOK_MAX_RETRIES=3
+2026-Jun-20 12:05:51.896360 ARG WEBHOOK_RETRY_DELAY=5000
+2026-Jun-20 12:05:51.896360 ARG RATE_LIMIT_TTL=60
+2026-Jun-20 12:05:51.896360 ARG RATE_LIMIT_MAX=100
+2026-Jun-20 12:05:51.896360 ARG CORS_ORIGINS=*
+2026-Jun-20 12:05:51.896360 ARG AUTO_START_SESSIONS=false
+2026-Jun-20 12:05:51.896360 ARG STORAGE_TYPE=local
+2026-Jun-20 12:05:51.896360 ARG STORAGE_LOCAL_PATH=/app/data/media
+2026-Jun-20 12:05:51.896360 ARG WEBHOOK_TIMEOUT=10000
+2026-Jun-20 12:05:51.896360 ARG XDG_CACHE_HOME=/tmp/.cache
+2026-Jun-20 12:05:51.896360 ARG API_MASTER_KEY=
+2026-Jun-20 12:05:51.896360 ARG PLUGINS_DIR=/app/data/plugins
+2026-Jun-20 12:05:51.896360 ARG LOG_LEVEL=info
+2026-Jun-20 12:05:51.896360 ARG HOME=/app/data
+2026-Jun-20 12:05:51.896360 ARG XDG_CONFIG_HOME=/tmp/.config
+2026-Jun-20 12:05:51.896360 ARG PLUGINS_ENABLED=true
+2026-Jun-20 12:05:51.896360 ARG DATABASE_HOST=v7vpbbfvi3l4e4zve5a8oomf
+2026-Jun-20 12:05:51.896360 ARG REDIS_HOST=redis-database-fcyhivdua0qxcog7rgqoc8q6
+2026-Jun-20 12:05:51.896360 ARG REDIS_PORT=6379
+2026-Jun-20 12:05:51.896360 ARG DATABASE_PORT=5432
+2026-Jun-20 12:05:51.896360 ARG DATABASE_USERNAME=postgres
+2026-Jun-20 12:05:51.896360 ARG DATABASE_PASSWORD=WOUogzcjHmuL5xAXPhmShjUZHVtFsH2EVJrF8JVNi1J1rpukgWw4wjtXWrbAo8IO
+2026-Jun-20 12:05:51.896360 ARG REDIS_PASSWORD=JCajsvLIJJlDs1X2p5f3o2KQwnpDbBx39mV80YO0b4UbLyNwFYPYzc4xl8wF2lOr
+2026-Jun-20 12:05:51.896360 ARG PUPPETEER_ARGS=--no-sandbox,--disable-setuid-sandbox,--disable-dev-shm-usage,--disable-gpu
+2026-Jun-20 12:05:51.896360 ARG COOLIFY_URL=openwa.teamora.site
+2026-Jun-20 12:05:51.896360 ARG COOLIFY_FQDN=
+2026-Jun-20 12:05:51.896360 ARG COOLIFY_BRANCH='main'
+2026-Jun-20 12:05:51.896360 ARG COOLIFY_RESOURCE_UUID=ext53b0c1hzgywm993snyux3
+2026-Jun-20 12:05:51.896360
+2026-Jun-20 12:05:51.896360 # Install Chrome/Chromium and required dependencies
+2026-Jun-20 12:05:51.896360 RUN apt-get update && apt-get install -y \
+2026-Jun-20 12:05:51.896360 chromium \
+2026-Jun-20 12:05:51.896360 fonts-liberation \
+2026-Jun-20 12:05:51.896360 libappindicator3-1 \
+2026-Jun-20 12:05:51.896360 libasound2 \
+2026-Jun-20 12:05:51.896360 libatk-bridge2.0-0 \
+2026-Jun-20 12:05:51.896360 libatk1.0-0 \
+2026-Jun-20 12:05:51.896360 libcups2 \
+2026-Jun-20 12:05:51.896360 libdbus-1-3 \
+2026-Jun-20 12:05:51.896360 libdrm2 \
+2026-Jun-20 12:05:51.896360 libgbm1 \
+2026-Jun-20 12:05:51.896360 libgtk-3-0 \
+2026-Jun-20 12:05:51.896360 libnspr4 \
+2026-Jun-20 12:05:51.896360 libnss3 \
+2026-Jun-20 12:05:51.896360 libx11-xcb1 \
+2026-Jun-20 12:05:51.896360 libxcomposite1 \
+2026-Jun-20 12:05:51.896360 libxdamage1 \
+2026-Jun-20 12:05:51.896360 libxrandr2 \
+2026-Jun-20 12:05:51.896360 xdg-utils \
+2026-Jun-20 12:05:51.896360 dumb-init \
+2026-Jun-20 12:05:51.896360 gosu \
+2026-Jun-20 12:05:51.896360 curl \
+2026-Jun-20 12:05:51.896360 procps \
+2026-Jun-20 12:05:51.896360 && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 12:05:51.896360
+2026-Jun-20 12:05:51.896360 # Set Chrome executable path for Puppeteer
+2026-Jun-20 12:05:51.896360 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+2026-Jun-20 12:05:51.896360 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+2026-Jun-20 12:05:51.896360
+2026-Jun-20 12:05:51.896360 # Create app user for security
+2026-Jun-20 12:05:51.896360 RUN groupadd -r openwa && useradd -r -g openwa openwa
+2026-Jun-20 12:05:51.896360
+2026-Jun-20 12:05:51.896360 WORKDIR /app
+2026-Jun-20 12:05:51.896360
+2026-Jun-20 12:05:51.896360 # Copy package files
+2026-Jun-20 12:05:51.896360 COPY package*.json ./
+2026-Jun-20 12:05:51.896360
+2026-Jun-20 12:05:51.896360 # Install production dependencies only
+2026-Jun-20 12:05:51.896360 RUN npm ci --omit=dev && npm cache clean --force
+2026-Jun-20 12:05:51.896360
+2026-Jun-20 12:05:51.896360 # Copy built application from builder stage
+2026-Jun-20 12:05:51.896360 COPY --from=builder /app/dist ./dist
+2026-Jun-20 12:05:51.896360
+2026-Jun-20 12:05:51.896360 # Copy the bundled dashboard SPA; ServeStaticModule serves it from this same process/port
+2026-Jun-20 12:05:51.896360 # (app.module.ts resolves dashboard/dist relative to dist/). Single container, single port.
+2026-Jun-20 12:05:51.896360 COPY --from=builder /app/dashboard/dist ./dashboard/dist
+2026-Jun-20 12:05:51.896360
+2026-Jun-20 12:05:51.896360 # Create data directories with correct ownership
+2026-Jun-20 12:05:51.896360 RUN mkdir -p ./data/sessions ./data/media && \
+2026-Jun-20 12:05:51.896360 chown -R openwa:openwa /app
+2026-Jun-20 12:05:51.896360
+2026-Jun-20 12:05:51.896360 # The non-root openwa user has no home of its own (`useradd -r`, no -m). Chromium resolves the home
+2026-Jun-20 12:05:51.896360 # dir from the passwd entry via glib's getpwuid() — it IGNORES $HOME — so it tries to read/write
+2026-Jun-20 12:05:51.896360 # /home/openwa, which does not exist. On hardened/read-only hosts that makes the browser HARD-CRASH
+2026-Jun-20 12:05:51.896360 # at launch (SIGTRAP/int3, logged as "chrome_crashpad_handler: --database is required"). The robust
+2026-Jun-20 12:05:51.896360 # fix is to point Chromium's config + cache at writable, pre-created dirs via XDG_* (honored directly,
+2026-Jun-20 12:05:51.896360 # bypassing the passwd lookup); docker-entrypoint.sh creates them owned by openwa. On a read_only
+2026-Jun-20 12:05:51.896360 # rootfs these live on the tmpfs /tmp. HOME is kept for any other HOME-relative tooling. See #254/#242.
+2026-Jun-20 12:05:51.896360 ENV HOME=/app/data
+2026-Jun-20 12:05:51.896360 ENV XDG_CONFIG_HOME=/tmp/.config
+2026-Jun-20 12:05:51.896360 ENV XDG_CACHE_HOME=/tmp/.cache
+2026-Jun-20 12:05:51.896360
+2026-Jun-20 12:05:51.896360 # Copy entrypoint: runs as root to fix named-volume ownership, then drops to openwa via gosu
+2026-Jun-20 12:05:51.896360 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+2026-Jun-20 12:05:51.896360 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+2026-Jun-20 12:05:51.896360
+2026-Jun-20 12:05:51.896360 # Expose port
+2026-Jun-20 12:05:51.896360 EXPOSE 2785
+2026-Jun-20 12:05:51.896360
+2026-Jun-20 12:05:51.896360 # Health check
+2026-Jun-20 12:05:51.896360 HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
+2026-Jun-20 12:05:51.896360 CMD curl -f http://localhost:2785/api/health/ready || exit 1
+2026-Jun-20 12:05:51.896360
+2026-Jun-20 12:05:51.896360 # dumb-init is PID 1 and handles signal forwarding.
+2026-Jun-20 12:05:51.896360 # It execs docker-entrypoint.sh (as root), which fixes volume ownership and
+2026-Jun-20 12:05:51.896360 # then drops to the openwa user via gosu before starting the node process.
+2026-Jun-20 12:05:51.896360 ENTRYPOINT ["dumb-init", "--", "/usr/local/bin/docker-entrypoint.sh"]
+2026-Jun-20 12:05:51.896360 CMD ["node", "dist/main"]
+2026-Jun-20 12:05:51.908524 ----------------------------------------
+2026-Jun-20 12:05:51.920027 Building docker image started.
+2026-Jun-20 12:05:51.930703 To check the current progress, click on Show Debug Logs.
+2026-Jun-20 12:05:52.387220 [CMD]: docker exec ttiy67mjjw11wkoo53i07dya bash -c 'cat /artifacts/build.sh'
+2026-Jun-20 12:05:52.387220 cd /artifacts/ttiy67mjjw11wkoo53i07dya && set -a && source /artifacts/build-time.env && set +a && DOCKER_BUILDKIT=1 docker build --add-host coolify:172.18.0.5 --add-host coolify-db:172.18.0.4 --add-host coolify-realtime:172.18.0.2 --add-host coolify-redis:172.18.0.3 --add-host evvo98q6edfgkf6lwgmzmmjj:172.18.0.7 --add-host ey9tgc9teiguf55tdueda4fx:172.18.0.8 --add-host fcyhivdua0qxcog7rgqoc8q6:172.18.0.10 --add-host v7vpbbfvi3l4e4zve5a8oomf:172.18.0.9 --network host -f /artifacts/ttiy67mjjw11wkoo53i07dya/Dockerfile --progress plain -t ext53b0c1hzgywm993snyux3:fd4e08b7ff057af3a05e9138c3b666ea47cd9a20 --build-arg COOLIFY_URL --build-arg COOLIFY_FQDN --build-arg COOLIFY_BRANCH --build-arg COOLIFY_RESOURCE_UUID --build-arg NODE_ENV --build-arg PORT --build-arg ENGINE_TYPE --build-arg DATABASE_NAME --build-arg SESSION_DATA_PATH --build-arg PUPPETEER_HEADLESS --build-arg PUPPETEER_EXECUTABLE_PATH --build-arg PUPPETEER_SKIP_CHROMIUM_DOWNLOAD --build-arg DATABASE_TYPE --build-arg DATABASE_SYNCHRONIZE --build-arg REDIS_ENABLED --build-arg WEBHOOK_MAX_RETRIES --build-arg WEBHOOK_RETRY_DELAY --build-arg RATE_LIMIT_TTL --build-arg RATE_LIMIT_MAX --build-arg CORS_ORIGINS --build-arg AUTO_START_SESSIONS --build-arg STORAGE_TYPE --build-arg STORAGE_LOCAL_PATH --build-arg WEBHOOK_TIMEOUT --build-arg XDG_CACHE_HOME --build-arg API_MASTER_KEY --build-arg PLUGINS_DIR --build-arg LOG_LEVEL --build-arg HOME --build-arg XDG_CONFIG_HOME --build-arg PLUGINS_ENABLED --build-arg DATABASE_HOST --build-arg REDIS_HOST --build-arg REDIS_PORT --build-arg DATABASE_PORT --build-arg DATABASE_USERNAME --build-arg DATABASE_PASSWORD --build-arg REDIS_PASSWORD --build-arg PUPPETEER_ARGS --build-arg COOLIFY_BUILD_SECRETS_HASH=0ea73b2733357b6de708f695fe2d88db57ba944481d953f3d591bd029bd88961 --build-arg 'COOLIFY_URL' --build-arg 'COOLIFY_FQDN' --build-arg 'COOLIFY_BRANCH' --build-arg 'COOLIFY_RESOURCE_UUID' /artifacts/ttiy67mjjw11wkoo53i07dya
+2026-Jun-20 12:05:52.780534 [CMD]: docker exec ttiy67mjjw11wkoo53i07dya bash -c 'bash /artifacts/build.sh'
+2026-Jun-20 12:05:52.780534 ERROR: BuildKit is enabled but the buildx component is missing or broken.
+2026-Jun-20 12:05:52.780534 Install the buildx component to build images with BuildKit:
+2026-Jun-20 12:05:52.780534 https://docs.docker.com/go/buildx/
+2026-Jun-20 12:05:52.858930 ========================================
+2026-Jun-20 12:05:52.872121 Deployment failed: Command execution failed (exit code 1): docker exec ttiy67mjjw11wkoo53i07dya bash -c 'bash /artifacts/build.sh'
+2026-Jun-20 12:05:52.872121 Error: ERROR: BuildKit is enabled but the buildx component is missing or broken.
+2026-Jun-20 12:05:52.872121 Install the buildx component to build images with BuildKit:
+2026-Jun-20 12:05:52.872121 https://docs.docker.com/go/buildx/
+2026-Jun-20 12:05:52.881440 Error type: App\Exceptions\DeploymentException
+2026-Jun-20 12:05:52.890968 Error code: 0
+2026-Jun-20 12:05:52.899835 Location: /var/www/html/app/Traits/ExecuteRemoteCommand.php:242
+2026-Jun-20 12:05:52.910458 Stack trace (first 5 lines):
+2026-Jun-20 12:05:52.920195 #0 /var/www/html/app/Traits/ExecuteRemoteCommand.php(106): App\Jobs\ApplicationDeploymentJob->executeCommandWithProcess()
+2026-Jun-20 12:05:52.930919 #1 /var/www/html/vendor/laravel/framework/src/Illuminate/Collections/Traits/EnumeratesValues.php(275): App\Jobs\ApplicationDeploymentJob->{closure:App\Traits\ExecuteRemoteCommand::execute_remote_command():72}()
+2026-Jun-20 12:05:52.940673 #2 /var/www/html/app/Traits/ExecuteRemoteCommand.php(72): Illuminate\Support\Collection->each()
+2026-Jun-20 12:05:52.951050 #3 /var/www/html/app/Jobs/ApplicationDeploymentJob.php(3821): App\Jobs\ApplicationDeploymentJob->execute_remote_command()
+2026-Jun-20 12:05:52.960564 #4 /var/www/html/app/Jobs/ApplicationDeploymentJob.php(912): App\Jobs\ApplicationDeploymentJob->build_image()
+2026-Jun-20 12:05:52.969641 ========================================
+2026-Jun-20 12:05:52.981254 Deployment failed. Removing the new version of your application.
+2026-Jun-20 12:05:53.569510 Gracefully shutting down build container: ttiy67mjjw11wkoo53i07dya
+2026-Jun-20 12:05:53.712139 [CMD]: docker stop --time=30 ttiy67mjjw11wkoo53i07dya
+2026-Jun-20 12:05:53.712139 Flag --time has been deprecated, use --timeout instead
+2026-Jun-20 12:05:53.940298 ttiy67mjjw11wkoo53i07dya
