@@ -1,0 +1,235 @@
+========================================
+2026-Jun-20 13:08:47.903966
+Deployment failed: Command execution failed (exit code 1): docker exec h10j7vqzedo4m6yn6ip7evh5 bash -c 'bash /artifacts/build.sh'
+2026-Jun-20 13:08:47.903966
+Error: #0 building with "default" instance using docker driver
+2026-Jun-20 13:08:47.903966
+2026-Jun-20 13:08:47.903966
+#1 [internal] load build definition from Dockerfile
+2026-Jun-20 13:08:47.903966
+#1 transferring dockerfile: 6.83kB done
+2026-Jun-20 13:08:47.903966
+#1 DONE 0.0s
+2026-Jun-20 13:08:47.903966
+2026-Jun-20 13:08:47.903966
+#2 [internal] load metadata for docker.io/library/node:22-slim
+2026-Jun-20 13:08:47.903966
+#2 DONE 1.4s
+2026-Jun-20 13:08:47.903966
+2026-Jun-20 13:08:47.903966
+#3 [internal] load .dockerignore
+2026-Jun-20 13:08:47.903966
+#3 transferring context: 389B done
+2026-Jun-20 13:08:47.903966
+#3 DONE 0.0s
+2026-Jun-20 13:08:47.903966
+2026-Jun-20 13:08:47.903966
+#4 [builder 1/8] FROM docker.io/library/node:22-slim@sha256:d9f850096136edbc402debdd8729579a288aac64574ada0ff4db26b6ae58b0b2
+2026-Jun-20 13:08:47.903966
+#4 resolve docker.io/library/node:22-slim@sha256:d9f850096136edbc402debdd8729579a288aac64574ada0ff4db26b6ae58b0b2 0.0s done
+2026-Jun-20 13:08:47.903966
+#4 DONE 0.0s
+2026-Jun-20 13:08:47.903966
+2026-Jun-20 13:08:47.903966
+#5 [internal] load build context
+2026-Jun-20 13:08:47.903966
+#5 transferring context: 9.04MB 0.2s done
+2026-Jun-20 13:08:47.903966
+#5 DONE 0.2s
+2026-Jun-20 13:08:47.903966
+2026-Jun-20 13:08:47.903966
+#6 [builder 3/8] RUN apt-get update && apt-get install -y     python3     make     g++     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 13:08:47.903966
+#6 CACHED
+2026-Jun-20 13:08:47.903966
+2026-Jun-20 13:08:47.903966
+#7 [builder 2/8] WORKDIR /app
+2026-Jun-20 13:08:47.903966
+#7 CACHED
+2026-Jun-20 13:08:47.903966
+2026-Jun-20 13:08:47.903966
+#8 [builder 4/8] COPY package*.json ./
+2026-Jun-20 13:08:47.903966
+#8 CACHED
+2026-Jun-20 13:08:47.903966
+2026-Jun-20 13:08:47.903966
+#9 [production  2/11] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 13:08:47.903966
+#9 CACHED
+2026-Jun-20 13:08:47.903966
+2026-Jun-20 13:08:47.903966
+#10 [production  4/11] WORKDIR /app
+2026-Jun-20 13:08:47.903966
+#10 CACHED
+2026-Jun-20 13:08:47.903966
+2026-Jun-20 13:08:47.903966
+#11 [production  3/11] RUN groupadd -r openwa && useradd -r -g openwa openwa
+2026-Jun-20 13:08:47.903966
+#11 CACHED
+2026-Jun-20 13:08:47.903966
+2026-Jun-20 13:08:47.903966
+#12 [production  5/11] COPY package*.json ./
+2026-Jun-20 13:08:47.903966
+#12 CACHED
+2026-Jun-20 13:08:47.903966
+2026-Jun-20 13:08:47.903966
+#13 [production  6/11] RUN npm ci --omit=dev && npm cache clean --force
+2026-Jun-20 13:08:47.903966
+#13 ...
+2026-Jun-20 13:08:47.903966
+2026-Jun-20 13:08:47.903966
+#14 [builder 5/8] RUN sed -i 's|http://package-firewall\.replit\.local/npm/|https:<REDACTED>@0.4.5 postinstall
+2026-Jun-20 13:08:47.903966
+#15 66.35 > node -e "if (require('fs').existsSync('dashboard')) require('child_process').spawnSync('npm', ['run', 'dashboard:install'], { stdio: 'inherit', shell: true });"
+2026-Jun-20 13:08:47.903966
+#15 66.35
+2026-Jun-20 13:08:47.903966
+#15 66.43
+2026-Jun-20 13:08:47.903966
+#15 66.43 added 706 packages, and audited 707 packages in 1m
+2026-Jun-20 13:08:47.903966
+#15 66.43
+2026-Jun-20 13:08:47.903966
+#15 66.43 113 packages are looking for funding
+2026-Jun-20 13:08:47.903966
+#15 66.43   run `npm fund` for details
+2026-Jun-20 13:08:47.903966
+#15 66.47 npm notice
+2026-Jun-20 13:08:47.903966
+#15 66.47 npm notice New major version of npm available! 10.9.8 -> 11.17.0
+2026-Jun-20 13:08:47.903966
+#15 66.47 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.17.0
+2026-Jun-20 13:08:47.903966
+#15 66.47 npm notice To update run:<REDACTED>@11.17.0
+2026-Jun-20 13:08:47.903966
+#15 66.47 npm notice
+2026-Jun-20 13:08:47.903966
+#15 66.47
+2026-Jun-20 13:08:47.903966
+#15 66.47 22 vulnerabilities (2 low, 1 moderate, 19 high)
+2026-Jun-20 13:08:47.903966
+#15 66.47
+2026-Jun-20 13:08:47.903966
+#15 66.47 To address all issues possible (including breaking changes), run:
+2026-Jun-20 13:08:47.903966
+#15 66.47   npm audit fix --force
+2026-Jun-20 13:08:47.903966
+#15 66.47
+2026-Jun-20 13:08:47.903966
+#15 66.47 Some issues need review, and may require choosing
+2026-Jun-20 13:08:47.903966
+#15 66.47 a different dependency.
+2026-Jun-20 13:08:47.903966
+#15 66.47
+2026-Jun-20 13:08:47.903966
+#15 66.47 Run `npm audit` for details.
+2026-Jun-20 13:08:47.903966
+#15 DONE 66.9s
+2026-Jun-20 13:08:47.903966
+2026-Jun-20 13:08:47.903966
+#13 [production  6/11] RUN npm ci --omit=dev && npm cache clean --force
+2026-Jun-20 13:08:47.903966
+#13 ...
+2026-Jun-20 13:08:47.903966
+2026-Jun-20 13:08:47.903966
+#16 [builder 7/8] COPY . .
+2026-Jun-20 13:08:47.903966
+#16 DONE 2.3s
+2026-Jun-20 13:08:47.903966
+2026-Jun-20 13:08:47.903966
+#13 [production  6/11] RUN npm ci --omit=dev && npm cache clean --force
+2026-Jun-20 13:08:47.903966
+#13 ...
+2026-Jun-20 13:08:47.903966
+2026-Jun-20 13:08:47.903966
+#17 [builder 8/8] RUN npm run build && npm run dashboard:ci && npm run dashboard:build
+2026-Jun-20 13:08:47.903966
+#17 0.328
+2026-Jun-20 13:08:47.903966
+#17 0.328 > openwa@0.4.5 build
+2026-Jun-20 13:08:47.903966
+#17 0.328 > nest build
+2026-Jun-20 13:08:47.903966
+#17 0.328
+2026-Jun-20 13:08:47.903966
+#17 0.337 sh: 1: nest: not found
+2026-Jun-20 13:08:47.903966
+#17 ERROR: process "/bin/sh -c npm run build && npm run dashboard:ci && npm run dashboard:build" did not complete successfully: exit code: 127
+2026-Jun-20 13:08:47.903966
+2026-Jun-20 13:08:47.903966
+#13 [production  6/11] RUN npm ci --omit=dev && npm cache clean --force
+2026-Jun-20 13:08:47.903966
+#13 CANCELED
+2026-Jun-20 13:08:47.903966
+------
+2026-Jun-20 13:08:47.903966
+> [builder 8/8] RUN npm run build && npm run dashboard:ci && npm run dashboard:build:
+2026-Jun-20 13:08:47.903966
+0.328
+2026-Jun-20 13:08:47.903966
+0.328 > openwa@0.4.5 build
+2026-Jun-20 13:08:47.903966
+0.328 > nest build
+2026-Jun-20 13:08:47.903966
+0.328
+2026-Jun-20 13:08:47.903966
+0.337 sh: 1: nest: not found
+2026-Jun-20 13:08:47.903966
+------
+2026-Jun-20 13:08:47.903966
+2026-Jun-20 13:08:47.903966
+6 warnings found (use docker --debug to expand):
+2026-Jun-20 13:08:47.903966
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "DATABASE_PASSWORD") (line 38)
+2026-Jun-20 13:08:47.903966
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "REDIS_PASSWORD") (line 39)
+2026-Jun-20 13:08:47.903966
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "API_MASTER_KEY") (line 97)
+2026-Jun-20 13:08:47.903966
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "DATABASE_PASSWORD") (line 108)
+2026-Jun-20 13:08:47.903966
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "REDIS_PASSWORD") (line 109)
+2026-Jun-20 13:08:47.903966
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "API_MASTER_KEY") (line 27)
+2026-Jun-20 13:08:47.903966
+Dockerfile:72
+2026-Jun-20 13:08:47.903966
+--------------------
+2026-Jun-20 13:08:47.903966
+70 |     # ran before the dashboard source was copied, so its postinstall hook skipped the dashboard
+2026-Jun-20 13:08:47.903966
+71 |     # deps - install them explicitly here (npm ci, reproducible from dashboard/package-lock.json).
+2026-Jun-20 13:08:47.903966
+72 | >>> RUN npm run build && npm run dashboard:ci && npm run dashboard:build
+2026-Jun-20 13:08:47.903966
+73 |
+2026-Jun-20 13:08:47.903966
+74 |     # ===== Stage 2: Production =====
+2026-Jun-20 13:08:47.903966
+--------------------
+2026-Jun-20 13:08:47.903966
+ERROR: failed to build: failed to solve: process "/bin/sh -c npm run build && npm run dashboard:ci && npm run dashboard:build" did not complete successfully: exit code: 127
+2026-Jun-20 13:08:47.903966
+exit status 1
+2026-Jun-20 13:08:47.930792
+Error type: App\Exceptions\DeploymentException
+2026-Jun-20 13:08:47.955723
+Error code: 0
+2026-Jun-20 13:08:47.983752
+Location: /var/www/html/app/Traits/ExecuteRemoteCommand.php:242
+2026-Jun-20 13:08:48.016455
+Stack trace (first 5 lines):
+2026-Jun-20 13:08:48.046664
+#0 /var/www/html/app/Traits/ExecuteRemoteCommand.php(106): App\Jobs\ApplicationDeploymentJob->executeCommandWithProcess()
+2026-Jun-20 13:08:48.078160
+#1 /var/www/html/vendor/laravel/framework/src/Illuminate/Collections/Traits/EnumeratesValues.php(275): App\Jobs\ApplicationDeploymentJob->{closure:App\Traits\ExecuteRemoteCommand::execute_remote_command():72}()
+2026-Jun-20 13:08:48.097953
+#2 /var/www/html/app/Traits/ExecuteRemoteCommand.php(72): Illuminate\Support\Collection->each()
+2026-Jun-20 13:08:48.114280
+#3 /var/www/html/app/Jobs/ApplicationDeploymentJob.php(3821): App\Jobs\ApplicationDeploymentJob->execute_remote_command()
+2026-Jun-20 13:08:48.129057
+#4 /var/www/html/app/Jobs/ApplicationDeploymentJob.php(912): App\Jobs\ApplicationDeploymentJob->build_image()
+2026-Jun-20 13:08:48.148920
+========================================
+2026-Jun-20 13:08:48.165168
+Deployment failed. Removing the new version of your application.

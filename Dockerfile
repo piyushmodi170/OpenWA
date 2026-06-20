@@ -21,6 +21,11 @@ COPY package*.json ./
 # development; those hosts don't exist outside Replit so npm ci would fail with EAI_AGAIN)
 RUN sed -i 's|http://package-firewall\.replit\.local/npm/|https://registry.npmjs.org/|g' package-lock.json
 
+# Force development mode so npm ci installs ALL deps including devDependencies.
+# Coolify injects NODE_ENV=production as a build arg which skips devDeps and breaks
+# the build (nest CLI, typescript, etc. are devDeps but required to compile).
+ENV NODE_ENV=development
+
 # Install all dependencies (including devDependencies for build)
 RUN npm ci
 
@@ -72,6 +77,9 @@ WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
+
+# Rewrite Replit-internal registry URLs (same fix as builder stage)
+RUN sed -i 's|http://package-firewall\.replit\.local/npm/|https://registry.npmjs.org/|g' package-lock.json
 
 # Install production dependencies only
 RUN npm ci --omit=dev && npm cache clean --force
