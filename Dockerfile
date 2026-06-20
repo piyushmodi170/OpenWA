@@ -16,6 +16,11 @@ RUN apt-get update && apt-get install -y \
 # Copy package files
 COPY package*.json ./
 
+# Rewrite any Replit-internal registry URLs in the lock file to the public npm registry
+# (package-lock.json may contain http://package-firewall.replit.local URLs baked in from
+# development; those hosts don't exist outside Replit so npm ci would fail with EAI_AGAIN)
+RUN sed -i 's|http://package-firewall\.replit\.local/npm/|https://registry.npmjs.org/|g' package-lock.json
+
 # Install all dependencies (including devDependencies for build)
 RUN npm ci
 
