@@ -22,13 +22,13 @@ args = "Start application"
 name = "Start application"
 author = "agent"
 
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "npm run dev"
-waitForPort = 5000
-
 [workflows.workflow.metadata]
 outputType = "webview"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev:api"
+waitForPort = 5000
 
 [[ports]]
 localPort = 2785
@@ -47,7 +47,7 @@ build = ["npm", "run", "build:all"]
 
 [userenv.shared]
 NODE_ENV = "production"
-PORT = "8080"
+PORT = "5000"
 DATABASE_TYPE = "postgres"
 DATABASE_HOST = "v7vpbbfvi3l4e4zve5a8oomf"
 DATABASE_PORT = "5432"
@@ -58,23 +58,22 @@ REDIS_ENABLED = "true"
 REDIS_HOST = "redis-database-fcyhivdua0qxcog7rgqoc8q6"
 REDIS_PORT = "6379"
 ENGINE_TYPE = "whatsapp-web.js"
-SESSION_DATA_PATH = "/app/data/sessions"
 PUPPETEER_HEADLESS = "true"
-PUPPETEER_EXECUTABLE_PATH = "/usr/bin/chromium"
 PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "true"
 PUPPETEER_ARGS = "--no-sandbox,--disable-setuid-sandbox,--disable-dev-shm-usage,--disable-gpu"
 STORAGE_TYPE = "local"
-STORAGE_LOCAL_PATH = "/app/data/media"
 WEBHOOK_TIMEOUT = "10000"
 WEBHOOK_MAX_RETRIES = "3"
 WEBHOOK_RETRY_DELAY = "5000"
 RATE_LIMIT_TTL = "60"
 RATE_LIMIT_MAX = "100"
 PLUGINS_ENABLED = "true"
-PLUGINS_DIR = "/app/data/plugins"
 LOG_LEVEL = "info"
 CORS_ORIGINS = "https://openwa.teamora.site"
 AUTO_START_SESSIONS = "false"
-HOME = "/app/data"
 XDG_CONFIG_HOME = "/tmp/.config"
 XDG_CACHE_HOME = "/tmp/.cache"
+SESSION_DATA_PATH = "/home/runner/workspace/data/sessions"
+STORAGE_LOCAL_PATH = "/home/runner/workspace/data/media"
+PLUGINS_DIR = "/home/runner/workspace/data/plugins"
+PUPPETEER_EXECUTABLE_PATH = "/nix/store/qa9cnw4v5xkxyip6mb9kxqfq1z4x2dx1-chromium-138.0.7204.100/bin/chromium"
