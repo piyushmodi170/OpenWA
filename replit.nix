@@ -1,5 +1,6 @@
 {pkgs}: {
   deps = [
+    pkgs.lsof
     pkgs.gtk3
     pkgs.gdk-pixbuf
     pkgs.cairo
