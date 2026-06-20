@@ -43,7 +43,7 @@ localPort = 5001
 externalPort = 3001
 
 [deployment]
-deploymentTarget = "autoscale"
+deploymentTarget = "vm"
 run = ["node", "dist/main"]
 build = ["npm", "run", "build:all"]
 
@@ -54,7 +54,6 @@ DATABASE_SYNCHRONIZE = "true"
 REDIS_ENABLED = "false"
 ENGINE_TYPE = "whatsapp-web.js"
 PUPPETEER_HEADLESS = "true"
-PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "true"
 PUPPETEER_ARGS = "--no-sandbox,--disable-setuid-sandbox,--disable-dev-shm-usage,--disable-gpu"
 STORAGE_TYPE = "local"
 WEBHOOK_TIMEOUT = "10000"
@@ -68,12 +67,13 @@ XDG_CACHE_HOME = "/tmp/.cache"
 SESSION_DATA_PATH = "/home/runner/workspace/data/sessions"
 STORAGE_LOCAL_PATH = "/home/runner/workspace/data/media"
 PLUGINS_DIR = "/home/runner/workspace/data/plugins"
-PUPPETEER_EXECUTABLE_PATH = "/nix/store/qa9cnw4v5xkxyip6mb9kxqfq1z4x2dx1-chromium-138.0.7204.100/bin/chromium"
 NODE_ENV = "development"
 DATABASE_TYPE = "sqlite"
 CORS_ORIGINS = "*"
 ALLOW_DEV_API_KEY = "true"
 ENABLE_SWAGGER = "true"
+PUPPETEER_CACHE_DIR = "/home/runner/workspace/.puppeteer-cache"
+PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "false"
 
 [userenv.development]
 PORT = "2785"
