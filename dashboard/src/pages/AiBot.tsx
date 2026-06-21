@@ -160,7 +160,6 @@ export function AiBot() {
     setEditingId(null);
     setSaveError('');
     setActiveTab('company');
-    setShowApiKey(false);
   }
 
   function startEdit(config: AiBotConfig) {
@@ -183,7 +182,6 @@ export function AiBot() {
     });
     setEditingId(config.id);
     setSaveError('');
-    setShowApiKey(false);
     setActiveTab('ai');
   }
 
