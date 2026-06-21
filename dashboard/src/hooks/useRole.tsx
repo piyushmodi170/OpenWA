@@ -1,8 +1,6 @@
 import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
 import type { UserRole, RoleContextType } from '../types/role';
 
-export type { UserRole, RoleContextType } from '../types/role';
-
 const RoleContext = createContext<RoleContextType | undefined>(undefined);
 
 export function RoleProvider({ children }: { children: ReactNode }) {
