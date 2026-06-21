@@ -178,7 +178,6 @@ export class AiBotService implements OnModuleInit {
       model: dto.model || 'gpt-4o-mini',
       maxTokens: dto.maxTokens || 500,
       fallbackMessage: dto.fallbackMessage || null,
-      greetingMessage: dto.greetingMessage || null,
       enabled: dto.enabled ?? false,
     });
     return this.repo.save(config);

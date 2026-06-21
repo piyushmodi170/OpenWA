@@ -74,11 +74,6 @@ export class CreateAiBotConfigDto {
   @IsString()
   fallbackMessage?: string;
 
-  @ApiProperty({ description: 'Greeting message sent when bot starts', required: false })
-  @IsOptional()
-  @IsString()
-  greetingMessage?: string;
-
   @ApiProperty({ default: false })
   @IsOptional()
   @IsBoolean()
@@ -100,7 +95,6 @@ export class UpdateAiBotConfigDto {
   @IsOptional() @IsString() model?: string;
   @IsOptional() @IsNumber() @Min(50) @Max(4000) maxTokens?: number;
   @IsOptional() @IsString() fallbackMessage?: string;
-  @IsOptional() @IsString() greetingMessage?: string;
   @IsOptional() @IsBoolean() enabled?: boolean;
 }
 

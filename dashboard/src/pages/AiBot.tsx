@@ -58,7 +58,6 @@ const EMPTY_FORM: Partial<AiBotConfig> & { servicesArr: string[]; faqsArr: { q: 
   model: 'gpt-4o-mini',
   maxTokens: 500,
   fallbackMessage: 'Sorry, I am unable to assist right now. Please try again later.',
-  greetingMessage: '',
   enabled: false,
 };
 
@@ -140,7 +139,6 @@ export function AiBot() {
       model: config.model || 'gpt-4o-mini',
       maxTokens: config.maxTokens,
       fallbackMessage: config.fallbackMessage || '',
-      greetingMessage: config.greetingMessage || '',
       enabled: config.enabled,
     });
     setEditingId(config.id);
@@ -164,7 +162,6 @@ export function AiBot() {
       model: form.model || (form.aiProvider === 'gemini' ? 'gemini-1.5-flash' : 'gpt-4o-mini'),
       maxTokens: form.maxTokens || 500,
       fallbackMessage: form.fallbackMessage || null,
-      greetingMessage: form.greetingMessage || null,
       enabled: form.enabled ?? false,
     };
     if (form.apiKey?.trim()) {
@@ -566,17 +563,6 @@ export function AiBot() {
                   </>
                 )}
 
-                <div>
-                  <label style={labelStyle}>Greeting Message</label>
-                  <textarea
-                    value={form.greetingMessage || ''}
-                    onChange={e => setForm(f => ({ ...f, greetingMessage: e.target.value }))}
-                    placeholder="Hi! How can I help you today?"
-                    rows={2}
-                    style={{ ...inputStyle, resize: 'vertical' }}
-                  />
-                  <div style={hintStyle}>Sent once when a new conversation starts (optional).</div>
-                </div>
               </div>
             )}
 

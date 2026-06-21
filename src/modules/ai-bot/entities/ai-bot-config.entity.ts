@@ -56,9 +56,6 @@ export class AiBotConfig {
   @Column({ type: 'text', nullable: true })
   fallbackMessage: string | null;
 
-  @Column({ type: 'text', nullable: true })
-  greetingMessage: string | null;
-
   @CreateDateColumn()
   createdAt: Date;
 

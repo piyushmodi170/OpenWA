@@ -622,7 +622,6 @@ export interface AiBotConfig {
   model: string;
   maxTokens: number;
   fallbackMessage: string | null;
-  greetingMessage: string | null;
   createdAt: string;
   updatedAt: string;
 }
