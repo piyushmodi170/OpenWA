@@ -257,25 +257,31 @@ export class InfraController {
     // Secrets (passwords, S3 keys) are never returned; the form shows a "set" indicator
     // and an empty submission preserves the stored value (see saveConfig). This lets the
     // dashboard hydrate the form so a save no longer overwrites unseen fields (#226).
+    // Fall back to process.env for fields not yet saved to .env.generated.
+    // This lets operators pre-configure via Coolify/Docker env vars without
+    // touching the UI form at all — the form will show the values as if they
+    // had been manually entered and saved.
+    const env = process.env;
     return {
       database: {
-        type: saved.DATABASE_TYPE === 'postgres' ? 'postgres' : 'sqlite',
+        type: (saved.DATABASE_TYPE || env.DATABASE_TYPE) === 'postgres' ? 'postgres' : 'sqlite',
         builtIn: saved.POSTGRES_BUILTIN === 'true',
-        host: saved.DATABASE_HOST || '',
-        port: saved.DATABASE_PORT || '',
-        username: saved.DATABASE_USERNAME || '',
-        database: saved.DATABASE_NAME || '',
-        poolSize: Number(saved.DATABASE_POOL_SIZE) || 10,
-        sslEnabled: saved.DATABASE_SSL === 'true',
-        sslRejectUnauthorized: saved.DATABASE_SSL_REJECT_UNAUTHORIZED !== 'false',
-        passwordSet: Boolean(saved.DATABASE_PASSWORD),
+        host: saved.DATABASE_HOST || env.DATABASE_HOST || '',
+        port: saved.DATABASE_PORT || env.DATABASE_PORT || '',
+        username: saved.DATABASE_USERNAME || env.DATABASE_USERNAME || '',
+        database: saved.DATABASE_NAME || env.DATABASE_NAME || '',
+        poolSize: Number(saved.DATABASE_POOL_SIZE || env.DATABASE_POOL_SIZE) || 10,
+        sslEnabled: (saved.DATABASE_SSL || env.DATABASE_SSL) === 'true',
+        sslRejectUnauthorized: (saved.DATABASE_SSL_REJECT_UNAUTHORIZED ?? env.DATABASE_SSL_REJECT_UNAUTHORIZED) !== 'false',
+        passwordSet: Boolean(saved.DATABASE_PASSWORD || env.DATABASE_PASSWORD),
       },
       redis: {
-        enabled: saved.REDIS_ENABLED === 'true',
-        builtIn: saved.REDIS_BUILTIN === 'true',
-        host: saved.REDIS_HOST || '',
-        port: saved.REDIS_PORT || '',
-        passwordSet: Boolean(saved.REDIS_PASSWORD),
+        enabled: (saved.REDIS_ENABLED || env.REDIS_ENABLED) === 'true',
+        builtIn: (saved.REDIS_BUILTIN || env.REDIS_BUILTIN) === 'true',
+        // Strip Coolify's "redis-database-" prefix — it's a UI label, not a Docker DNS name.
+        host: (saved.REDIS_HOST || env.REDIS_HOST || '').replace(/^redis-database-/, ''),
+        port: saved.REDIS_PORT || env.REDIS_PORT || '',
+        passwordSet: Boolean(saved.REDIS_PASSWORD || env.REDIS_PASSWORD || env.REDIS_URL),
       },
       queue: { enabled: saved.QUEUE_ENABLED === 'true' },
       storage: {

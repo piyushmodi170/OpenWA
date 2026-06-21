@@ -79,7 +79,9 @@ export class CacheService implements OnModuleDestroy {
         this.logger.log(`Connecting to Redis via REDIS_URL (attempt ${this.connectionAttempts})`);
         this.redis = new Redis(redisUrl, redisOpts);
       } else {
-        const host = process.env.REDIS_HOST || this.configService.get<string>('redis.host', 'localhost');
+        // Strip Coolify's "redis-database-" prefix — Docker DNS resolves by short container name only.
+        const rawHost = process.env.REDIS_HOST || this.configService.get<string>('redis.host', 'localhost');
+        const host = rawHost.replace(/^redis-database-/, '');
         const port = parseInt(process.env.REDIS_PORT || '', 10) || this.configService.get<number>('redis.port', 6379);
         const password = process.env.REDIS_PASSWORD || this.configService.get<string>('redis.password');
 
