@@ -15,11 +15,15 @@ RUN apt-get update && apt-get install -y \
 
 # Copy package files
 COPY package*.json ./
+# Copy dashboard package files early (before COPY . .) so we can rewrite their
+# lock file in the same layer and still benefit from Docker cache on npm ci.
+COPY dashboard/package*.json ./dashboard/
 
-# Rewrite any Replit-internal registry URLs in the lock file to the public npm registry
-# (package-lock.json may contain http://package-firewall.replit.local URLs baked in from
-# development; those hosts don't exist outside Replit so npm ci would fail with EAI_AGAIN)
-RUN sed -i 's|http://package-firewall\.replit\.local/npm/|https://registry.npmjs.org/|g' package-lock.json
+# Rewrite Replit-internal registry URLs in BOTH lock files to the public npm registry.
+# package-lock.json files may contain http://package-firewall.replit.local URLs baked in
+# from development; that host doesn't exist outside Replit → npm ci fails with EAI_AGAIN.
+RUN sed -i 's|http://package-firewall\.replit\.local/npm/|https://registry.npmjs.org/|g' package-lock.json && \
+    sed -i 's|http://package-firewall\.replit\.local/npm/|https://registry.npmjs.org/|g' dashboard/package-lock.json
 
 # Force development mode so npm ci installs ALL deps including devDependencies.
 # Coolify injects NODE_ENV=production as a build arg which skips devDeps and breaks
