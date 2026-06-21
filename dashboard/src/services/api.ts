@@ -671,6 +671,10 @@ export const aiBotApi = {
     }),
   deleteProviderKey: (id: string) =>
     request<void>(`/ai-bot/provider-keys/${id}`, { method: 'DELETE' }),
+  listModelsForProvider: (provider: string) =>
+    request<{ models: { id: string; label: string }[] }>(`/ai-bot/provider-keys/${provider}/list-models`, {
+      method: 'POST',
+    }),
 };
 
 // =============================================================================

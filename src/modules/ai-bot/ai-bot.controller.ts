@@ -87,6 +87,16 @@ export class AiBotController {
     return this.aiBotService.deleteProviderKey(id);
   }
 
+  @Post('provider-keys/:provider/list-models')
+  @RequireRole(ApiKeyRole.OPERATOR)
+  @ApiOperation({ summary: 'List models using a saved provider key' })
+  async listModelsForProvider(@Param('provider') provider: string): Promise<{ models: { id: string; label: string }[] }> {
+    const apiKey = await this.aiBotService.getProviderApiKey(provider);
+    if (!apiKey) return { models: [] };
+    const models = await this.aiBotService.listModels(provider, apiKey);
+    return { models };
+  }
+
   // ─── Model Listing ──────────────────────────────────────────────────────────
 
   @Post('list-models')
