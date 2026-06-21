@@ -169,7 +169,7 @@ export function AiBot() {
       tone: form.tone as AiBotConfig['tone'],
       responseLanguage: form.responseLanguage || 'auto',
       systemPrompt: form.systemPrompt?.trim() || null,
-      model: form.model || (form.aiProvider === 'gemini' ? 'gemini-1.5-flash' : 'gpt-4o-mini'),
+      model: form.model || (form.aiProvider === 'gemini' ? 'gemini-2.0-flash' : 'gpt-4o-mini'),
       maxTokens: form.maxTokens || 500,
       fallbackMessage: form.fallbackMessage || null,
       enabled: form.enabled ?? false,
@@ -235,15 +235,27 @@ export function AiBot() {
   }
 
   async function handleLoadModels() {
-    const apiKey = form.apiKey?.trim() || '';
-    if (!apiKey) {
-      setModelsError('Enter your API key first, then click Load Models.');
-      return;
-    }
     setModelsLoading(true);
     setModelsError('');
     try {
-      const res = await aiBotApi.listModels(form.aiProvider as string, apiKey);
+      let res: { models: { id: string; label: string }[] };
+      const newKey = form.apiKey?.trim() || '';
+      if (newKey) {
+        // User entered a new key — use it directly
+        res = await aiBotApi.listModels(form.aiProvider as string, newKey);
+      } else if (editingId) {
+        // Existing config — use the stored key on the server (no re-entry needed)
+        res = await aiBotApi.listModelsForConfig(editingId);
+        if (res.models.length === 0) {
+          setModelsError('No API key saved for this config. Enter your key above first.');
+          setModelsLoading(false);
+          return;
+        }
+      } else {
+        setModelsError('Enter your API key first, then click Load from API.');
+        setModelsLoading(false);
+        return;
+      }
       if (res.models.length === 0) {
         setModelsError('No generateContent-capable models found for this key.');
       } else {

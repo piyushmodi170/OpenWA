@@ -72,7 +72,7 @@ export class AiBotService implements OnModuleInit {
     }
 
     if (provider === 'gemini') {
-      return this.callGemini(apiKey, config.model || 'gemini-1.5-flash', systemPrompt, userMessage, config.maxTokens || 500);
+      return this.callGemini(apiKey, config.model || 'gemini-2.0-flash', systemPrompt, userMessage, config.maxTokens || 500);
     }
     return this.callOpenAI(apiKey, config.model || 'gpt-4o-mini', systemPrompt, userMessage, config.maxTokens || 500);
   }

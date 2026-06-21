@@ -69,6 +69,19 @@ export class AiBotController {
     return { models };
   }
 
+  @Post('configs/:id/list-models')
+  @RequireRole(ApiKeyRole.OPERATOR)
+  @ApiOperation({ summary: 'List available models using the stored API key of an existing config' })
+  async listModelsForConfig(@Param('id') id: string): Promise<{ models: { id: string; label: string }[] }> {
+    const config = await this.aiBotService.findOne(id);
+    const apiKey = config.apiKey || process.env.OPENAI_API_KEY || '';
+    if (!apiKey) {
+      return { models: [] };
+    }
+    const models = await this.aiBotService.listModels(config.aiProvider || 'openai', apiKey);
+    return { models };
+  }
+
   @Post('configs/:id/test')
   @RequireRole(ApiKeyRole.OPERATOR)
   @ApiOperation({ summary: 'Test AI bot with a message' })

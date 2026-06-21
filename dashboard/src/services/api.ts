@@ -646,6 +646,10 @@ export const aiBotApi = {
       method: 'POST',
       body: JSON.stringify({ provider, apiKey }),
     }),
+  listModelsForConfig: (id: string) =>
+    request<{ models: { id: string; label: string }[] }>(`/ai-bot/configs/${id}/list-models`, {
+      method: 'POST',
+    }),
   testConfig: (id: string, message: string) =>
     request<{ reply: string; error?: string; isError?: boolean }>(`/ai-bot/configs/${id}/test`, {
       method: 'POST',
