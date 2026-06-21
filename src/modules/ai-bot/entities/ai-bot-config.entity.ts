@@ -17,6 +17,15 @@ export class AiBotConfig {
   @Column({ type: 'boolean', default: false })
   enabled: boolean;
 
+  @Column({ type: 'varchar', length: 20, default: 'openai' })
+  aiProvider: string;
+
+  @Column({ type: 'text', nullable: true })
+  apiKey: string | null;
+
+  @Column({ type: 'varchar', length: 20, default: 'company' })
+  botType: string;
+
   @Column({ type: 'varchar', length: 200, default: '' })
   companyName: string;
 
@@ -36,10 +45,10 @@ export class AiBotConfig {
   responseLanguage: string;
 
   @Column({ type: 'text', nullable: true })
-  systemPromptOverride: string | null;
+  systemPrompt: string | null;
 
   @Column({ type: 'varchar', length: 50, default: 'gpt-4o-mini' })
-  openaiModel: string;
+  model: string;
 
   @Column({ type: 'int', default: 500 })
   maxTokens: number;

@@ -2,6 +2,7 @@ import { Injectable, OnModuleInit, NotFoundException, Logger, forwardRef, Inject
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import OpenAI from 'openai';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 import { AiBotConfig } from './entities/ai-bot-config.entity';
 import { CreateAiBotConfigDto, UpdateAiBotConfigDto } from './dto/ai-bot.dto';
 import { HookManager } from '../../core/hooks/hook-manager.service';
@@ -12,7 +13,6 @@ import { MessageService } from '../message/message.service';
 @Injectable()
 export class AiBotService implements OnModuleInit {
   private readonly logger = new Logger(AiBotService.name);
-  private openai: OpenAI | null = null;
 
   constructor(
     @InjectRepository(AiBotConfig, 'data')
@@ -23,14 +23,6 @@ export class AiBotService implements OnModuleInit {
   ) {}
 
   onModuleInit(): void {
-    const apiKey = process.env.OPENAI_API_KEY;
-    if (apiKey) {
-      this.openai = new OpenAI({ apiKey });
-      this.logger.log('OpenAI client initialized');
-    } else {
-      this.logger.warn('OPENAI_API_KEY not set — AI bot will not respond (set key to activate)');
-    }
-
     this.hookManager.register('ai-bot', 'message:received', ctx =>
       this.onMessage(ctx as HookContext<IncomingMessage>),
     );
@@ -47,10 +39,6 @@ export class AiBotService implements OnModuleInit {
     try {
       const config = await this.findConfigForSession(ctx.sessionId);
       if (!config || !config.enabled) return { continue: true };
-      if (!this.openai) {
-        this.logger.warn('AI Bot triggered but OPENAI_API_KEY is missing');
-        return { continue: true };
-      }
 
       const reply = await this.generateReply(config, message.body);
       if (reply && ctx.sessionId) {
@@ -64,58 +52,95 @@ export class AiBotService implements OnModuleInit {
   }
 
   async generateReply(config: AiBotConfig, userMessage: string): Promise<string> {
-    if (!this.openai) throw new Error('OpenAI not configured');
+    const apiKey = config.apiKey || process.env.OPENAI_API_KEY || '';
+    const provider = config.aiProvider || 'openai';
+    const systemPrompt = config.systemPrompt?.trim() || this.buildSystemPrompt(config);
+    const fallback = config.fallbackMessage || 'Sorry, I am unable to respond right now. Please try again later.';
 
-    const systemPrompt = config.systemPromptOverride?.trim() || this.buildSystemPrompt(config);
+    if (!apiKey) {
+      this.logger.warn(`AI Bot: no API key configured for provider "${provider}"`);
+      return fallback;
+    }
 
     try {
-      const completion = await this.openai.chat.completions.create({
-        model: config.openaiModel || 'gpt-4o-mini',
-        max_tokens: config.maxTokens || 500,
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userMessage },
-        ],
-      });
-      return completion.choices[0]?.message?.content?.trim() || config.fallbackMessage || '';
+      if (provider === 'gemini') {
+        return await this.callGemini(apiKey, config.model || 'gemini-1.5-flash', systemPrompt, userMessage, config.maxTokens || 500);
+      }
+      return await this.callOpenAI(apiKey, config.model || 'gpt-4o-mini', systemPrompt, userMessage, config.maxTokens || 500);
     } catch (err) {
-      this.logger.error('OpenAI request failed', err);
-      return config.fallbackMessage || 'Sorry, I am unable to respond right now. Please try again later.';
+      this.logger.error(`${provider} request failed`, err);
+      return fallback;
     }
   }
 
-  private buildSystemPrompt(config: AiBotConfig): string {
-    const services: string[] = JSON.parse(config.companyServices || '[]');
-    const faqs: { q: string; a: string }[] = JSON.parse(config.companyFaqs || '[]');
+  private async callOpenAI(apiKey: string, model: string, systemPrompt: string, userMessage: string, maxTokens: number): Promise<string> {
+    const client = new OpenAI({ apiKey });
+    const completion = await client.chat.completions.create({
+      model,
+      max_tokens: maxTokens,
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userMessage },
+      ],
+    });
+    return completion.choices[0]?.message?.content?.trim() || '';
+  }
 
+  private async callGemini(apiKey: string, model: string, systemPrompt: string, userMessage: string, maxTokens: number): Promise<string> {
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const geminiModel = genAI.getGenerativeModel({
+      model,
+      systemInstruction: systemPrompt,
+    });
+    const result = await geminiModel.generateContent({
+      contents: [{ role: 'user', parts: [{ text: userMessage }] }],
+      generationConfig: { maxOutputTokens: maxTokens },
+    });
+    return result.response.text()?.trim() || '';
+  }
+
+  private buildSystemPrompt(config: AiBotConfig): string {
     const toneMap: Record<string, string> = {
       friendly: 'You are friendly, warm, and approachable.',
       professional: 'You are professional and courteous.',
       formal: 'You are formal and precise.',
     };
+    const toneLine = toneMap[config.tone] || toneMap['friendly'];
+
+    if (config.botType === 'casual') {
+      const parts: string[] = [
+        'You are a helpful and conversational AI assistant.',
+        toneLine,
+        'Engage naturally with the user, answer their questions, and have a pleasant conversation.',
+      ];
+      if (config.responseLanguage && config.responseLanguage !== 'auto') {
+        parts.push(`Always respond in ${config.responseLanguage}.`);
+      }
+      parts.push('Keep responses concise and helpful.');
+      return parts.join('\n\n');
+    }
+
+    const services: string[] = JSON.parse(config.companyServices || '[]');
+    const faqs: { q: string; a: string }[] = JSON.parse(config.companyFaqs || '[]');
 
     const parts: string[] = [
       `You are a customer service assistant for ${config.companyName || 'our company'}.`,
-      toneMap[config.tone] || toneMap['friendly'],
+      toneLine,
     ];
 
     if (config.companyDescription) {
       parts.push(`About us: ${config.companyDescription}`);
     }
-
     if (services.length > 0) {
       parts.push(`Our services: ${services.join(', ')}.`);
     }
-
     if (faqs.length > 0) {
       const faqText = faqs.map(f => `Q: ${f.q}\nA: ${f.a}`).join('\n\n');
       parts.push(`Frequently asked questions:\n${faqText}`);
     }
-
     if (config.responseLanguage && config.responseLanguage !== 'auto') {
       parts.push(`Always respond in ${config.responseLanguage}.`);
     }
-
     parts.push('Keep responses concise and helpful. Only answer questions relevant to the company and its services.');
 
     return parts.join('\n\n');
@@ -140,14 +165,17 @@ export class AiBotService implements OnModuleInit {
   async create(dto: CreateAiBotConfigDto): Promise<AiBotConfig> {
     const config = this.repo.create({
       sessionId: dto.sessionId || '*',
-      companyName: dto.companyName,
-      companyDescription: dto.companyDescription,
+      aiProvider: dto.aiProvider || 'openai',
+      apiKey: dto.apiKey || null,
+      botType: dto.botType || 'company',
+      companyName: dto.companyName || '',
+      companyDescription: dto.companyDescription || '',
       companyServices: dto.companyServices || '[]',
       companyFaqs: dto.companyFaqs || '[]',
       tone: dto.tone || 'friendly',
       responseLanguage: dto.responseLanguage || 'auto',
-      systemPromptOverride: dto.systemPromptOverride || null,
-      openaiModel: dto.openaiModel || 'gpt-4o-mini',
+      systemPrompt: dto.systemPrompt || null,
+      model: dto.model || 'gpt-4o-mini',
       maxTokens: dto.maxTokens || 500,
       fallbackMessage: dto.fallbackMessage || null,
       greetingMessage: dto.greetingMessage || null,
@@ -167,7 +195,7 @@ export class AiBotService implements OnModuleInit {
     await this.repo.remove(config);
   }
 
-  isOpenAiConfigured(): boolean {
-    return this.openai !== null;
+  hasEnvFallbackKey(): boolean {
+    return !!process.env.OPENAI_API_KEY;
   }
 }

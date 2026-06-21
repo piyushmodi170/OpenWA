@@ -51,6 +51,7 @@
     "@bull-board/api": "^8.0.0",
     "@bull-board/express": "^8.0.0",
     "@bull-board/nestjs": "^8.0.0",
+    "@google/generative-ai": "^0.24.1",
     "@nestjs-modules/ioredis": "^2.0.2",
     "@nestjs/bullmq": "^11.0.4",
     "@nestjs/common": "^11.1.27",

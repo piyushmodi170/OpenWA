@@ -1,0 +1,1 @@
+- [NODE_ENV=production breaks devDependencies](node-env-production-devdeps.md) — always use `NODE_ENV=development npm install` at root and dashboard; plain install drops @nestjs/cli and vite.

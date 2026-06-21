@@ -7,13 +7,30 @@ export class CreateAiBotConfigDto {
   @IsString()
   sessionId?: string;
 
-  @ApiProperty({ description: 'Company name' })
-  @IsString()
-  companyName: string;
+  @ApiProperty({ enum: ['openai', 'gemini'], default: 'openai' })
+  @IsOptional()
+  @IsIn(['openai', 'gemini'])
+  aiProvider?: string;
 
-  @ApiProperty({ description: 'Company description / what you do' })
+  @ApiProperty({ description: 'API key for the selected AI provider (stored per-config)', required: false })
+  @IsOptional()
   @IsString()
-  companyDescription: string;
+  apiKey?: string;
+
+  @ApiProperty({ enum: ['company', 'casual'], default: 'company' })
+  @IsOptional()
+  @IsIn(['company', 'casual'])
+  botType?: string;
+
+  @ApiProperty({ description: 'Company name (required for company bots)', default: '' })
+  @IsOptional()
+  @IsString()
+  companyName?: string;
+
+  @ApiProperty({ description: 'Company description / what you do', default: '' })
+  @IsOptional()
+  @IsString()
+  companyDescription?: string;
 
   @ApiProperty({ description: 'JSON array of service names', default: '[]' })
   @IsOptional()
@@ -38,12 +55,12 @@ export class CreateAiBotConfigDto {
   @ApiProperty({ description: 'Custom system prompt (overrides auto-generated)', required: false })
   @IsOptional()
   @IsString()
-  systemPromptOverride?: string;
+  systemPrompt?: string;
 
-  @ApiProperty({ default: 'gpt-4o-mini' })
+  @ApiProperty({ description: 'Model to use (gpt-4o-mini, gemini-1.5-flash, etc.)', default: 'gpt-4o-mini' })
   @IsOptional()
   @IsString()
-  openaiModel?: string;
+  model?: string;
 
   @ApiProperty({ default: 500 })
   @IsOptional()
@@ -70,14 +87,17 @@ export class CreateAiBotConfigDto {
 
 export class UpdateAiBotConfigDto {
   @IsOptional() @IsString() sessionId?: string;
+  @IsOptional() @IsIn(['openai', 'gemini']) aiProvider?: string;
+  @IsOptional() @IsString() apiKey?: string;
+  @IsOptional() @IsIn(['company', 'casual']) botType?: string;
   @IsOptional() @IsString() companyName?: string;
   @IsOptional() @IsString() companyDescription?: string;
   @IsOptional() @IsString() companyServices?: string;
   @IsOptional() @IsString() companyFaqs?: string;
   @IsOptional() @IsIn(['friendly', 'professional', 'formal']) tone?: string;
   @IsOptional() @IsString() responseLanguage?: string;
-  @IsOptional() @IsString() systemPromptOverride?: string;
-  @IsOptional() @IsString() openaiModel?: string;
+  @IsOptional() @IsString() systemPrompt?: string;
+  @IsOptional() @IsString() model?: string;
   @IsOptional() @IsNumber() @Min(50) @Max(4000) maxTokens?: number;
   @IsOptional() @IsString() fallbackMessage?: string;
   @IsOptional() @IsString() greetingMessage?: string;

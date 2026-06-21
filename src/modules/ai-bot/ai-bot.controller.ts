@@ -13,12 +13,13 @@ export class AiBotController {
 
   @Get('status')
   @RequireRole(ApiKeyRole.VIEWER)
-  @ApiOperation({ summary: 'Get AI bot status (OpenAI configured, configs count)' })
-  async getStatus(): Promise<{ openaiConfigured: boolean; configCount: number }> {
+  @ApiOperation({ summary: 'Get AI bot status' })
+  async getStatus(): Promise<{ configCount: number; activeCount: number; hasEnvFallbackKey: boolean }> {
     const configs = await this.aiBotService.findAll();
     return {
-      openaiConfigured: this.aiBotService.isOpenAiConfigured(),
       configCount: configs.length,
+      activeCount: configs.filter(c => c.enabled).length,
+      hasEnvFallbackKey: this.aiBotService.hasEnvFallbackKey(),
     };
   }
 

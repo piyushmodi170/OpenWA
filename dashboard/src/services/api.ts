@@ -609,14 +609,17 @@ export interface AiBotConfig {
   id: string;
   sessionId: string;
   enabled: boolean;
+  aiProvider: 'openai' | 'gemini';
+  apiKey: string | null;
+  botType: 'company' | 'casual';
   companyName: string;
   companyDescription: string;
   companyServices: string;
   companyFaqs: string;
   tone: 'friendly' | 'professional' | 'formal';
   responseLanguage: string;
-  systemPromptOverride: string | null;
-  openaiModel: string;
+  systemPrompt: string | null;
+  model: string;
   maxTokens: number;
   fallbackMessage: string | null;
   greetingMessage: string | null;
@@ -625,8 +628,9 @@ export interface AiBotConfig {
 }
 
 export interface AiBotStatus {
-  openaiConfigured: boolean;
   configCount: number;
+  activeCount: number;
+  hasEnvFallbackKey: boolean;
 }
 
 export const aiBotApi = {
