@@ -44,6 +44,12 @@ const GEMINI_MODELS = [
   { value: 'gemini-1.5-pro', label: 'Gemini 1.5 Pro — most capable' },
 ];
 
+function resolveModel(model: string | null | undefined, provider: string): string {
+  const list = provider === 'gemini' ? GEMINI_MODELS : OPENAI_MODELS;
+  if (model && list.find(m => m.value === model)) return model;
+  return list[0].value;
+}
+
 const EMPTY_FORM: Partial<AiBotConfig> & { servicesArr: string[]; faqsArr: { q: string; a: string }[] } = {
   sessionId: '*',
   aiProvider: 'openai',
@@ -146,7 +152,7 @@ export function AiBot() {
       tone: config.tone,
       responseLanguage: config.responseLanguage,
       systemPrompt: config.systemPrompt || '',
-      model: config.model || 'gpt-4o-mini',
+      model: resolveModel(config.model, config.aiProvider || 'openai'),
       maxTokens: config.maxTokens,
       fallbackMessage: config.fallbackMessage || '',
       enabled: config.enabled,
