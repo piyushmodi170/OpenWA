@@ -1,0 +1,193 @@
+
+Deployment failed: Command execution failed (exit code 1): docker exec yqfzhj24kuv5fxz3vswy1lt7 bash -c 'bash /artifacts/build.sh'
+2026-Jun-21 10:33:52.121565
+Error: #0 building with "default" instance using docker driver
+2026-Jun-21 10:33:52.121565
+2026-Jun-21 10:33:52.121565
+#1 [internal] load build definition from Dockerfile
+2026-Jun-21 10:33:52.121565
+#1 transferring dockerfile: 7.89kB done
+2026-Jun-21 10:33:52.121565
+#1 DONE 0.0s
+2026-Jun-21 10:33:52.121565
+2026-Jun-21 10:33:52.121565
+#2 [internal] load metadata for docker.io/library/node:22-slim
+2026-Jun-21 10:33:52.121565
+#2 DONE 1.4s
+2026-Jun-21 10:33:52.121565
+2026-Jun-21 10:33:52.121565
+#3 [internal] load .dockerignore
+2026-Jun-21 10:33:52.121565
+#3 transferring context: 389B done
+2026-Jun-21 10:33:52.121565
+#3 DONE 0.0s
+2026-Jun-21 10:33:52.121565
+2026-Jun-21 10:33:52.121565
+#4 [builder 1/9] FROM docker.io/library/node:22-slim@sha256:d9f850096136edbc402debdd8729579a288aac64574ada0ff4db26b6ae58b0b2
+2026-Jun-21 10:33:52.121565
+#4 resolve docker.io/library/node:22-slim@sha256:d9f850096136edbc402debdd8729579a288aac64574ada0ff4db26b6ae58b0b2 0.0s done
+2026-Jun-21 10:33:52.121565
+#4 DONE 0.0s
+2026-Jun-21 10:33:52.121565
+2026-Jun-21 10:33:52.121565
+#5 [internal] load build context
+2026-Jun-21 10:33:52.121565
+#5 transferring context: 19.44MB 0.3s done
+2026-Jun-21 10:33:52.121565
+#5 DONE 0.4s
+2026-Jun-21 10:33:52.121565
+2026-Jun-21 10:33:52.121565
+#6 [builder 2/9] WORKDIR /app
+2026-Jun-21 10:33:52.121565
+#6 CACHED
+2026-Jun-21 10:33:52.121565
+2026-Jun-21 10:33:52.121565
+#7 [builder 3/9] RUN apt-get update && apt-get install -y     python3     make     g++     && rm -rf /var/lib/apt/lists/*
+2026-Jun-21 10:33:52.121565
+#7 CACHED
+2026-Jun-21 10:33:52.121565
+2026-Jun-21 10:33:52.121565
+#8 [builder 4/9] COPY package*.json ./
+2026-Jun-21 10:33:52.121565
+#8 CACHED
+2026-Jun-21 10:33:52.121565
+2026-Jun-21 10:33:52.121565
+#9 [builder 5/9] COPY dashboard/package*.json ./dashboard/
+2026-Jun-21 10:33:52.121565
+#9 CACHED
+2026-Jun-21 10:33:52.121565
+2026-Jun-21 10:33:52.121565
+#10 [builder 6/9] RUN sed -i 's|http://package-firewall\.replit\.local/npm/|https:<REDACTED>@0.4.5 build
+2026-Jun-21 10:33:52.121565
+#13 0.413 > nest build
+2026-Jun-21 10:33:52.121565
+#13 0.413
+2026-Jun-21 10:33:52.121565
+#13 18.79
+2026-Jun-21 10:33:52.121565
+#13 18.79 > openwa@0.4.5 dashboard:ci
+2026-Jun-21 10:33:52.121565
+#13 18.79 > cd dashboard && NODE_ENV=development npm ci
+2026-Jun-21 10:33:52.121565
+#13 18.79
+2026-Jun-21 10:33:52.121565
+#13 30.80
+2026-Jun-21 10:33:52.121565
+#13 30.80 added 176 packages, and audited 177 packages in 12s
+2026-Jun-21 10:33:52.121565
+#13 30.80
+2026-Jun-21 10:33:52.121565
+#13 30.80 49 packages are looking for funding
+2026-Jun-21 10:33:52.121565
+#13 30.80   run `npm fund` for details
+2026-Jun-21 10:33:52.121565
+#13 30.80
+2026-Jun-21 10:33:52.121565
+#13 30.80 found 0 vulnerabilities
+2026-Jun-21 10:33:52.121565
+#13 31.01
+2026-Jun-21 10:33:52.121565
+#13 31.01 > openwa@0.4.5 dashboard:build
+2026-Jun-21 10:33:52.121565
+#13 31.01 > cd dashboard && npm run build
+2026-Jun-21 10:33:52.121565
+#13 31.01
+2026-Jun-21 10:33:52.121565
+#13 31.21
+2026-Jun-21 10:33:52.121565
+#13 31.21 > dashboard@0.4.5 build
+2026-Jun-21 10:33:52.121565
+#13 31.21 > tsc -b && vite build
+2026-Jun-21 10:33:52.121565
+#13 31.21
+2026-Jun-21 10:33:52.121565
+#13 40.33 src/pages/AiBot.tsx(22,3): error TS6133: 'Eye' is declared but its value is never read.
+2026-Jun-21 10:33:52.121565
+#13 40.33 src/pages/AiBot.tsx(23,3): error TS6133: 'EyeOff' is declared but its value is never read.
+2026-Jun-21 10:33:52.121565
+#13 40.33 src/pages/AiBot.tsx(92,10): error TS6133: 'showApiKey' is declared but its value is never read.
+2026-Jun-21 10:33:52.121565
+#13 ERROR: process "/bin/sh -c npm run build && npm run dashboard:ci && npm run dashboard:build" did not complete successfully: exit code: 2
+2026-Jun-21 10:33:52.121565
+------
+2026-Jun-21 10:33:52.121565
+> [builder 9/9] RUN npm run build && npm run dashboard:ci && npm run dashboard:build:
+2026-Jun-21 10:33:52.121565
+31.01 > openwa@0.4.5 dashboard:build
+2026-Jun-21 10:33:52.121565
+31.01 > cd dashboard && npm run build
+2026-Jun-21 10:33:52.121565
+31.01
+2026-Jun-21 10:33:52.121565
+31.21
+2026-Jun-21 10:33:52.121565
+31.21 > dashboard@0.4.5 build
+2026-Jun-21 10:33:52.121565
+31.21 > tsc -b && vite build
+2026-Jun-21 10:33:52.121565
+31.21
+2026-Jun-21 10:33:52.121565
+40.33 src/pages/AiBot.tsx(22,3): error TS6133: 'Eye' is declared but its value is never read.
+2026-Jun-21 10:33:52.121565
+40.33 src/pages/AiBot.tsx(23,3): error TS6133: 'EyeOff' is declared but its value is never read.
+2026-Jun-21 10:33:52.121565
+40.33 src/pages/AiBot.tsx(92,10): error TS6133: 'showApiKey' is declared but its value is never read.
+2026-Jun-21 10:33:52.121565
+------
+2026-Jun-21 10:33:52.121565
+2026-Jun-21 10:33:52.121565
+6 warnings found (use docker --debug to expand):
+2026-Jun-21 10:33:52.121565
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "API_MASTER_KEY") (line 27)
+2026-Jun-21 10:33:52.121565
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "DATABASE_PASSWORD") (line 37)
+2026-Jun-21 10:33:52.121565
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "REDIS_PASSWORD") (line 38)
+2026-Jun-21 10:33:52.121565
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "API_MASTER_KEY") (line 107)
+2026-Jun-21 10:33:52.121565
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "DATABASE_PASSWORD") (line 117)
+2026-Jun-21 10:33:52.121565
+- SecretsUsedInArgOrEnv: Do not use ARG or ENV instructions for sensitive data (ARG "REDIS_PASSWORD") (line 118)
+2026-Jun-21 10:33:52.121565
+Dockerfile:82
+2026-Jun-21 10:33:52.121565
+--------------------
+2026-Jun-21 10:33:52.121565
+80 |     # ran before the dashboard source was copied, so its postinstall hook skipped the dashboard
+2026-Jun-21 10:33:52.121565
+81 |     # deps - install them explicitly here (npm ci, reproducible from dashboard/package-lock.json).
+2026-Jun-21 10:33:52.121565
+82 | >>> RUN npm run build && npm run dashboard:ci && npm run dashboard:build
+2026-Jun-21 10:33:52.121565
+83 |
+2026-Jun-21 10:33:52.121565
+84 |     # ===== Stage 2: Production =====
+2026-Jun-21 10:33:52.121565
+--------------------
+2026-Jun-21 10:33:52.121565
+ERROR: failed to build: failed to solve: process "/bin/sh -c npm run build && npm run dashboard:ci && npm run dashboard:build" did not complete successfully: exit code: 2
+2026-Jun-21 10:33:52.121565
+exit status 1
+2026-Jun-21 10:33:52.133689
+Error type: App\Exceptions\DeploymentException
+2026-Jun-21 10:33:52.144587
+Error code: 0
+2026-Jun-21 10:33:52.155646
+Location: /var/www/html/app/Traits/ExecuteRemoteCommand.php:242
+2026-Jun-21 10:33:52.165117
+Stack trace (first 5 lines):
+2026-Jun-21 10:33:52.175349
+#0 /var/www/html/app/Traits/ExecuteRemoteCommand.php(106): App\Jobs\ApplicationDeploymentJob->executeCommandWithProcess()
+2026-Jun-21 10:33:52.185524
+#1 /var/www/html/vendor/laravel/framework/src/Illuminate/Collections/Traits/EnumeratesValues.php(275): App\Jobs\ApplicationDeploymentJob->{closure:App\Traits\ExecuteRemoteCommand::execute_remote_command():72}()
+2026-Jun-21 10:33:52.197395
+#2 /var/www/html/app/Traits/ExecuteRemoteCommand.php(72): Illuminate\Support\Collection->each()
+2026-Jun-21 10:33:52.209636
+#3 /var/www/html/app/Jobs/ApplicationDeploymentJob.php(3821): App\Jobs\ApplicationDeploymentJob->execute_remote_command()
+2026-Jun-21 10:33:52.225717
+#4 /var/www/html/app/Jobs/ApplicationDeploymentJob.php(912): App\Jobs\ApplicationDeploymentJob->build_image()
+2026-Jun-21 10:33:52.237584
+========================================
+2026-Jun-21 10:33:52.251511
+Deployment failed. Removing the new version of your application.

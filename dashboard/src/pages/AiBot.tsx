@@ -19,8 +19,6 @@ import {
   MessageCircle,
   Info,
   Key,
-  Eye,
-  EyeOff,
   Zap,
   Coffee,
 } from 'lucide-react';
@@ -89,7 +87,6 @@ export function AiBot() {
   const [newFaqQ, setNewFaqQ] = useState('');
   const [newFaqA, setNewFaqA] = useState('');
   const [saveError, setSaveError] = useState('');
-  const [showApiKey, setShowApiKey] = useState(false);
   const [dynamicModels, setDynamicModels] = useState<{ id: string; label: string }[]>([]);
   const [modelsLoading, setModelsLoading] = useState(false);
   const [modelsError, setModelsError] = useState('');
