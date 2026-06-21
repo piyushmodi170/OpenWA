@@ -64,9 +64,29 @@ export class AiBotController {
   @Post('configs/:id/test')
   @RequireRole(ApiKeyRole.OPERATOR)
   @ApiOperation({ summary: 'Test AI bot with a message' })
-  async test(@Param('id') id: string, @Body() dto: TestAiBotDto): Promise<{ reply: string }> {
+  async test(
+    @Param('id') id: string,
+    @Body() dto: TestAiBotDto,
+  ): Promise<{ reply: string; error?: string; isError?: boolean }> {
     const config = await this.aiBotService.findOne(id);
-    const reply = await this.aiBotService.generateReply(config, dto.message);
-    return { reply };
+    const apiKey = config.apiKey || process.env.OPENAI_API_KEY || '';
+    if (!apiKey) {
+      return {
+        reply: config.fallbackMessage || 'Sorry, I am unable to respond right now.',
+        error: 'No API key configured. Add one in the AI Settings tab.',
+        isError: true,
+      };
+    }
+    try {
+      const reply = await this.aiBotService.generateReplyRaw(config, dto.message);
+      return { reply };
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      return {
+        reply: config.fallbackMessage || 'Sorry, I am unable to respond right now.',
+        error: msg,
+        isError: true,
+      };
+    }
   }
 }

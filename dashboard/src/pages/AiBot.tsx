@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { sessionApi } from '../services/api';
 import {
   Bot,
   Plus,
@@ -76,12 +77,18 @@ export function AiBot() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [testMessage, setTestMessage] = useState('');
   const [testReply, setTestReply] = useState('');
+  const [testError, setTestError] = useState('');
   const [testLoading, setTestLoading] = useState(false);
   const [newService, setNewService] = useState('');
   const [newFaqQ, setNewFaqQ] = useState('');
   const [newFaqA, setNewFaqA] = useState('');
   const [saveError, setSaveError] = useState('');
   const [showApiKey, setShowApiKey] = useState(false);
+
+  const { data: sessions = [] } = useQuery({
+    queryKey: ['sessions'],
+    queryFn: sessionApi.list,
+  });
 
   const { data: status } = useQuery({
     queryKey: ['ai-bot-status'],
@@ -188,11 +195,13 @@ export function AiBot() {
     if (!testMessage.trim() || !editingId) return;
     setTestLoading(true);
     setTestReply('');
+    setTestError('');
     try {
       const res = await aiBotApi.testConfig(editingId, testMessage);
       setTestReply(res.reply);
+      if (res.isError && res.error) setTestError(res.error);
     } catch (e) {
-      setTestReply('Error: ' + (e instanceof Error ? e.message : 'Unknown error'));
+      setTestError(e instanceof Error ? e.message : 'Unknown error');
     } finally {
       setTestLoading(false);
     }
@@ -476,14 +485,22 @@ export function AiBot() {
                 </div>
 
                 <div>
-                  <label style={labelStyle}>Session ID</label>
-                  <input
+                  <label style={labelStyle}>Session</label>
+                  <select
                     value={form.sessionId || '*'}
                     onChange={e => setForm(f => ({ ...f, sessionId: e.target.value }))}
-                    placeholder="* (all sessions) or specific session ID"
                     style={inputStyle}
-                  />
-                  <div style={hintStyle}>Use <code>*</code> to apply to all sessions, or enter a specific session ID.</div>
+                  >
+                    <option value="*">* — All sessions</option>
+                    {sessions.map(s => (
+                      <option key={s.id} value={s.id}>{s.name || s.id}</option>
+                    ))}
+                  </select>
+                  <div style={hintStyle}>
+                    {sessions.length === 0
+                      ? 'No sessions found. Connect a WhatsApp account in Sessions first.'
+                      : 'Choose a specific session or "All sessions" to respond on every connected number.'}
+                  </div>
                 </div>
 
                 {!isCasual && (
@@ -773,16 +790,34 @@ export function AiBot() {
                   {testLoading ? 'Thinking...' : 'Send to AI'}
                 </button>
 
+                {testError && (
+                  <div style={{
+                    display: 'flex', alignItems: 'flex-start', gap: '8px', padding: '10px 12px',
+                    borderRadius: '8px', background: 'var(--danger-bg, #fee2e2)', color: 'var(--danger, #b91c1c)',
+                    fontSize: '0.82rem',
+                  }}>
+                    <AlertCircle size={14} style={{ flexShrink: 0, marginTop: '2px' }} />
+                    <div>
+                      <strong>API Error:</strong> {testError}
+                      <div style={{ marginTop: '4px', opacity: 0.8 }}>
+                        Check your API key in the AI Settings tab and make sure it has access to the selected model.
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {testReply && (
                   <div>
                     <label style={labelStyle}>AI Response</label>
                     <div style={{
-                      padding: '12px', borderRadius: '8px', background: 'var(--primary-subtle, #eff6ff)',
-                      border: '1px solid var(--primary-border, #bfdbfe)', fontSize: '0.875rem',
-                      whiteSpace: 'pre-wrap', lineHeight: 1.6,
+                      padding: '12px', borderRadius: '8px',
+                      background: testError ? 'var(--muted, #f3f4f6)' : 'var(--primary-subtle, #eff6ff)',
+                      border: `1px solid ${testError ? 'var(--border)' : 'var(--primary-border, #bfdbfe)'}`,
+                      fontSize: '0.875rem', whiteSpace: 'pre-wrap', lineHeight: 1.6,
                     }}>
-                      <Bot size={14} style={{ color: 'var(--primary)', marginRight: '6px', verticalAlign: 'middle' }} />
+                      <Bot size={14} style={{ color: testError ? 'var(--text-secondary)' : 'var(--primary)', marginRight: '6px', verticalAlign: 'middle' }} />
                       {testReply}
+                      {testError && <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', marginLeft: '8px' }}>(fallback)</span>}
                     </div>
                   </div>
                 )}

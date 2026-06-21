@@ -52,25 +52,29 @@ export class AiBotService implements OnModuleInit {
   }
 
   async generateReply(config: AiBotConfig, userMessage: string): Promise<string> {
-    const apiKey = config.apiKey || process.env.OPENAI_API_KEY || '';
-    const provider = config.aiProvider || 'openai';
-    const systemPrompt = config.systemPrompt?.trim() || this.buildSystemPrompt(config);
     const fallback = config.fallbackMessage || 'Sorry, I am unable to respond right now. Please try again later.';
-
-    if (!apiKey) {
-      this.logger.warn(`AI Bot: no API key configured for provider "${provider}"`);
-      return fallback;
-    }
-
     try {
-      if (provider === 'gemini') {
-        return await this.callGemini(apiKey, config.model || 'gemini-1.5-flash', systemPrompt, userMessage, config.maxTokens || 500);
-      }
-      return await this.callOpenAI(apiKey, config.model || 'gpt-4o-mini', systemPrompt, userMessage, config.maxTokens || 500);
+      return await this.generateReplyRaw(config, userMessage);
     } catch (err) {
+      const provider = config.aiProvider || 'openai';
       this.logger.error(`${provider} request failed`, err);
       return fallback;
     }
+  }
+
+  async generateReplyRaw(config: AiBotConfig, userMessage: string): Promise<string> {
+    const apiKey = config.apiKey || process.env.OPENAI_API_KEY || '';
+    const provider = config.aiProvider || 'openai';
+    const systemPrompt = config.systemPrompt?.trim() || this.buildSystemPrompt(config);
+
+    if (!apiKey) {
+      throw new Error(`No API key configured for provider "${provider}"`);
+    }
+
+    if (provider === 'gemini') {
+      return this.callGemini(apiKey, config.model || 'gemini-1.5-flash', systemPrompt, userMessage, config.maxTokens || 500);
+    }
+    return this.callOpenAI(apiKey, config.model || 'gpt-4o-mini', systemPrompt, userMessage, config.maxTokens || 500);
   }
 
   private async callOpenAI(apiKey: string, model: string, systemPrompt: string, userMessage: string, maxTokens: number): Promise<string> {

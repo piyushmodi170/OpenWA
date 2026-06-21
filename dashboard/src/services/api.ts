@@ -642,7 +642,7 @@ export const aiBotApi = {
     request<AiBotConfig>(`/ai-bot/configs/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
   deleteConfig: (id: string) => request<void>(`/ai-bot/configs/${id}`, { method: 'DELETE' }),
   testConfig: (id: string, message: string) =>
-    request<{ reply: string }>(`/ai-bot/configs/${id}/test`, {
+    request<{ reply: string; error?: string; isError?: boolean }>(`/ai-bot/configs/${id}/test`, {
       method: 'POST',
       body: JSON.stringify({ message }),
     }),
