@@ -1,0 +1,2767 @@
+========================================
+2026-Jun-20 14:02:01.208062
+Deployment failed: Command execution failed (exit code 255): docker exec a8y4q3jjrl4oaxtvaqcvu2q0 bash -c 'bash /artifacts/build.sh'
+2026-Jun-20 14:02:01.208062
+Error: #0 building with "default" instance using docker driver
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#1 [internal] load build definition from Dockerfile
+2026-Jun-20 14:02:01.208062
+#1 transferring dockerfile:
+2026-Jun-20 14:02:01.208062
+#1 transferring dockerfile: 7.28kB done
+2026-Jun-20 14:02:01.208062
+#1 DONE 0.7s
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#2 [internal] load metadata for docker.io/library/node:22-slim
+2026-Jun-20 14:02:01.208062
+#2 DONE 4.0s
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#3 [internal] load .dockerignore
+2026-Jun-20 14:02:01.208062
+#3 transferring context:
+2026-Jun-20 14:02:01.208062
+#3 transferring context: 389B done
+2026-Jun-20 14:02:01.208062
+#3 DONE 0.9s
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#4 [internal] load build context
+2026-Jun-20 14:02:01.208062
+#4 DONE 0.0s
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#5 [builder 1/8] FROM docker.io/library/node:22-slim@sha256:d9f850096136edbc402debdd8729579a288aac64574ada0ff4db26b6ae58b0b2
+2026-Jun-20 14:02:01.208062
+#5 resolve docker.io/library/node:22-slim@sha256:d9f850096136edbc402debdd8729579a288aac64574ada0ff4db26b6ae58b0b2
+2026-Jun-20 14:02:01.208062
+#5 resolve docker.io/library/node:22-slim@sha256:d9f850096136edbc402debdd8729579a288aac64574ada0ff4db26b6ae58b0b2 0.4s done
+2026-Jun-20 14:02:01.208062
+#5 DONE 0.5s
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#5 [builder 1/8] FROM docker.io/library/node:22-slim@sha256:d9f850096136edbc402debdd8729579a288aac64574ada0ff4db26b6ae58b0b2
+2026-Jun-20 14:02:01.208062
+#5 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#4 [internal] load build context
+2026-Jun-20 14:02:01.208062
+#4 transferring context: 9.05MB 0.2s done
+2026-Jun-20 14:02:01.208062
+#4 DONE 2.1s
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#5 [builder 1/8] FROM docker.io/library/node:22-slim@sha256:d9f850096136edbc402debdd8729579a288aac64574ada0ff4db26b6ae58b0b2
+2026-Jun-20 14:02:01.208062
+#5 DONE 4.5s
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#5 [builder 1/8] FROM docker.io/library/node:22-slim@sha256:d9f850096136edbc402debdd8729579a288aac64574ada0ff4db26b6ae58b0b2
+2026-Jun-20 14:02:01.208062
+#5 sha256:aafc9ed683951fde1a681129a1f0d99c253586800606e93cf8c4846c9c0dad45 0B / 445B 0.2s
+2026-Jun-20 14:02:01.208062
+#5 sha256:aafc9ed683951fde1a681129a1f0d99c253586800606e93cf8c4846c9c0dad45 445B / 445B 0.3s
+2026-Jun-20 14:02:01.208062
+#5 sha256:3b89dda362aaa910fe0f00f1359e9c7d75a4daa1996a0c0be6b3dc8fe1b55258 0B / 1.71MB 0.2s
+2026-Jun-20 14:02:01.208062
+#5 sha256:3b89dda362aaa910fe0f00f1359e9c7d75a4daa1996a0c0be6b3dc8fe1b55258 1.71MB / 1.71MB 0.3s
+2026-Jun-20 14:02:01.208062
+#5 sha256:4c3f9c72f6056cb05411975a19395822d67c1ad0be17b7099144ff827e2696ff 0B / 49.93MB 0.3s
+2026-Jun-20 14:02:01.208062
+#5 sha256:4c3f9c72f6056cb05411975a19395822d67c1ad0be17b7099144ff827e2696ff 3.90MB / 49.93MB 0.5s
+2026-Jun-20 14:02:01.208062
+#5 sha256:3b89dda362aaa910fe0f00f1359e9c7d75a4daa1996a0c0be6b3dc8fe1b55258 1.71MB / 1.71MB 0.6s done
+2026-Jun-20 14:02:01.208062
+#5 sha256:4c3f9c72f6056cb05411975a19395822d67c1ad0be17b7099144ff827e2696ff 19.92MB / 49.93MB 0.6s
+2026-Jun-20 14:02:01.208062
+#5 sha256:fd3790d1cc1668bbb96061c9842c9b08637fd0fe865e0fba75a876d9c6f39a74 0B / 3.31kB 0.2s
+2026-Jun-20 14:02:01.208062
+#5 sha256:aafc9ed683951fde1a681129a1f0d99c253586800606e93cf8c4846c9c0dad45 445B / 445B 1.0s done
+2026-Jun-20 14:02:01.208062
+#5 sha256:4c3f9c72f6056cb05411975a19395822d67c1ad0be17b7099144ff827e2696ff 37.75MB / 49.93MB 0.8s
+2026-Jun-20 14:02:01.208062
+#5 sha256:4c3f9c72f6056cb05411975a19395822d67c1ad0be17b7099144ff827e2696ff 49.93MB / 49.93MB 0.9s
+2026-Jun-20 14:02:01.208062
+#5 sha256:fd3790d1cc1668bbb96061c9842c9b08637fd0fe865e0fba75a876d9c6f39a74 3.31kB / 3.31kB 0.5s done
+2026-Jun-20 14:02:01.208062
+#5 sha256:4c3f9c72f6056cb05411975a19395822d67c1ad0be17b7099144ff827e2696ff 49.93MB / 49.93MB 1.2s done
+2026-Jun-20 14:02:01.208062
+#5 DONE 6.6s
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#5 [builder 1/8] FROM docker.io/library/node:22-slim@sha256:d9f850096136edbc402debdd8729579a288aac64574ada0ff4db26b6ae58b0b2
+2026-Jun-20 14:02:01.208062
+#5 extracting sha256:fd3790d1cc1668bbb96061c9842c9b08637fd0fe865e0fba75a876d9c6f39a74
+2026-Jun-20 14:02:01.208062
+#5 extracting sha256:fd3790d1cc1668bbb96061c9842c9b08637fd0fe865e0fba75a876d9c6f39a74 0.6s done
+2026-Jun-20 14:02:01.208062
+#5 DONE 7.2s
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#5 [builder 1/8] FROM docker.io/library/node:22-slim@sha256:d9f850096136edbc402debdd8729579a288aac64574ada0ff4db26b6ae58b0b2
+2026-Jun-20 14:02:01.208062
+#5 extracting sha256:4c3f9c72f6056cb05411975a19395822d67c1ad0be17b7099144ff827e2696ff
+2026-Jun-20 14:02:01.208062
+#5 extracting sha256:4c3f9c72f6056cb05411975a19395822d67c1ad0be17b7099144ff827e2696ff 2.3s done
+2026-Jun-20 14:02:01.208062
+#5 DONE 9.4s
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#5 [builder 1/8] FROM docker.io/library/node:22-slim@sha256:d9f850096136edbc402debdd8729579a288aac64574ada0ff4db26b6ae58b0b2
+2026-Jun-20 14:02:01.208062
+#5 extracting sha256:3b89dda362aaa910fe0f00f1359e9c7d75a4daa1996a0c0be6b3dc8fe1b55258
+2026-Jun-20 14:02:01.208062
+#5 extracting sha256:3b89dda362aaa910fe0f00f1359e9c7d75a4daa1996a0c0be6b3dc8fe1b55258 0.6s done
+2026-Jun-20 14:02:01.208062
+#5 DONE 10.0s
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#5 [builder 1/8] FROM docker.io/library/node:22-slim@sha256:d9f850096136edbc402debdd8729579a288aac64574ada0ff4db26b6ae58b0b2
+2026-Jun-20 14:02:01.208062
+#5 extracting sha256:aafc9ed683951fde1a681129a1f0d99c253586800606e93cf8c4846c9c0dad45
+2026-Jun-20 14:02:01.208062
+#5 extracting sha256:aafc9ed683951fde1a681129a1f0d99c253586800606e93cf8c4846c9c0dad45 0.7s done
+2026-Jun-20 14:02:01.208062
+#5 DONE 10.7s
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#6 [builder 2/8] WORKDIR /app
+2026-Jun-20 14:02:01.208062
+#6 DONE 3.0s
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 1.413 Get:1 http://deb.debian.org/debian bookworm InRelease [151 kB]
+2026-Jun-20 14:02:01.208062
+#7 1.504 Get:<REDACTED>@tty1.service → /lib/systemd/system/getty@.service.
+2026-Jun-20 14:02:01.208062
+#7 53.28 Created symlink /etc/systemd/system/multi-user.target.wants/remote-fs.target → /lib/systemd/system/remote-fs.target.
+2026-Jun-20 14:02:01.208062
+#7 53.29 Created symlink /etc/systemd/system/sysinit.target.wants/systemd-pstore.service → /lib/systemd/system/systemd-pstore.service.
+2026-Jun-20 14:02:01.208062
+#7 53.30 Initializing machine ID from random generator.
+2026-Jun-20 14:02:01.208062
+#7 53.71 Creating group 'systemd-journal' with GID 999.
+2026-Jun-20 14:02:01.208062
+#7 53.71 Creating group 'systemd-network' with GID 998.
+2026-Jun-20 14:02:01.208062
+#7 53.71 Creating user 'systemd-network' (systemd Network Management) with UID 998 and GID 998.
+2026-Jun-20 14:02:01.208062
+#7 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#8 [builder 3/8] RUN apt-get update && apt-get install -y     python3     make     g++     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#8 43.41 Selecting previously unselected package libgssapi-krb5-2:amd64.
+2026-Jun-20 14:02:01.208062
+#8 43.41 Preparing to unpack .../07-libgssapi-krb5-2_1.20.1-2+deb12u5_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 44.15 Unpacking libgssapi-krb5-2:amd64 (1.20.1-2+deb12u5) ...
+2026-Jun-20 14:02:01.208062
+#8 45.01 Selecting previously unselected package libtirpc-common.
+2026-Jun-20 14:02:01.208062
+#8 45.01 Preparing to unpack .../08-libtirpc-common_1.3.3+ds-1_all.deb ...
+2026-Jun-20 14:02:01.208062
+#8 45.11 Unpacking libtirpc-common (1.3.3+ds-1) ...
+2026-Jun-20 14:02:01.208062
+#8 46.40 Selecting previously unselected package libtirpc3:amd64.
+2026-Jun-20 14:02:01.208062
+#8 46.41 Preparing to unpack .../09-libtirpc3_1.3.3+ds-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 46.46 Unpacking libtirpc3:amd64 (1.3.3+ds-1) ...
+2026-Jun-20 14:02:01.208062
+#8 48.07 Selecting previously unselected package libnsl2:amd64.
+2026-Jun-20 14:02:01.208062
+#8 48.12 Preparing to unpack .../10-libnsl2_1.3.0-2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 48.72 Unpacking libnsl2:amd64 (1.3.0-2) ...
+2026-Jun-20 14:02:01.208062
+#8 50.60 Selecting previously unselected package readline-common.
+2026-Jun-20 14:02:01.208062
+#8 50.60 Preparing to unpack .../11-readline-common_8.2-1.3_all.deb ...
+2026-Jun-20 14:02:01.208062
+#8 51.01 Unpacking readline-common (8.2-1.3) ...
+2026-Jun-20 14:02:01.208062
+#8 52.55 Selecting previously unselected package libreadline8:amd64.
+2026-Jun-20 14:02:01.208062
+#8 52.55 Preparing to unpack .../12-libreadline8_8.2-1.3_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 52.64 Unpacking libreadline8:amd64 (8.2-1.3) ...
+2026-Jun-20 14:02:01.208062
+#8 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 55.84 Setting up dmsetup (2:1.02.185-2) ...
+2026-Jun-20 14:02:01.208062
+#7 56.70 Selecting previously unselected package systemd-sysv.
+2026-Jun-20 14:02:01.208062
+#7 56.70 (Reading database ... 
+(Reading database ... 5%
+(Reading database ... 10%
+(Reading database ... 15%
+(Reading database ... 20%
+(Reading database ... 25%
+(Reading database ... 30%
+(Reading database ... 35%
+(Reading database ... 40%
+(Reading database ... 45%
+(Reading database ... 50%
+(Reading database ... 55%
+(Reading database ... 60%
+(Reading database ... 65%
+(Reading database ... 70%
+(Reading database ... 75%
+(Reading database ... 80%
+(Reading database ... 85%
+(Reading database ... 90%
+(Reading database ... 95%
+(Reading database ... 100%
+(Reading database ... 7031 files and directories currently installed.)
+2026-Jun-20 14:02:01.208062
+#7 56.71 Preparing to unpack .../00-systemd-sysv_252.39-1~deb12u2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 56.79 Unpacking systemd-sysv (252.39-1~deb12u2) ...
+2026-Jun-20 14:02:01.208062
+#7 57.28 Selecting previously unselected package libdbus-1-3:amd64.
+2026-Jun-20 14:02:01.208062
+#7 57.28 Preparing to unpack .../01-libdbus-1-3_1.14.10-1~deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 57.42 Unpacking libdbus-1-3:amd64 (1.14.10-1~deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#7 58.02 Selecting previously unselected package dbus-bin.
+2026-Jun-20 14:02:01.208062
+#7 58.02 Preparing to unpack .../02-dbus-bin_1.14.10-1~deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 58.10 Unpacking dbus-bin (1.14.10-1~deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#7 58.56 Selecting previously unselected package dbus-session-bus-common.
+2026-Jun-20 14:02:01.208062
+#7 58.56 Preparing to unpack .../03-dbus-session-bus-common_1.14.10-1~deb12u1_all.deb ...
+2026-Jun-20 14:02:01.208062
+#7 58.65 Unpacking dbus-session-bus-common (1.14.10-1~deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#7 59.23 Selecting previously unselected package libexpat1:amd64.
+2026-Jun-20 14:02:01.208062
+#7 59.24 Preparing to unpack .../04-libexpat1_2.5.0-1+deb12u2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 59.41 Unpacking libexpat1:amd64 (2.5.0-1+deb12u2) ...
+2026-Jun-20 14:02:01.208062
+#7 60.16 Selecting previously unselected package dbus-daemon.
+2026-Jun-20 14:02:01.208062
+#7 60.16 Preparing to unpack .../05-dbus-daemon_1.14.10-1~deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 60.24 Unpacking dbus-daemon (1.14.10-1~deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#7 60.63 Selecting previously unselected package dbus-system-bus-common.
+2026-Jun-20 14:02:01.208062
+#7 60.64 Preparing to unpack .../06-dbus-system-bus-common_1.14.10-1~deb12u1_all.deb ...
+2026-Jun-20 14:02:01.208062
+#7 60.74 Unpacking dbus-system-bus-common (1.14.10-1~deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#7 61.55 Selecting previously unselected package dbus.
+2026-Jun-20 14:02:01.208062
+#7 61.55 Preparing to unpack .../07-dbus_1.14.10-1~deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 61.70 Unpacking dbus (1.14.10-1~deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#7 62.68 Selecting previously unselected package perl-modules-5.36.
+2026-Jun-20 14:02:01.208062
+#7 62.68 Preparing to unpack .../08-perl-modules-5.36_5.36.0-7+deb12u3_all.deb ...
+2026-Jun-20 14:02:01.208062
+#7 62.84 Unpacking perl-modules-5.36 (5.36.0-7+deb12u3) ...
+2026-Jun-20 14:02:01.208062
+#7 66.35 Selecting previously unselected package libgdbm6:amd64.
+2026-Jun-20 14:02:01.208062
+#7 66.36 Preparing to unpack .../09-libgdbm6_1.23-3_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#8 [builder 3/8] RUN apt-get update && apt-get install -y     python3     make     g++     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#8 53.50 Selecting previously unselected package libsqlite3-0:amd64.
+2026-Jun-20 14:02:01.208062
+#8 53.50 Preparing to unpack .../13-libsqlite3-0_3.40.1-2+deb12u2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 53.62 Unpacking libsqlite3-0:amd64 (3.40.1-2+deb12u2) ...
+2026-Jun-20 14:02:01.208062
+#8 54.09 Selecting previously unselected package libpython3.11-stdlib:amd64.
+2026-Jun-20 14:02:01.208062
+#8 54.10 Preparing to unpack .../14-libpython3.11-stdlib_3.11.2-6+deb12u7_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 54.18 Unpacking libpython3.11-stdlib:amd64 (3.11.2-6+deb12u7) ...
+2026-Jun-20 14:02:01.208062
+#8 55.06 Selecting previously unselected package python3.11.
+2026-Jun-20 14:02:01.208062
+#8 55.07 Preparing to unpack .../15-python3.11_3.11.2-6+deb12u7_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 55.12 Unpacking python3.11 (3.11.2-6+deb12u7) ...
+2026-Jun-20 14:02:01.208062
+#8 55.62 Selecting previously unselected package libpython3-stdlib:amd64.
+2026-Jun-20 14:02:01.208062
+#8 55.62 Preparing to unpack .../16-libpython3-stdlib_3.11.2-1+b1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 55.70 Unpacking libpython3-stdlib:amd64 (3.11.2-1+b1) ...
+2026-Jun-20 14:02:01.208062
+#8 56.31 Setting up python3-minimal (3.11.2-1+b1) ...
+2026-Jun-20 14:02:01.208062
+#8 57.29 Selecting previously unselected package python3.
+2026-Jun-20 14:02:01.208062
+#8 57.29 (Reading database ... 
+(Reading database ... 5%
+(Reading database ... 10%
+(Reading database ... 15%
+(Reading database ... 20%
+(Reading database ... 25%
+(Reading database ... 30%
+(Reading database ... 35%
+(Reading database ... 40%
+(Reading database ... 45%
+(Reading database ... 50%
+(Reading database ... 55%
+(Reading database ... 60%
+(Reading database ... 65%
+(Reading database ... 70%
+(Reading database ... 75%
+(Reading database ... 80%
+(Reading database ... 85%
+(Reading database ... 90%
+(Reading database ... 95%
+(Reading database ... 100%
+(Reading database ... 6932 files and directories currently installed.)
+2026-Jun-20 14:02:01.208062
+#8 57.31 Preparing to unpack .../00-python3_3.11.2-1+b1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 57.37 Unpacking python3 (3.11.2-1+b1) ...
+2026-Jun-20 14:02:01.208062
+#8 58.08 Selecting previously unselected package openssl.
+2026-Jun-20 14:02:01.208062
+#8 58.08 Preparing to unpack .../01-openssl_3.0.20-1~deb12u2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 58.27 Unpacking openssl (3.0.20-1~deb12u2) ...
+2026-Jun-20 14:02:01.208062
+#8 59.24 Selecting previously unselected package ca-certificates.
+2026-Jun-20 14:02:01.208062
+#8 59.24 Preparing to unpack .../02-ca-certificates_20230311+deb12u1_all.deb ...
+2026-Jun-20 14:02:01.208062
+#8 59.40 Unpacking ca-certificates (20230311+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 60.19 Selecting previously unselected package krb5-locales.
+2026-Jun-20 14:02:01.208062
+#8 60.19 Preparing to unpack .../03-krb5-locales_1.20.1-2+deb12u5_all.deb ...
+2026-Jun-20 14:02:01.208062
+#8 60.30 Unpacking krb5-locales (1.20.1-2+deb12u5) ...
+2026-Jun-20 14:02:01.208062
+#8 61.30 Selecting previously unselected package manpages.
+2026-Jun-20 14:02:01.208062
+#8 61.31 Preparing to unpack .../04-manpages_6.03-2_all.deb ...
+2026-Jun-20 14:02:01.208062
+#8 61.64 Unpacking manpages (6.03-2) ...
+2026-Jun-20 14:02:01.208062
+#8 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 66.98 Unpacking libgdbm6:amd64 (1.23-3) ...
+2026-Jun-20 14:02:01.208062
+#7 69.49 Selecting previously unselected package libgdbm-compat4:amd64.
+2026-Jun-20 14:02:01.208062
+#7 69.50 Preparing to unpack .../10-libgdbm-compat4_1.23-3_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 69.94 Unpacking libgdbm-compat4:amd64 (1.23-3) ...
+2026-Jun-20 14:02:01.208062
+#7 72.34 Selecting previously unselected package libperl5.36:amd64.
+2026-Jun-20 14:02:01.208062
+#7 72.35 Preparing to unpack .../11-libperl5.36_5.36.0-7+deb12u3_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 72.50 Unpacking libperl5.36:amd64 (5.36.0-7+deb12u3) ...
+2026-Jun-20 14:02:01.208062
+#7 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#8 [builder 3/8] RUN apt-get update && apt-get install -y     python3     make     g++     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#8 65.26 Selecting previously unselected package binutils-common:amd64.
+2026-Jun-20 14:02:01.208062
+#8 65.26 Preparing to unpack .../05-binutils-common_2.40-2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 65.49 Unpacking binutils-common:amd64 (2.40-2) ...
+2026-Jun-20 14:02:01.208062
+#8 67.97 Selecting previously unselected package libbinutils:amd64.
+2026-Jun-20 14:02:01.208062
+#8 68.01 Preparing to unpack .../06-libbinutils_2.40-2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 68.40 Unpacking libbinutils:amd64 (2.40-2) ...
+2026-Jun-20 14:02:01.208062
+#8 69.52 Selecting previously unselected package libctf-nobfd0:amd64.
+2026-Jun-20 14:02:01.208062
+#8 69.52 Preparing to unpack .../07-libctf-nobfd0_2.40-2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 69.56 Unpacking libctf-nobfd0:amd64 (2.40-2) ...
+2026-Jun-20 14:02:01.208062
+#8 70.00 Selecting previously unselected package libctf0:amd64.
+2026-Jun-20 14:02:01.208062
+#8 70.00 Preparing to unpack .../08-libctf0_2.40-2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 70.16 Unpacking libctf0:amd64 (2.40-2) ...
+2026-Jun-20 14:02:01.208062
+#8 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 75.84 Selecting previously unselected package perl.
+2026-Jun-20 14:02:01.208062
+#7 75.84 Preparing to unpack .../12-perl_5.36.0-7+deb12u3_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 76.69 Unpacking perl (5.36.0-7+deb12u3) ...
+2026-Jun-20 14:02:01.208062
+#7 79.21 Selecting previously unselected package libpython3.11-minimal:amd64.
+2026-Jun-20 14:02:01.208062
+#7 79.23 Preparing to unpack .../13-libpython3.11-minimal_3.11.2-6+deb12u7_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 79.37 Unpacking libpython3.11-minimal:amd64 (3.11.2-6+deb12u7) ...
+2026-Jun-20 14:02:01.208062
+#7 80.23 Selecting previously unselected package python3.11-minimal.
+2026-Jun-20 14:02:01.208062
+#7 80.23 Preparing to unpack .../14-python3.11-minimal_3.11.2-6+deb12u7_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 80.34 Unpacking python3.11-minimal (3.11.2-6+deb12u7) ...
+2026-Jun-20 14:02:01.208062
+#7 81.49 Setting up libpython3.11-minimal:amd64 (3.11.2-6+deb12u7) ...
+2026-Jun-20 14:02:01.208062
+#7 82.38 Setting up libexpat1:amd64 (2.5.0-1+deb12u2) ...
+2026-Jun-20 14:02:01.208062
+#7 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#8 [builder 3/8] RUN apt-get update && apt-get install -y     python3     make     g++     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#8 73.43 Selecting previously unselected package libgprofng0:amd64.
+2026-Jun-20 14:02:01.208062
+#8 73.45 Preparing to unpack .../09-libgprofng0_2.40-2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 73.73 Unpacking libgprofng0:amd64 (2.40-2) ...
+2026-Jun-20 14:02:01.208062
+#8 76.04 Selecting previously unselected package libjansson4:amd64.
+2026-Jun-20 14:02:01.208062
+#8 76.04 Preparing to unpack .../10-libjansson4_2.14-2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 76.10 Unpacking libjansson4:amd64 (2.14-2) ...
+2026-Jun-20 14:02:01.208062
+#8 76.50 Selecting previously unselected package binutils-x86-64-linux-gnu.
+2026-Jun-20 14:02:01.208062
+#8 76.50 Preparing to unpack .../11-binutils-x86-64-linux-gnu_2.40-2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 76.55 Unpacking binutils-x86-64-linux-gnu (2.40-2) ...
+2026-Jun-20 14:02:01.208062
+#8 77.22 Selecting previously unselected package binutils.
+2026-Jun-20 14:02:01.208062
+#8 77.23 Preparing to unpack .../12-binutils_2.40-2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 77.29 Unpacking binutils (2.40-2) ...
+2026-Jun-20 14:02:01.208062
+#8 78.09 Selecting previously unselected package libisl23:amd64.
+2026-Jun-20 14:02:01.208062
+#8 78.11 Preparing to unpack .../13-libisl23_0.25-1.1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 78.36 Unpacking libisl23:amd64 (0.25-1.1) ...
+2026-Jun-20 14:02:01.208062
+#8 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 84.20 Setting up python3.11-minimal (3.11.2-6+deb12u7) ...
+2026-Jun-20 14:02:01.208062
+#7 89.38 Selecting previously unselected package python3-minimal.
+2026-Jun-20 14:02:01.208062
+#7 89.38 (Reading database ... 
+(Reading database ... 5%
+(Reading database ... 10%
+(Reading database ... 15%
+(Reading database ... 20%
+(Reading database ... 25%
+(Reading database ... 30%
+(Reading database ... 35%
+(Reading database ... 40%
+(Reading database ... 45%
+(Reading database ... 50%
+(Reading database ... 55%
+(Reading database ... 60%
+(Reading database ... 65%
+(Reading database ... 70%
+(Reading database ... 75%
+(Reading database ... 80%
+(Reading database ... 85%
+(Reading database ... 90%
+(Reading database ... 95%
+(Reading database ... 100%
+(Reading database ... 9442 files and directories currently installed.)
+2026-Jun-20 14:02:01.208062
+#7 89.39 Preparing to unpack .../00-python3-minimal_3.11.2-1+b1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 89.47 Unpacking python3-minimal (3.11.2-1+b1) ...
+2026-Jun-20 14:02:01.208062
+#7 91.31 Selecting previously unselected package media-types.
+2026-Jun-20 14:02:01.208062
+#7 91.31 Preparing to unpack .../01-media-types_10.0.0_all.deb ...
+2026-Jun-20 14:02:01.208062
+#7 91.44 Unpacking media-types (10.0.0) ...
+2026-Jun-20 14:02:01.208062
+#7 91.99 Selecting previously unselected package libncursesw6:amd64.
+2026-Jun-20 14:02:01.208062
+#7 91.99 Preparing to unpack .../02-libncursesw6_6.4-4_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 92.04 Unpacking libncursesw6:amd64 (6.4-4) ...
+2026-Jun-20 14:02:01.208062
+#7 92.79 Selecting previously unselected package libkrb5support0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 92.80 Preparing to unpack .../03-libkrb5support0_1.20.1-2+deb12u5_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 92.91 Unpacking libkrb5support0:amd64 (1.20.1-2+deb12u5) ...
+2026-Jun-20 14:02:01.208062
+#7 93.49 Selecting previously unselected package libk5crypto3:amd64.
+2026-Jun-20 14:02:01.208062
+#7 93.49 Preparing to unpack .../04-libk5crypto3_1.20.1-2+deb12u5_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 93.55 Unpacking libk5crypto3:amd64 (1.20.1-2+deb12u5) ...
+2026-Jun-20 14:02:01.208062
+#7 94.29 Selecting previously unselected package libkeyutils1:amd64.
+2026-Jun-20 14:02:01.208062
+#7 94.29 Preparing to unpack .../05-libkeyutils1_1.6.3-2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 94.38 Unpacking libkeyutils1:amd64 (1.6.3-2) ...
+2026-Jun-20 14:02:01.208062
+#7 95.14 Selecting previously unselected package libkrb5-3:amd64.
+2026-Jun-20 14:02:01.208062
+#7 95.14 Preparing to unpack .../06-libkrb5-3_1.20.1-2+deb12u5_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 95.18 Unpacking libkrb5-3:amd64 (1.20.1-2+deb12u5) ...
+2026-Jun-20 14:02:01.208062
+#7 96.05 Selecting previously unselected package libgssapi-krb5-2:amd64.
+2026-Jun-20 14:02:01.208062
+#7 96.06 Preparing to unpack .../07-libgssapi-krb5-2_1.20.1-2+deb12u5_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#8 [builder 3/8] RUN apt-get update && apt-get install -y     python3     make     g++     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#8 82.94 Selecting previously unselected package libmpfr6:amd64.
+2026-Jun-20 14:02:01.208062
+#8 82.94 Preparing to unpack .../14-libmpfr6_4.2.0-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 83.57 Unpacking libmpfr6:amd64 (4.2.0-1) ...
+2026-Jun-20 14:02:01.208062
+#8 86.26 Selecting previously unselected package libmpc3:amd64.
+2026-Jun-20 14:02:01.208062
+#8 86.27 Preparing to unpack .../15-libmpc3_1.3.1-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 86.35 Unpacking libmpc3:amd64 (1.3.1-1) ...
+2026-Jun-20 14:02:01.208062
+#8 88.15 Selecting previously unselected package cpp-12.
+2026-Jun-20 14:02:01.208062
+#8 88.15 Preparing to unpack .../16-cpp-12_12.2.0-14+deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 88.29 Unpacking cpp-12 (12.2.0-14+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 89.94 Selecting previously unselected package cpp.
+2026-Jun-20 14:02:01.208062
+#8 89.95 Preparing to unpack .../17-cpp_4%3a12.2.0-3_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 90.05 Unpacking cpp (4:12.2.0-3) ...
+2026-Jun-20 14:02:01.208062
+#8 90.60 Selecting previously unselected package fonts-dejavu-core.
+2026-Jun-20 14:02:01.208062
+#8 90.61 Preparing to unpack .../18-fonts-dejavu-core_2.37-6_all.deb ...
+2026-Jun-20 14:02:01.208062
+#8 90.79 Unpacking fonts-dejavu-core (2.37-6) ...
+2026-Jun-20 14:02:01.208062
+#8 91.87 Selecting previously unselected package fontconfig-config.
+2026-Jun-20 14:02:01.208062
+#8 91.88 Preparing to unpack .../19-fontconfig-config_2.14.1-4_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 92.18 Unpacking fontconfig-config (2.14.1-4) ...
+2026-Jun-20 14:02:01.208062
+#8 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 96.46 Unpacking libgssapi-krb5-2:amd64 (1.20.1-2+deb12u5) ...
+2026-Jun-20 14:02:01.208062
+#7 98.38 Selecting previously unselected package libtirpc-common.
+2026-Jun-20 14:02:01.208062
+#7 98.38 Preparing to unpack .../08-libtirpc-common_1.3.3+ds-1_all.deb ...
+2026-Jun-20 14:02:01.208062
+#7 98.69 Unpacking libtirpc-common (1.3.3+ds-1) ...
+2026-Jun-20 14:02:01.208062
+#7 101.6 Selecting previously unselected package libtirpc3:amd64.
+2026-Jun-20 14:02:01.208062
+#7 101.6 Preparing to unpack .../09-libtirpc3_1.3.3+ds-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 101.8 Unpacking libtirpc3:amd64 (1.3.3+ds-1) ...
+2026-Jun-20 14:02:01.208062
+#7 103.2 Selecting previously unselected package libnsl2:amd64.
+2026-Jun-20 14:02:01.208062
+#7 103.2 Preparing to unpack .../10-libnsl2_1.3.0-2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 103.4 Unpacking libnsl2:amd64 (1.3.0-2) ...
+2026-Jun-20 14:02:01.208062
+#7 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#8 [builder 3/8] RUN apt-get update && apt-get install -y     python3     make     g++     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#8 94.67 Selecting previously unselected package libcc1-0:amd64.
+2026-Jun-20 14:02:01.208062
+#8 94.67 Preparing to unpack .../20-libcc1-0_12.2.0-14+deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 95.12 Unpacking libcc1-0:amd64 (12.2.0-14+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 96.72 Selecting previously unselected package libgomp1:amd64.
+2026-Jun-20 14:02:01.208062
+#8 96.72 Preparing to unpack .../21-libgomp1_12.2.0-14+deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 97.33 Unpacking libgomp1:amd64 (12.2.0-14+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 99.51 Selecting previously unselected package libitm1:amd64.
+2026-Jun-20 14:02:01.208062
+#8 99.51 Preparing to unpack .../22-libitm1_12.2.0-14+deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 99.76 Unpacking libitm1:amd64 (12.2.0-14+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 100.9 Selecting previously unselected package libatomic1:amd64.
+2026-Jun-20 14:02:01.208062
+#8 100.9 Preparing to unpack .../23-libatomic1_12.2.0-14+deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 101.1 Unpacking libatomic1:amd64 (12.2.0-14+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 104.8 Selecting previously unselected package readline-common.
+2026-Jun-20 14:02:01.208062
+#7 104.8 Preparing to unpack .../11-readline-common_8.2-1.3_all.deb ...
+2026-Jun-20 14:02:01.208062
+#7 105.2 Unpacking readline-common (8.2-1.3) ...
+2026-Jun-20 14:02:01.208062
+#7 105.8 Selecting previously unselected package libreadline8:amd64.
+2026-Jun-20 14:02:01.208062
+#7 105.8 Preparing to unpack .../12-libreadline8_8.2-1.3_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 106.0 Unpacking libreadline8:amd64 (8.2-1.3) ...
+2026-Jun-20 14:02:01.208062
+#7 106.8 Selecting previously unselected package libsqlite3-0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 106.8 Preparing to unpack .../13-libsqlite3-0_3.40.1-2+deb12u2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 106.8 Unpacking libsqlite3-0:amd64 (3.40.1-2+deb12u2) ...
+2026-Jun-20 14:02:01.208062
+#7 107.9 Selecting previously unselected package libpython3.11-stdlib:amd64.
+2026-Jun-20 14:02:01.208062
+#7 107.9 Preparing to unpack .../14-libpython3.11-stdlib_3.11.2-6+deb12u7_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 108.0 Unpacking libpython3.11-stdlib:amd64 (3.11.2-6+deb12u7) ...
+2026-Jun-20 14:02:01.208062
+#7 109.9 Selecting previously unselected package python3.11.
+2026-Jun-20 14:02:01.208062
+#7 109.9 Preparing to unpack .../15-python3.11_3.11.2-6+deb12u7_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 110.4 Unpacking python3.11 (3.11.2-6+deb12u7) ...
+2026-Jun-20 14:02:01.208062
+#7 113.8 Selecting previously unselected package libpython3-stdlib:amd64.
+2026-Jun-20 14:02:01.208062
+#7 113.8 Preparing to unpack .../16-libpython3-stdlib_3.11.2-1+b1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 114.1 Unpacking libpython3-stdlib:amd64 (3.11.2-1+b1) ...
+2026-Jun-20 14:02:01.208062
+#7 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#8 [builder 3/8] RUN apt-get update && apt-get install -y     python3     make     g++     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#8 102.5 Selecting previously unselected package libasan8:amd64.
+2026-Jun-20 14:02:01.208062
+#8 102.5 Preparing to unpack .../24-libasan8_12.2.0-14+deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 102.5 Unpacking libasan8:amd64 (12.2.0-14+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 103.6 Selecting previously unselected package liblsan0:amd64.
+2026-Jun-20 14:02:01.208062
+#8 103.6 Preparing to unpack .../25-liblsan0_12.2.0-14+deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 103.6 Unpacking liblsan0:amd64 (12.2.0-14+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 104.5 Selecting previously unselected package libtsan2:amd64.
+2026-Jun-20 14:02:01.208062
+#8 104.5 Preparing to unpack .../26-libtsan2_12.2.0-14+deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 104.7 Unpacking libtsan2:amd64 (12.2.0-14+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 106.1 Selecting previously unselected package libubsan1:amd64.
+2026-Jun-20 14:02:01.208062
+#8 106.1 Preparing to unpack .../27-libubsan1_12.2.0-14+deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 106.7 Unpacking libubsan1:amd64 (12.2.0-14+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 111.0 Selecting previously unselected package libquadmath0:amd64.
+2026-Jun-20 14:02:01.208062
+#8 111.0 Preparing to unpack .../28-libquadmath0_12.2.0-14+deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 111.9 Unpacking libquadmath0:amd64 (12.2.0-14+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 117.7 Setting up python3-minimal (3.11.2-1+b1) ...
+2026-Jun-20 14:02:01.208062
+#7 122.4 Selecting previously unselected package python3.
+2026-Jun-20 14:02:01.208062
+#7 122.4 (Reading database ... 
+(Reading database ... 5%
+(Reading database ... 10%
+(Reading database ... 15%
+(Reading database ... 20%
+(Reading database ... 25%
+(Reading database ... 30%
+(Reading database ... 35%
+(Reading database ... 40%
+(Reading database ... 45%
+(Reading database ... 50%
+(Reading database ... 55%
+(Reading database ... 60%
+(Reading database ... 65%
+(Reading database ... 70%
+(Reading database ... 75%
+(Reading database ... 80%
+(Reading database ... 85%
+(Reading database ... 90%
+(Reading database ... 95%
+(Reading database ... 100%
+(Reading database ... 9950 files and directories currently installed.)
+2026-Jun-20 14:02:01.208062
+#7 122.4 Preparing to unpack .../000-python3_3.11.2-1+b1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 123.2 Unpacking python3 (3.11.2-1+b1) ...
+2026-Jun-20 14:02:01.208062
+#7 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#8 [builder 3/8] RUN apt-get update && apt-get install -y     python3     make     g++     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#8 115.1 Selecting previously unselected package libgcc-12-dev:amd64.
+2026-Jun-20 14:02:01.208062
+#8 115.2 Preparing to unpack .../29-libgcc-12-dev_12.2.0-14+deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 115.9 Unpacking libgcc-12-dev:amd64 (12.2.0-14+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 119.2 Selecting previously unselected package gcc-12.
+2026-Jun-20 14:02:01.208062
+#8 119.2 Preparing to unpack .../30-gcc-12_12.2.0-14+deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 120.0 Unpacking gcc-12 (12.2.0-14+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 128.5 Selecting previously unselected package sgml-base.
+2026-Jun-20 14:02:01.208062
+#7 128.5 Preparing to unpack .../001-sgml-base_1.31_all.deb ...
+2026-Jun-20 14:02:01.208062
+#7 129.4 Unpacking sgml-base (1.31) ...
+2026-Jun-20 14:02:01.208062
+#7 131.9 Selecting previously unselected package netbase.
+2026-Jun-20 14:02:01.208062
+#7 131.9 Preparing to unpack .../002-netbase_6.4_all.deb ...
+2026-Jun-20 14:02:01.208062
+#7 132.5 Unpacking netbase (6.4) ...
+2026-Jun-20 14:02:01.208062
+#7 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#8 [builder 3/8] RUN apt-get update && apt-get install -y     python3     make     g++     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#8 126.9 Selecting previously unselected package gcc.
+2026-Jun-20 14:02:01.208062
+#8 126.9 Preparing to unpack .../31-gcc_4%3a12.2.0-3_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 127.0 Unpacking gcc (4:12.2.0-3) ...
+2026-Jun-20 14:02:01.208062
+#8 128.7 Selecting previously unselected package libc-dev-bin.
+2026-Jun-20 14:02:01.208062
+#8 128.7 Preparing to unpack .../32-libc-dev-bin_2.36-9+deb12u14_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 129.1 Unpacking libc-dev-bin (2.36-9+deb12u14) ...
+2026-Jun-20 14:02:01.208062
+#8 132.3 Selecting previously unselected package linux-libc-dev:amd64.
+2026-Jun-20 14:02:01.208062
+#8 132.3 Preparing to unpack .../33-linux-libc-dev_6.1.174-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 133.1 Unpacking linux-libc-dev:amd64 (6.1.174-1) ...
+2026-Jun-20 14:02:01.208062
+#8 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 136.5 Selecting previously unselected package libproc2-0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 136.5 Preparing to unpack .../003-libproc2-0_2%3a4.0.2-3_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 136.8 Unpacking libproc2-0:amd64 (2:4.0.2-3) ...
+2026-Jun-20 14:02:01.208062
+#7 139.3 Selecting previously unselected package procps.
+2026-Jun-20 14:02:01.208062
+#7 139.3 Preparing to unpack .../004-procps_2%3a4.0.2-3_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 139.8 Unpacking procps (2:4.0.2-3) ...
+2026-Jun-20 14:02:01.208062
+#7 144.1 Selecting previously unselected package udev.
+2026-Jun-20 14:02:01.208062
+#7 144.1 Preparing to unpack .../005-udev_252.39-1~deb12u2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 144.8 Unpacking udev (252.39-1~deb12u2) ...
+2026-Jun-20 14:02:01.208062
+#7 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#8 [builder 3/8] RUN apt-get update && apt-get install -y     python3     make     g++     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#8 136.4 Selecting previously unselected package libcrypt-dev:amd64.
+2026-Jun-20 14:02:01.208062
+#8 136.4 Preparing to unpack .../34-libcrypt-dev_1%3a4.4.33-2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 137.0 Unpacking libcrypt-dev:amd64 (1:4.4.33-2) ...
+2026-Jun-20 14:02:01.208062
+#8 139.8 Selecting previously unselected package libtirpc-dev:amd64.
+2026-Jun-20 14:02:01.208062
+#8 139.8 Preparing to unpack .../35-libtirpc-dev_1.3.3+ds-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 140.1 Unpacking libtirpc-dev:amd64 (1.3.3+ds-1) ...
+2026-Jun-20 14:02:01.208062
+#8 143.1 Selecting previously unselected package libnsl-dev:amd64.
+2026-Jun-20 14:02:01.208062
+#8 143.1 Preparing to unpack .../36-libnsl-dev_1.3.0-2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 143.7 Unpacking libnsl-dev:amd64 (1.3.0-2) ...
+2026-Jun-20 14:02:01.208062
+#8 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 150.2 Selecting previously unselected package openssl.
+2026-Jun-20 14:02:01.208062
+#7 150.3 Preparing to unpack .../006-openssl_3.0.20-1~deb12u2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 151.2 Unpacking openssl (3.0.20-1~deb12u2) ...
+2026-Jun-20 14:02:01.208062
+#7 156.3 Selecting previously unselected package ca-certificates.
+2026-Jun-20 14:02:01.208062
+#7 156.3 Preparing to unpack .../007-ca-certificates_20230311+deb12u1_all.deb ...
+2026-Jun-20 14:02:01.208062
+#7 157.1 Unpacking ca-certificates (20230311+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#7 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#8 [builder 3/8] RUN apt-get update && apt-get install -y     python3     make     g++     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#8 148.1 Selecting previously unselected package rpcsvc-proto.
+2026-Jun-20 14:02:01.208062
+#8 148.1 Preparing to unpack .../37-rpcsvc-proto_1.4.3-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 148.7 Unpacking rpcsvc-proto (1.4.3-1) ...
+2026-Jun-20 14:02:01.208062
+#8 151.8 Selecting previously unselected package libc6-dev:amd64.
+2026-Jun-20 14:02:01.208062
+#8 151.8 Preparing to unpack .../38-libc6-dev_2.36-9+deb12u14_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 152.4 Unpacking libc6-dev:amd64 (2.36-9+deb12u14) ...
+2026-Jun-20 14:02:01.208062
+#8 155.3 Selecting previously unselected package libstdc++-12-dev:amd64.
+2026-Jun-20 14:02:01.208062
+#8 155.4 Preparing to unpack .../39-libstdc++-12-dev_12.2.0-14+deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 156.0 Unpacking libstdc++-12-dev:amd64 (12.2.0-14+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 161.0 Selecting previously unselected package krb5-locales.
+2026-Jun-20 14:02:01.208062
+#7 161.0 Preparing to unpack .../008-krb5-locales_1.20.1-2+deb12u5_all.deb ...
+2026-Jun-20 14:02:01.208062
+#7 161.8 Unpacking krb5-locales (1.20.1-2+deb12u5) ...
+2026-Jun-20 14:02:01.208062
+#7 164.9 Selecting previously unselected package libnss-systemd:amd64.
+2026-Jun-20 14:02:01.208062
+#7 165.0 Preparing to unpack .../009-libnss-systemd_252.39-1~deb12u2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 165.5 Unpacking libnss-systemd:amd64 (252.39-1~deb12u2) ...
+2026-Jun-20 14:02:01.208062
+#7 168.1 Selecting previously unselected package libpam-systemd:amd64.
+2026-Jun-20 14:02:01.208062
+#7 168.1 Preparing to unpack .../010-libpam-systemd_252.39-1~deb12u2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 168.6 Unpacking libpam-systemd:amd64 (252.39-1~deb12u2) ...
+2026-Jun-20 14:02:01.208062
+#7 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#8 [builder 3/8] RUN apt-get update && apt-get install -y     python3     make     g++     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#8 159.8 Selecting previously unselected package g++-12.
+2026-Jun-20 14:02:01.208062
+#8 159.9 Preparing to unpack .../40-g++-12_12.2.0-14+deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 160.2 Unpacking g++-12 (12.2.0-14+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 163.6 Selecting previously unselected package g++.
+2026-Jun-20 14:02:01.208062
+#8 163.6 Preparing to unpack .../41-g++_4%3a12.2.0-3_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 163.9 Unpacking g++ (4:12.2.0-3) ...
+2026-Jun-20 14:02:01.208062
+#8 166.5 Selecting previously unselected package libabsl20220623:amd64.
+2026-Jun-20 14:02:01.208062
+#8 166.5 Preparing to unpack .../42-libabsl20220623_20220623.1-1+deb12u2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 166.7 Unpacking libabsl20220623:amd64 (20220623.1-1+deb12u2) ...
+2026-Jun-20 14:02:01.208062
+#8 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 171.3 Selecting previously unselected package systemd-timesyncd.
+2026-Jun-20 14:02:01.208062
+#7 171.3 Preparing to unpack .../011-systemd-timesyncd_252.39-1~deb12u2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 172.1 Unpacking systemd-timesyncd (252.39-1~deb12u2) ...
+2026-Jun-20 14:02:01.208062
+#7 175.2 Selecting previously unselected package hicolor-icon-theme.
+2026-Jun-20 14:02:01.208062
+#7 175.2 Preparing to unpack .../012-hicolor-icon-theme_0.17-2_all.deb ...
+2026-Jun-20 14:02:01.208062
+#7 176.0 Unpacking hicolor-icon-theme (0.17-2) ...
+2026-Jun-20 14:02:01.208062
+#7 177.8 Selecting previously unselected package libgdk-pixbuf2.0-common.
+2026-Jun-20 14:02:01.208062
+#7 177.8 Preparing to unpack .../013-libgdk-pixbuf2.0-common_2.42.10+dfsg-1+deb12u4_all.deb ...
+2026-Jun-20 14:02:01.208062
+#7 178.1 Unpacking libgdk-pixbuf2.0-common (2.42.10+dfsg-1+deb12u4) ...
+2026-Jun-20 14:02:01.208062
+#7 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#8 [builder 3/8] RUN apt-get update && apt-get install -y     python3     make     g++     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#8 169.6 Selecting previously unselected package libaom3:amd64.
+2026-Jun-20 14:02:01.208062
+#8 169.6 Preparing to unpack .../43-libaom3_3.6.0-1+deb12u2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 170.1 Unpacking libaom3:amd64 (3.6.0-1+deb12u2) ...
+2026-Jun-20 14:02:01.208062
+#8 173.1 Selecting previously unselected package libdav1d6:amd64.
+2026-Jun-20 14:02:01.208062
+#8 173.1 Preparing to unpack .../44-libdav1d6_1.0.0-2+deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 173.8 Unpacking libdav1d6:amd64 (1.0.0-2+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 175.0 Selecting previously unselected package libgav1-1:amd64.
+2026-Jun-20 14:02:01.208062
+#8 175.1 Preparing to unpack .../45-libgav1-1_0.18.0-1+b1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 175.1 Unpacking libgav1-1:amd64 (0.18.0-1+b1) ...
+2026-Jun-20 14:02:01.208062
+#8 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 180.6 Selecting previously unselected package libglib2.0-0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 180.6 Preparing to unpack .../014-libglib2.0-0_2.74.6-2+deb12u9_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 181.3 Unpacking libglib2.0-0:amd64 (2.74.6-2+deb12u9) ...
+2026-Jun-20 14:02:01.208062
+#7 185.4 Selecting previously unselected package libicu72:amd64.
+2026-Jun-20 14:02:01.208062
+#7 185.4 Preparing to unpack .../015-libicu72_72.1-3+deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 185.9 Unpacking libicu72:amd64 (72.1-3+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#7 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#8 [builder 3/8] RUN apt-get update && apt-get install -y     python3     make     g++     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#8 178.0 Selecting previously unselected package librav1e0:amd64.
+2026-Jun-20 14:02:01.208062
+#8 178.0 Preparing to unpack .../46-librav1e0_0.5.1-6_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 178.4 Unpacking librav1e0:amd64 (0.5.1-6) ...
+2026-Jun-20 14:02:01.208062
+#8 182.3 Selecting previously unselected package libsvtav1enc1:amd64.
+2026-Jun-20 14:02:01.208062
+#8 182.3 Preparing to unpack .../47-libsvtav1enc1_1.4.1+dfsg-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 182.8 Unpacking libsvtav1enc1:amd64 (1.4.1+dfsg-1) ...
+2026-Jun-20 14:02:01.208062
+#8 186.2 Selecting previously unselected package libjpeg62-turbo:amd64.
+2026-Jun-20 14:02:01.208062
+#8 186.2 Preparing to unpack .../48-libjpeg62-turbo_1%3a2.1.5-2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 186.7 Unpacking libjpeg62-turbo:amd64 (1:2.1.5-2) ...
+2026-Jun-20 14:02:01.208062
+#8 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 190.3 Selecting previously unselected package libxml2:amd64.
+2026-Jun-20 14:02:01.208062
+#7 190.3 Preparing to unpack .../016-libxml2_2.9.14+dfsg-1.3~deb12u5_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 190.5 Unpacking libxml2:amd64 (2.9.14+dfsg-1.3~deb12u5) ...
+2026-Jun-20 14:02:01.208062
+#7 191.4 Selecting previously unselected package shared-mime-info.
+2026-Jun-20 14:02:01.208062
+#7 191.4 Preparing to unpack .../017-shared-mime-info_2.2-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 191.6 Unpacking shared-mime-info (2.2-1) ...
+2026-Jun-20 14:02:01.208062
+#7 194.1 Selecting previously unselected package libjpeg62-turbo:amd64.
+2026-Jun-20 14:02:01.208062
+#7 194.1 Preparing to unpack .../018-libjpeg62-turbo_1%3a2.1.5-2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 194.2 Unpacking libjpeg62-turbo:amd64 (1:2.1.5-2) ...
+2026-Jun-20 14:02:01.208062
+#7 194.9 Selecting previously unselected package libpng16-16:amd64.
+2026-Jun-20 14:02:01.208062
+#7 194.9 Preparing to unpack .../019-libpng16-16_1.6.39-2+deb12u5_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 194.9 Unpacking libpng16-16:amd64 (1.6.39-2+deb12u5) ...
+2026-Jun-20 14:02:01.208062
+#7 195.7 Selecting previously unselected package libdeflate0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 195.7 Preparing to unpack .../020-libdeflate0_1.14-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 195.8 Unpacking libdeflate0:amd64 (1.14-1) ...
+2026-Jun-20 14:02:01.208062
+#7 196.8 Selecting previously unselected package libjbig0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 196.8 Preparing to unpack .../021-libjbig0_2.1-6.1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 197.5 Unpacking libjbig0:amd64 (2.1-6.1) ...
+2026-Jun-20 14:02:01.208062
+#7 199.1 Selecting previously unselected package liblerc4:amd64.
+2026-Jun-20 14:02:01.208062
+#7 199.2 Preparing to unpack .../022-liblerc4_4.0.0+ds-2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 199.3 Unpacking liblerc4:amd64 (4.0.0+ds-2) ...
+2026-Jun-20 14:02:01.208062
+#7 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#8 [builder 3/8] RUN apt-get update && apt-get install -y     python3     make     g++     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#8 187.9 Selecting previously unselected package libyuv0:amd64.
+2026-Jun-20 14:02:01.208062
+#8 187.9 Preparing to unpack .../49-libyuv0_0.0~git20230123.b2528b0-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 188.0 Unpacking libyuv0:amd64 (0.0~git20230123.b2528b0-1) ...
+2026-Jun-20 14:02:01.208062
+#8 189.4 Selecting previously unselected package libavif15:amd64.
+2026-Jun-20 14:02:01.208062
+#8 189.4 Preparing to unpack .../50-libavif15_0.11.1-1+deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 189.7 Unpacking libavif15:amd64 (0.11.1-1+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 191.1 Selecting previously unselected package libbrotli1:amd64.
+2026-Jun-20 14:02:01.208062
+#8 191.2 Preparing to unpack .../51-libbrotli1_1.0.9-2+b6_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 191.2 Unpacking libbrotli1:amd64 (1.0.9-2+b6) ...
+2026-Jun-20 14:02:01.208062
+#8 192.2 Selecting previously unselected package libbsd0:amd64.
+2026-Jun-20 14:02:01.208062
+#8 192.2 Preparing to unpack .../52-libbsd0_0.11.7-2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 192.3 Unpacking libbsd0:amd64 (0.11.7-2) ...
+2026-Jun-20 14:02:01.208062
+#8 193.0 Selecting previously unselected package libpng16-16:amd64.
+2026-Jun-20 14:02:01.208062
+#8 193.0 Preparing to unpack .../53-libpng16-16_1.6.39-2+deb12u5_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 193.2 Unpacking libpng16-16:amd64 (1.6.39-2+deb12u5) ...
+2026-Jun-20 14:02:01.208062
+#8 195.6 Selecting previously unselected package libfreetype6:amd64.
+2026-Jun-20 14:02:01.208062
+#8 195.6 Preparing to unpack .../54-libfreetype6_2.12.1+dfsg-5+deb12u4_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 195.7 Unpacking libfreetype6:amd64 (2.12.1+dfsg-5+deb12u4) ...
+2026-Jun-20 14:02:01.208062
+#8 196.5 Selecting previously unselected package libfontconfig1:amd64.
+2026-Jun-20 14:02:01.208062
+#8 196.5 Preparing to unpack .../55-libfontconfig1_2.14.1-4_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 196.6 Unpacking libfontconfig1:amd64 (2.14.1-4) ...
+2026-Jun-20 14:02:01.208062
+#8 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 200.1 Selecting previously unselected package libwebp7:amd64.
+2026-Jun-20 14:02:01.208062
+#7 200.1 Preparing to unpack .../023-libwebp7_1.2.4-0.2+deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 200.2 Unpacking libwebp7:amd64 (1.2.4-0.2+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#7 203.4 Selecting previously unselected package libtiff6:amd64.
+2026-Jun-20 14:02:01.208062
+#7 203.4 Preparing to unpack .../024-libtiff6_4.5.0-6+deb12u4_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 204.1 Unpacking libtiff6:amd64 (4.5.0-6+deb12u4) ...
+2026-Jun-20 14:02:01.208062
+#7 207.1 Selecting previously unselected package libgdk-pixbuf-2.0-0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 207.1 Preparing to unpack .../025-libgdk-pixbuf-2.0-0_2.42.10+dfsg-1+deb12u4_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 207.2 Unpacking libgdk-pixbuf-2.0-0:amd64 (2.42.10+dfsg-1+deb12u4) ...
+2026-Jun-20 14:02:01.208062
+#7 208.0 Selecting previously unselected package gtk-update-icon-cache.
+2026-Jun-20 14:02:01.208062
+#7 208.0 Preparing to unpack .../026-gtk-update-icon-cache_3.24.38-2~deb12u3_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 208.4 Unpacking gtk-update-icon-cache (3.24.38-2~deb12u3) ...
+2026-Jun-20 14:02:01.208062
+#7 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#8 [builder 3/8] RUN apt-get update && apt-get install -y     python3     make     g++     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#8 197.8 Selecting previously unselected package libde265-0:amd64.
+2026-Jun-20 14:02:01.208062
+#8 197.8 Preparing to unpack .../56-libde265-0_1.0.11-1+deb12u2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 198.5 Unpacking libde265-0:amd64 (1.0.11-1+deb12u2) ...
+2026-Jun-20 14:02:01.208062
+#8 202.9 Selecting previously unselected package libnuma1:amd64.
+2026-Jun-20 14:02:01.208062
+#8 202.9 Preparing to unpack .../57-libnuma1_2.0.16-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 203.4 Unpacking libnuma1:amd64 (2.0.16-1) ...
+2026-Jun-20 14:02:01.208062
+#8 204.3 Selecting previously unselected package libx265-199:amd64.
+2026-Jun-20 14:02:01.208062
+#8 204.3 Preparing to unpack .../58-libx265-199_3.5-2+b1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 204.6 Unpacking libx265-199:amd64 (3.5-2+b1) ...
+2026-Jun-20 14:02:01.208062
+#8 207.2 Selecting previously unselected package libheif1:amd64.
+2026-Jun-20 14:02:01.208062
+#8 207.2 Preparing to unpack .../59-libheif1_1.15.1-1+deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 207.6 Unpacking libheif1:amd64 (1.15.1-1+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 211.2 Selecting previously unselected package adwaita-icon-theme.
+2026-Jun-20 14:02:01.208062
+#7 211.2 Preparing to unpack .../027-adwaita-icon-theme_43-1_all.deb ...
+2026-Jun-20 14:02:01.208062
+#7 211.3 Unpacking adwaita-icon-theme (43-1) ...
+2026-Jun-20 14:02:01.208062
+#7 215.6 Selecting previously unselected package alsa-topology-conf.
+2026-Jun-20 14:02:01.208062
+#7 215.6 Preparing to unpack .../028-alsa-topology-conf_1.2.5.1-2_all.deb ...
+2026-Jun-20 14:02:01.208062
+#7 215.8 Unpacking alsa-topology-conf (1.2.5.1-2) ...
+2026-Jun-20 14:02:01.208062
+#7 218.7 Selecting previously unselected package libasound2-data.
+2026-Jun-20 14:02:01.208062
+#7 218.7 Preparing to unpack .../029-libasound2-data_1.2.8-1_all.deb ...
+2026-Jun-20 14:02:01.208062
+#7 219.5 Unpacking libasound2-data (1.2.8-1) ...
+2026-Jun-20 14:02:01.208062
+#7 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#8 [builder 3/8] RUN apt-get update && apt-get install -y     python3     make     g++     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#8 208.5 Selecting previously unselected package libdeflate0:amd64.
+2026-Jun-20 14:02:01.208062
+#8 208.5 Preparing to unpack .../60-libdeflate0_1.14-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 208.6 Unpacking libdeflate0:amd64 (1.14-1) ...
+2026-Jun-20 14:02:01.208062
+#8 211.4 Selecting previously unselected package libjbig0:amd64.
+2026-Jun-20 14:02:01.208062
+#8 211.4 Preparing to unpack .../61-libjbig0_2.1-6.1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 211.5 Unpacking libjbig0:amd64 (2.1-6.1) ...
+2026-Jun-20 14:02:01.208062
+#8 213.6 Selecting previously unselected package liblerc4:amd64.
+2026-Jun-20 14:02:01.208062
+#8 213.6 Preparing to unpack .../62-liblerc4_4.0.0+ds-2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 214.2 Unpacking liblerc4:amd64 (4.0.0+ds-2) ...
+2026-Jun-20 14:02:01.208062
+#8 217.5 Selecting previously unselected package libwebp7:amd64.
+2026-Jun-20 14:02:01.208062
+#8 217.5 Preparing to unpack .../63-libwebp7_1.2.4-0.2+deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 218.2 Unpacking libwebp7:amd64 (1.2.4-0.2+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 223.0 Selecting previously unselected package libasound2:amd64.
+2026-Jun-20 14:02:01.208062
+#7 223.0 Preparing to unpack .../030-libasound2_1.2.8-1+b1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 223.7 Unpacking libasound2:amd64 (1.2.8-1+b1) ...
+2026-Jun-20 14:02:01.208062
+#7 225.6 Selecting previously unselected package alsa-ucm-conf.
+2026-Jun-20 14:02:01.208062
+#7 225.6 Preparing to unpack .../031-alsa-ucm-conf_1.2.8-1_all.deb ...
+2026-Jun-20 14:02:01.208062
+#7 225.7 Unpacking alsa-ucm-conf (1.2.8-1) ...
+2026-Jun-20 14:02:01.208062
+#7 228.4 Selecting previously unselected package at-spi2-common.
+2026-Jun-20 14:02:01.208062
+#7 228.4 Preparing to unpack .../032-at-spi2-common_2.46.0-5_all.deb ...
+2026-Jun-20 14:02:01.208062
+#7 228.8 Unpacking at-spi2-common (2.46.0-5) ...
+2026-Jun-20 14:02:01.208062
+#7 230.9 Selecting previously unselected package libxau6:amd64.
+2026-Jun-20 14:02:01.208062
+#7 230.9 Preparing to unpack .../033-libxau6_1%3a1.0.9-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 231.5 Unpacking libxau6:amd64 (1:1.0.9-1) ...
+2026-Jun-20 14:02:01.208062
+#7 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#8 [builder 3/8] RUN apt-get update && apt-get install -y     python3     make     g++     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#8 221.6 Selecting previously unselected package libtiff6:amd64.
+2026-Jun-20 14:02:01.208062
+#8 221.6 Preparing to unpack .../64-libtiff6_4.5.0-6+deb12u4_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 222.1 Unpacking libtiff6:amd64 (4.5.0-6+deb12u4) ...
+2026-Jun-20 14:02:01.208062
+#8 224.0 Selecting previously unselected package libxau6:amd64.
+2026-Jun-20 14:02:01.208062
+#8 224.0 Preparing to unpack .../65-libxau6_1%3a1.0.9-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 224.3 Unpacking libxau6:amd64 (1:1.0.9-1) ...
+2026-Jun-20 14:02:01.208062
+#8 226.2 Selecting previously unselected package libxdmcp6:amd64.
+2026-Jun-20 14:02:01.208062
+#8 226.2 Preparing to unpack .../66-libxdmcp6_1%3a1.1.2-3_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 226.7 Unpacking libxdmcp6:amd64 (1:1.1.2-3) ...
+2026-Jun-20 14:02:01.208062
+#8 229.2 Selecting previously unselected package libxcb1:amd64.
+2026-Jun-20 14:02:01.208062
+#8 229.2 Preparing to unpack .../67-libxcb1_1.15-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 229.5 Unpacking libxcb1:amd64 (1.15-1) ...
+2026-Jun-20 14:02:01.208062
+#8 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 233.5 Selecting previously unselected package libbsd0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 233.5 Preparing to unpack .../034-libbsd0_0.11.7-2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 233.9 Unpacking libbsd0:amd64 (0.11.7-2) ...
+2026-Jun-20 14:02:01.208062
+#7 234.9 Selecting previously unselected package libxdmcp6:amd64.
+2026-Jun-20 14:02:01.208062
+#7 234.9 Preparing to unpack .../035-libxdmcp6_1%3a1.1.2-3_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 235.0 Unpacking libxdmcp6:amd64 (1:1.1.2-3) ...
+2026-Jun-20 14:02:01.208062
+#7 236.6 Selecting previously unselected package libxcb1:amd64.
+2026-Jun-20 14:02:01.208062
+#7 236.7 Preparing to unpack .../036-libxcb1_1.15-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 236.9 Unpacking libxcb1:amd64 (1.15-1) ...
+2026-Jun-20 14:02:01.208062
+#7 238.1 Selecting previously unselected package libx11-data.
+2026-Jun-20 14:02:01.208062
+#7 238.1 Preparing to unpack .../037-libx11-data_2%3a1.8.4-2+deb12u2_all.deb ...
+2026-Jun-20 14:02:01.208062
+#7 238.4 Unpacking libx11-data (2:1.8.4-2+deb12u2) ...
+2026-Jun-20 14:02:01.208062
+#7 241.3 Selecting previously unselected package libx11-6:amd64.
+2026-Jun-20 14:02:01.208062
+#7 241.3 Preparing to unpack .../038-libx11-6_2%3a1.8.4-2+deb12u2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 241.4 Unpacking libx11-6:amd64 (2:1.8.4-2+deb12u2) ...
+2026-Jun-20 14:02:01.208062
+#7 243.1 Selecting previously unselected package libxext6:amd64.
+2026-Jun-20 14:02:01.208062
+#7 243.1 Preparing to unpack .../039-libxext6_2%3a1.3.4-1+b1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 243.4 Unpacking libxext6:amd64 (2:1.3.4-1+b1) ...
+2026-Jun-20 14:02:01.208062
+#7 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#8 [builder 3/8] RUN apt-get update && apt-get install -y     python3     make     g++     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#8 231.3 Selecting previously unselected package libx11-data.
+2026-Jun-20 14:02:01.208062
+#8 231.3 Preparing to unpack .../68-libx11-data_2%3a1.8.4-2+deb12u2_all.deb ...
+2026-Jun-20 14:02:01.208062
+#8 231.6 Unpacking libx11-data (2:1.8.4-2+deb12u2) ...
+2026-Jun-20 14:02:01.208062
+#8 233.2 Selecting previously unselected package libx11-6:amd64.
+2026-Jun-20 14:02:01.208062
+#8 233.2 Preparing to unpack .../69-libx11-6_2%3a1.8.4-2+deb12u2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 233.5 Unpacking libx11-6:amd64 (2:1.8.4-2+deb12u2) ...
+2026-Jun-20 14:02:01.208062
+#8 235.1 Selecting previously unselected package libxpm4:amd64.
+2026-Jun-20 14:02:01.208062
+#8 235.1 Preparing to unpack .../70-libxpm4_1%3a3.5.12-1.1+deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 235.3 Unpacking libxpm4:amd64 (1:3.5.12-1.1+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 238.2 Selecting previously unselected package libgd3:amd64.
+2026-Jun-20 14:02:01.208062
+#8 238.2 Preparing to unpack .../71-libgd3_2.3.3-9_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 238.2 Unpacking libgd3:amd64 (2.3.3-9) ...
+2026-Jun-20 14:02:01.208062
+#8 239.3 Selecting previously unselected package libc-devtools.
+2026-Jun-20 14:02:01.208062
+#8 239.3 Preparing to unpack .../72-libc-devtools_2.36-9+deb12u14_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 239.5 Unpacking libc-devtools (2.36-9+deb12u14) ...
+2026-Jun-20 14:02:01.208062
+#8 241.5 Selecting previously unselected package libgpm2:amd64.
+2026-Jun-20 14:02:01.208062
+#8 241.5 Preparing to unpack .../73-libgpm2_1.20.7-10+b1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 241.7 Unpacking libgpm2:amd64 (1.20.7-10+b1) ...
+2026-Jun-20 14:02:01.208062
+#8 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 245.4 Selecting previously unselected package libxi6:amd64.
+2026-Jun-20 14:02:01.208062
+#7 245.4 Preparing to unpack .../040-libxi6_2%3a1.8-1+b1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 246.0 Unpacking libxi6:amd64 (2:1.8-1+b1) ...
+2026-Jun-20 14:02:01.208062
+#7 248.2 Selecting previously unselected package libatspi2.0-0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 248.2 Preparing to unpack .../041-libatspi2.0-0_2.46.0-5_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 248.3 Unpacking libatspi2.0-0:amd64 (2.46.0-5) ...
+2026-Jun-20 14:02:01.208062
+#7 250.8 Selecting previously unselected package x11-common.
+2026-Jun-20 14:02:01.208062
+#7 250.8 Preparing to unpack .../042-x11-common_1%3a7.7+23_all.deb ...
+2026-Jun-20 14:02:01.208062
+#7 250.9 Unpacking x11-common (1:7.7+23) ...
+2026-Jun-20 14:02:01.208062
+#7 252.2 Selecting previously unselected package libxtst6:amd64.
+2026-Jun-20 14:02:01.208062
+#7 252.2 Preparing to unpack .../043-libxtst6_2%3a1.2.3-1.1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 252.5 Unpacking libxtst6:amd64 (2:1.2.3-1.1) ...
+2026-Jun-20 14:02:01.208062
+#7 253.9 Selecting previously unselected package dbus-user-session.
+2026-Jun-20 14:02:01.208062
+#7 253.9 Preparing to unpack .../044-dbus-user-session_1.14.10-1~deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 254.1 Unpacking dbus-user-session (1.14.10-1~deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#7 255.8 Selecting previously unselected package libdconf1:amd64.
+2026-Jun-20 14:02:01.208062
+#7 255.8 Preparing to unpack .../045-libdconf1_0.40.0-4_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 256.1 Unpacking libdconf1:amd64 (0.40.0-4) ...
+2026-Jun-20 14:02:01.208062
+#7 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#8 [builder 3/8] RUN apt-get update && apt-get install -y     python3     make     g++     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#8 244.2 Selecting previously unselected package make.
+2026-Jun-20 14:02:01.208062
+#8 244.2 Preparing to unpack .../74-make_4.3-4.1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#8 244.6 Unpacking make (4.3-4.1) ...
+2026-Jun-20 14:02:01.208062
+#8 245.3 Selecting previously unselected package manpages-dev.
+2026-Jun-20 14:02:01.208062
+#8 245.3 Preparing to unpack .../75-manpages-dev_6.03-2_all.deb ...
+2026-Jun-20 14:02:01.208062
+#8 245.6 Unpacking manpages-dev (6.03-2) ...
+2026-Jun-20 14:02:01.208062
+#8 247.8 Setting up media-types (10.0.0) ...
+2026-Jun-20 14:02:01.208062
+#8 248.6 Setting up libaom3:amd64 (3.6.0-1+deb12u2) ...
+2026-Jun-20 14:02:01.208062
+#8 249.4 Setting up libabsl20220623:amd64 (20220623.1-1+deb12u2) ...
+2026-Jun-20 14:02:01.208062
+#8 250.2 Setting up libxau6:amd64 (1:1.0.9-1) ...
+2026-Jun-20 14:02:01.208062
+#8 251.0 Setting up libkeyutils1:amd64 (1.6.3-2) ...
+2026-Jun-20 14:02:01.208062
+#8 251.7 Setting up libgpm2:amd64 (1.20.7-10+b1) ...
+2026-Jun-20 14:02:01.208062
+#8 252.7 Setting up liblerc4:amd64 (4.0.0+ds-2) ...
+2026-Jun-20 14:02:01.208062
+#8 253.2 Setting up manpages (6.03-2) ...
+2026-Jun-20 14:02:01.208062
+#8 253.6 Setting up libtirpc-common (1.3.3+ds-1) ...
+2026-Jun-20 14:02:01.208062
+#8 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 257.1 Selecting previously unselected package dconf-service.
+2026-Jun-20 14:02:01.208062
+#7 257.1 Preparing to unpack .../046-dconf-service_0.40.0-4_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 257.3 Unpacking dconf-service (0.40.0-4) ...
+2026-Jun-20 14:02:01.208062
+#7 258.4 Selecting previously unselected package dconf-gsettings-backend:amd64.
+2026-Jun-20 14:02:01.208062
+#7 258.4 Preparing to unpack .../047-dconf-gsettings-backend_0.40.0-4_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 259.2 Unpacking dconf-gsettings-backend:amd64 (0.40.0-4) ...
+2026-Jun-20 14:02:01.208062
+#7 260.2 Selecting previously unselected package gsettings-desktop-schemas.
+2026-Jun-20 14:02:01.208062
+#7 260.2 Preparing to unpack .../048-gsettings-desktop-schemas_43.0-1_all.deb ...
+2026-Jun-20 14:02:01.208062
+#7 260.4 Unpacking gsettings-desktop-schemas (43.0-1) ...
+2026-Jun-20 14:02:01.208062
+#7 261.2 Selecting previously unselected package at-spi2-core.
+2026-Jun-20 14:02:01.208062
+#7 261.2 Preparing to unpack .../049-at-spi2-core_2.46.0-5_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 261.2 Unpacking at-spi2-core (2.46.0-5) ...
+2026-Jun-20 14:02:01.208062
+#7 262.1 Selecting previously unselected package libavahi-common-data:amd64.
+2026-Jun-20 14:02:01.208062
+#7 262.1 Preparing to unpack .../050-libavahi-common-data_0.8-10+deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 262.3 Unpacking libavahi-common-data:amd64 (0.8-10+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#7 264.9 Selecting previously unselected package libavahi-common3:amd64.
+2026-Jun-20 14:02:01.208062
+#7 265.0 Preparing to unpack .../051-libavahi-common3_0.8-10+deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 265.0 Unpacking libavahi-common3:amd64 (0.8-10+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#7 267.0 Selecting previously unselected package libavahi-core7:amd64.
+2026-Jun-20 14:02:01.208062
+#7 267.0 Preparing to unpack .../052-libavahi-core7_0.8-10+deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 267.2 Unpacking libavahi-core7:amd64 (0.8-10+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#7 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#8 [builder 3/8] RUN apt-get update && apt-get install -y     python3     make     g++     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#8 254.3 Setting up libbrotli1:amd64 (1.0.9-2+b6) ...
+2026-Jun-20 14:02:01.208062
+#8 255.0 Setting up libsqlite3-0:amd64 (3.40.1-2+deb12u2) ...
+2026-Jun-20 14:02:01.208062
+#8 256.2 Setting up binutils-common:amd64 (2.40-2) ...
+2026-Jun-20 14:02:01.208062
+#8 256.9 Setting up libdeflate0:amd64 (1.14-1) ...
+2026-Jun-20 14:02:01.208062
+#8 257.3 Setting up linux-libc-dev:amd64 (6.1.174-1) ...
+2026-Jun-20 14:02:01.208062
+#8 257.5 Setting up libctf-nobfd0:amd64 (2.40-2) ...
+2026-Jun-20 14:02:01.208062
+#8 257.7 Setting up krb5-locales (1.20.1-2+deb12u5) ...
+2026-Jun-20 14:02:01.208062
+#8 258.2 Setting up libsvtav1enc1:amd64 (1.4.1+dfsg-1) ...
+2026-Jun-20 14:02:01.208062
+#8 258.7 Setting up libgomp1:amd64 (12.2.0-14+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 259.2 Setting up libjbig0:amd64 (2.1-6.1) ...
+2026-Jun-20 14:02:01.208062
+#8 259.7 Setting up librav1e0:amd64 (0.5.1-6) ...
+2026-Jun-20 14:02:01.208062
+#8 261.3 Setting up libjansson4:amd64 (2.14-2) ...
+2026-Jun-20 14:02:01.208062
+#8 262.8 Setting up libkrb5support0:amd64 (1.20.1-2+deb12u5) ...
+2026-Jun-20 14:02:01.208062
+#8 263.5 Setting up rpcsvc-proto (1.4.3-1) ...
+2026-Jun-20 14:02:01.208062
+#8 264.0 Setting up libjpeg62-turbo:amd64 (1:2.1.5-2) ...
+2026-Jun-20 14:02:01.208062
+#8 264.4 Setting up libx11-data (2:1.8.4-2+deb12u2) ...
+2026-Jun-20 14:02:01.208062
+#8 264.8 Setting up make (4.3-4.1) ...
+2026-Jun-20 14:02:01.208062
+#8 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 268.4 Selecting previously unselected package libdaemon0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 268.4 Preparing to unpack .../053-libdaemon0_0.14-7.1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 268.6 Unpacking libdaemon0:amd64 (0.14-7.1) ...
+2026-Jun-20 14:02:01.208062
+#7 269.9 Selecting previously unselected package avahi-daemon.
+2026-Jun-20 14:02:01.208062
+#7 269.9 Preparing to unpack .../054-avahi-daemon_0.8-10+deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 270.1 Unpacking avahi-daemon (0.8-10+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#7 271.2 Selecting previously unselected package libavahi-client3:amd64.
+2026-Jun-20 14:02:01.208062
+#7 271.2 Preparing to unpack .../055-libavahi-client3_0.8-10+deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 271.4 Unpacking libavahi-client3:amd64 (0.8-10+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#7 272.0 Selecting previously unselected package avahi-utils.
+2026-Jun-20 14:02:01.208062
+#7 272.0 Preparing to unpack .../056-avahi-utils_0.8-10+deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 272.2 Unpacking avahi-utils (0.8-10+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#7 273.8 Selecting previously unselected package libatk1.0-0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 273.8 Preparing to unpack .../057-libatk1.0-0_2.46.0-5_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 274.4 Unpacking libatk1.0-0:amd64 (2.46.0-5) ...
+2026-Jun-20 14:02:01.208062
+#7 277.8 Selecting previously unselected package libatk-bridge2.0-0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 277.8 Preparing to unpack .../058-libatk-bridge2.0-0_2.46.0-5_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 278.5 Unpacking libatk-bridge2.0-0:amd64 (2.46.0-5) ...
+2026-Jun-20 14:02:01.208062
+#7 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#8 [builder 3/8] RUN apt-get update && apt-get install -y     python3     make     g++     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#8 265.4 Setting up libmpfr6:amd64 (4.2.0-1) ...
+2026-Jun-20 14:02:01.208062
+#8 265.9 Setting up libquadmath0:amd64 (12.2.0-14+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 266.4 Setting up libpng16-16:amd64 (1.6.39-2+deb12u5) ...
+2026-Jun-20 14:02:01.208062
+#8 267.2 Setting up libmpc3:amd64 (1.3.1-1) ...
+2026-Jun-20 14:02:01.208062
+#8 267.8 Setting up libatomic1:amd64 (12.2.0-14+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 268.0 Setting up fonts-dejavu-core (2.37-6) ...
+2026-Jun-20 14:02:01.208062
+#8 270.4 Setting up libgav1-1:amd64 (0.18.0-1+b1) ...
+2026-Jun-20 14:02:01.208062
+#8 270.4 Setting up libncursesw6:amd64 (6.4-4) ...
+2026-Jun-20 14:02:01.208062
+#8 270.4 Setting up libk5crypto3:amd64 (1.20.1-2+deb12u5) ...
+2026-Jun-20 14:02:01.208062
+#8 270.7 Setting up libdav1d6:amd64 (1.0.0-2+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 272.5 Setting up libwebp7:amd64 (1.2.4-0.2+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 274.0 Setting up libubsan1:amd64 (12.2.0-14+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 275.7 Setting up libnuma1:amd64 (2.0.16-1) ...
+2026-Jun-20 14:02:01.208062
+#8 277.3 Setting up libcrypt-dev:amd64 (1:4.4.33-2) ...
+2026-Jun-20 14:02:01.208062
+#8 279.1 Setting up libtiff6:amd64 (4.5.0-6+deb12u4) ...
+2026-Jun-20 14:02:01.208062
+#8 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 282.4 Selecting previously unselected package libbrotli1:amd64.
+2026-Jun-20 14:02:01.208062
+#7 282.4 Preparing to unpack .../059-libbrotli1_1.0.9-2+b6_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 282.7 Unpacking libbrotli1:amd64 (1.0.9-2+b6) ...
+2026-Jun-20 14:02:01.208062
+#7 286.0 Selecting previously unselected package libfreetype6:amd64.
+2026-Jun-20 14:02:01.208062
+#7 286.0 Preparing to unpack .../060-libfreetype6_2.12.1+dfsg-5+deb12u4_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 286.6 Unpacking libfreetype6:amd64 (2.12.1+dfsg-5+deb12u4) ...
+2026-Jun-20 14:02:01.208062
+#7 289.8 Selecting previously unselected package fonts-liberation.
+2026-Jun-20 14:02:01.208062
+#7 289.8 Preparing to unpack .../061-fonts-liberation_1%3a1.07.4-11_all.deb ...
+2026-Jun-20 14:02:01.208062
+#7 291.0 Unpacking fonts-liberation (1:1.07.4-11) ...
+2026-Jun-20 14:02:01.208062
+#7 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#8 [builder 3/8] RUN apt-get update && apt-get install -y     python3     make     g++     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#8 280.1 Setting up libasan8:amd64 (12.2.0-14+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 282.0 Setting up libkrb5-3:amd64 (1.20.1-2+deb12u5) ...
+2026-Jun-20 14:02:01.208062
+#8 283.6 Setting up libtsan2:amd64 (12.2.0-14+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 285.6 Setting up libbinutils:amd64 (2.40-2) ...
+2026-Jun-20 14:02:01.208062
+#8 288.1 Setting up libisl23:amd64 (0.25-1.1) ...
+2026-Jun-20 14:02:01.208062
+#8 291.5 Setting up libde265-0:amd64 (1.0.11-1+deb12u2) ...
+2026-Jun-20 14:02:01.208062
+#8 292.8 Setting up libc-dev-bin (2.36-9+deb12u14) ...
+2026-Jun-20 14:02:01.208062
+#8 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 296.9 Selecting previously unselected package fontconfig-config.
+2026-Jun-20 14:02:01.208062
+#7 296.9 Preparing to unpack .../062-fontconfig-config_2.14.1-4_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 298.1 Unpacking fontconfig-config (2.14.1-4) ...
+2026-Jun-20 14:02:01.208062
+#7 301.8 Selecting previously unselected package libfontconfig1:amd64.
+2026-Jun-20 14:02:01.208062
+#7 301.8 Preparing to unpack .../063-libfontconfig1_2.14.1-4_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 302.4 Unpacking libfontconfig1:amd64 (2.14.1-4) ...
+2026-Jun-20 14:02:01.208062
+#7 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#8 [builder 3/8] RUN apt-get update && apt-get install -y     python3     make     g++     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#8 294.3 Setting up openssl (3.0.20-1~deb12u2) ...
+2026-Jun-20 14:02:01.208062
+#8 296.0 Setting up libbsd0:amd64 (0.11.7-2) ...
+2026-Jun-20 14:02:01.208062
+#8 297.7 Setting up libyuv0:amd64 (0.0~git20230123.b2528b0-1) ...
+2026-Jun-20 14:02:01.208062
+#8 299.3 Setting up readline-common (8.2-1.3) ...
+2026-Jun-20 14:02:01.208062
+#8 301.3 Setting up libcc1-0:amd64 (12.2.0-14+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 303.1 Setting up liblsan0:amd64 (12.2.0-14+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 306.9 Selecting previously unselected package libpixman-1-0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 306.9 Preparing to unpack .../064-libpixman-1-0_0.42.2-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 307.3 Unpacking libpixman-1-0:amd64 (0.42.2-1) ...
+2026-Jun-20 14:02:01.208062
+#7 310.5 Selecting previously unselected package libxcb-render0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 310.5 Preparing to unpack .../065-libxcb-render0_1.15-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 310.7 Unpacking libxcb-render0:amd64 (1.15-1) ...
+2026-Jun-20 14:02:01.208062
+#7 313.1 Selecting previously unselected package libxcb-shm0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 313.1 Preparing to unpack .../066-libxcb-shm0_1.15-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 313.5 Unpacking libxcb-shm0:amd64 (1.15-1) ...
+2026-Jun-20 14:02:01.208062
+#7 316.4 Selecting previously unselected package libxrender1:amd64.
+2026-Jun-20 14:02:01.208062
+#7 316.4 Preparing to unpack .../067-libxrender1_1%3a0.9.10-1.1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 316.6 Unpacking libxrender1:amd64 (1:0.9.10-1.1) ...
+2026-Jun-20 14:02:01.208062
+#7 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#8 [builder 3/8] RUN apt-get update && apt-get install -y     python3     make     g++     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#8 304.7 Setting up libitm1:amd64 (12.2.0-14+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 306.3 Setting up libctf0:amd64 (2.40-2) ...
+2026-Jun-20 14:02:01.208062
+#8 307.4 Setting up manpages-dev (6.03-2) ...
+2026-Jun-20 14:02:01.208062
+#8 308.1 Setting up libxdmcp6:amd64 (1:1.1.2-3) ...
+2026-Jun-20 14:02:01.208062
+#8 309.2 Setting up cpp-12 (12.2.0-14+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 310.2 Setting up libxcb1:amd64 (1.15-1) ...
+2026-Jun-20 14:02:01.208062
+#8 311.8 Setting up libavif15:amd64 (0.11.1-1+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 313.2 Setting up fontconfig-config (2.14.1-4) ...
+2026-Jun-20 14:02:01.208062
+#8 315.7 debconf: unable to initialize frontend: Dialog
+2026-Jun-20 14:02:01.208062
+#8 315.7 debconf: (TERM is not set, so the dialog frontend is not usable.)
+2026-Jun-20 14:02:01.208062
+#8 315.7 debconf: falling back to frontend: Readline
+2026-Jun-20 14:02:01.208062
+#8 315.7 debconf: unable to initialize frontend: Readline
+2026-Jun-20 14:02:01.208062
+#8 315.7 debconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC contains: /etc/perl /usr/local/lib/x86_64-linux-gnu/perl/5.36.0 /usr/local/share/perl/5.36.0 /usr/lib/x86_64-linux-gnu/perl5/5.36 /usr/share/perl5 /usr/lib/x86_64-linux-gnu/perl-base /usr/lib/x86_64-linux-gnu/perl/5.36 /usr/share/perl/5.36 /usr/local/lib/site_perl) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 7.)
+2026-Jun-20 14:02:01.208062
+#8 315.7 debconf: falling back to frontend: Teletype
+2026-Jun-20 14:02:01.208062
+#8 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 319.3 Selecting previously unselected package libcairo2:amd64.
+2026-Jun-20 14:02:01.208062
+#7 319.3 Preparing to unpack .../068-libcairo2_1.16.0-7_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 319.5 Unpacking libcairo2:amd64 (1.16.0-7) ...
+2026-Jun-20 14:02:01.208062
+#7 323.3 Selecting previously unselected package libcups2:amd64.
+2026-Jun-20 14:02:01.208062
+#7 323.3 Preparing to unpack .../069-libcups2_2.4.2-3+deb12u9_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 324.3 Unpacking libcups2:amd64 (2.4.2-3+deb12u9) ...
+2026-Jun-20 14:02:01.208062
+#7 327.1 Selecting previously unselected package libdav1d6:amd64.
+2026-Jun-20 14:02:01.208062
+#7 327.1 Preparing to unpack .../070-libdav1d6_1.0.0-2+deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 327.5 Unpacking libdav1d6:amd64 (1.0.0-2+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#7 330.4 Selecting previously unselected package libdouble-conversion3:amd64.
+2026-Jun-20 14:02:01.208062
+#7 330.4 Preparing to unpack .../071-libdouble-conversion3_3.2.1-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 330.9 Unpacking libdouble-conversion3:amd64 (3.2.1-1) ...
+2026-Jun-20 14:02:01.208062
+#7 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#8 [builder 3/8] RUN apt-get update && apt-get install -y     python3     make     g++     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#8 317.8 Setting up libreadline8:amd64 (8.2-1.3) ...
+2026-Jun-20 14:02:01.208062
+#8 320.0 Setting up ca-certificates (20230311+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 321.5 debconf: unable to initialize frontend: Dialog
+2026-Jun-20 14:02:01.208062
+#8 321.5 debconf: (TERM is not set, so the dialog frontend is not usable.)
+2026-Jun-20 14:02:01.208062
+#8 321.5 debconf: falling back to frontend: Readline
+2026-Jun-20 14:02:01.208062
+#8 321.5 debconf: unable to initialize frontend: Readline
+2026-Jun-20 14:02:01.208062
+#8 321.5 debconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC contains: /etc/perl /usr/local/lib/x86_64-linux-gnu/perl/5.36.0 /usr/local/share/perl/5.36.0 /usr/lib/x86_64-linux-gnu/perl5/5.36 /usr/share/perl5 /usr/lib/x86_64-linux-gnu/perl-base /usr/lib/x86_64-linux-gnu/perl/5.36 /usr/share/perl/5.36 /usr/local/lib/site_perl) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 7.)
+2026-Jun-20 14:02:01.208062
+#8 321.5 debconf: falling back to frontend: Teletype
+2026-Jun-20 14:02:01.208062
+#8 322.4 Updating certificates in /etc/ssl/certs...
+2026-Jun-20 14:02:01.208062
+#8 324.5 142 added, 0 removed; done.
+2026-Jun-20 14:02:01.208062
+#8 326.8 Setting up libgprofng0:amd64 (2.40-2) ...
+2026-Jun-20 14:02:01.208062
+#8 329.0 Setting up libfreetype6:amd64 (2.12.1+dfsg-5+deb12u4) ...
+2026-Jun-20 14:02:01.208062
+#8 331.3 Setting up libgcc-12-dev:amd64 (12.2.0-14+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 335.7 Selecting previously unselected package libogg0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 335.7 Preparing to unpack .../072-libogg0_1.3.5-3_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 336.1 Unpacking libogg0:amd64 (1.3.5-3) ...
+2026-Jun-20 14:02:01.208062
+#7 340.1 Selecting previously unselected package libflac12:amd64.
+2026-Jun-20 14:02:01.208062
+#7 340.1 Preparing to unpack .../073-libflac12_1.4.2+ds-2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 341.1 Unpacking libflac12:amd64 (1.4.2+ds-2) ...
+2026-Jun-20 14:02:01.208062
+#7 344.8 Selecting previously unselected package libdrm-common.
+2026-Jun-20 14:02:01.208062
+#7 344.8 Preparing to unpack .../074-libdrm-common_2.4.114-1_all.deb ...
+2026-Jun-20 14:02:01.208062
+#7 345.7 Unpacking libdrm-common (2.4.114-1) ...
+2026-Jun-20 14:02:01.208062
+#7 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#8 [builder 3/8] RUN apt-get update && apt-get install -y     python3     make     g++     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#8 333.0 Setting up libgssapi-krb5-2:amd64 (1.20.1-2+deb12u5) ...
+2026-Jun-20 14:02:01.208062
+#8 334.6 Setting up libx265-199:amd64 (3.5-2+b1) ...
+2026-Jun-20 14:02:01.208062
+#8 336.6 Setting up cpp (4:12.2.0-3) ...
+2026-Jun-20 14:02:01.208062
+#8 340.1 Setting up libx11-6:amd64 (2:1.8.4-2+deb12u2) ...
+2026-Jun-20 14:02:01.208062
+#8 342.7 Setting up libfontconfig1:amd64 (2.14.1-4) ...
+2026-Jun-20 14:02:01.208062
+#8 345.3 Setting up binutils-x86-64-linux-gnu (2.40-2) ...
+2026-Jun-20 14:02:01.208062
+#8 348.3 Setting up libtirpc3:amd64 (1.3.3+ds-1) ...
+2026-Jun-20 14:02:01.208062
+#8 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 351.4 Selecting previously unselected package libdrm2:amd64.
+2026-Jun-20 14:02:01.208062
+#7 351.4 Preparing to unpack .../075-libdrm2_2.4.114-1+b1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 352.2 Unpacking libdrm2:amd64 (2.4.114-1+b1) ...
+2026-Jun-20 14:02:01.208062
+#7 357.7 Selecting previously unselected package libwayland-server0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 357.7 Preparing to unpack .../076-libwayland-server0_1.21.0-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 358.2 Unpacking libwayland-server0:amd64 (1.21.0-1) ...
+2026-Jun-20 14:02:01.208062
+#7 362.1 Selecting previously unselected package libgbm1:amd64.
+2026-Jun-20 14:02:01.208062
+#7 362.1 Preparing to unpack .../077-libgbm1_22.3.6-1+deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 362.6 Unpacking libgbm1:amd64 (22.3.6-1+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#7 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#8 [builder 3/8] RUN apt-get update && apt-get install -y     python3     make     g++     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#8 350.8 Setting up libxpm4:amd64 (1:3.5.12-1.1+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 353.7 Setting up libheif1:amd64 (1.15.1-1+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 355.3 Setting up binutils (2.40-2) ...
+2026-Jun-20 14:02:01.208062
+#8 356.9 Setting up libtirpc-dev:amd64 (1.3.3+ds-1) ...
+2026-Jun-20 14:02:01.208062
+#8 359.6 Setting up gcc-12 (12.2.0-14+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 361.6 Setting up libgd3:amd64 (2.3.3-9) ...
+2026-Jun-20 14:02:01.208062
+#8 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 365.8 Selecting previously unselected package libgraphite2-3:amd64.
+2026-Jun-20 14:02:01.208062
+#7 365.8 Preparing to unpack .../078-libgraphite2-3_1.3.14-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 366.2 Unpacking libgraphite2-3:amd64 (1.3.14-1) ...
+2026-Jun-20 14:02:01.208062
+#7 369.2 Selecting previously unselected package libharfbuzz0b:amd64.
+2026-Jun-20 14:02:01.208062
+#7 369.2 Preparing to unpack .../079-libharfbuzz0b_6.0.0+dfsg-3_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 369.4 Unpacking libharfbuzz0b:amd64 (6.0.0+dfsg-3) ...
+2026-Jun-20 14:02:01.208062
+#7 370.8 Selecting previously unselected package libharfbuzz-subset0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 370.8 Preparing to unpack .../080-libharfbuzz-subset0_6.0.0+dfsg-3_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 370.9 Unpacking libharfbuzz-subset0:amd64 (6.0.0+dfsg-3) ...
+2026-Jun-20 14:02:01.208062
+#7 372.0 Selecting previously unselected package liblcms2-2:amd64.
+2026-Jun-20 14:02:01.208062
+#7 372.0 Preparing to unpack .../081-liblcms2-2_2.14-2+deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 372.2 Unpacking liblcms2-2:amd64 (2.14-2+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#7 373.0 Selecting previously unselected package libminizip1:amd64.
+2026-Jun-20 14:02:01.208062
+#7 373.0 Preparing to unpack .../082-libminizip1_1.1-8+deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 373.1 Unpacking libminizip1:amd64 (1.1-8+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#7 373.8 Selecting previously unselected package libnspr4:amd64.
+2026-Jun-20 14:02:01.208062
+#7 373.8 Preparing to unpack .../083-libnspr4_2%3a4.35-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 373.9 Unpacking libnspr4:amd64 (2:4.35-1) ...
+2026-Jun-20 14:02:01.208062
+#7 374.9 Selecting previously unselected package libnss3:amd64.
+2026-Jun-20 14:02:01.208062
+#7 374.9 Preparing to unpack .../084-libnss3_2%3a3.87.1-1+deb12u2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 375.0 Unpacking libnss3:amd64 (2:3.87.1-1+deb12u2) ...
+2026-Jun-20 14:02:01.208062
+#7 375.9 Selecting previously unselected package libopenh264-7:amd64.
+2026-Jun-20 14:02:01.208062
+#7 375.9 Preparing to unpack .../085-libopenh264-7_2.3.1+dfsg-3+deb12u2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#8 [builder 3/8] RUN apt-get update && apt-get install -y     python3     make     g++     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#8 362.9 Setting up libnsl2:amd64 (1.3.0-2) ...
+2026-Jun-20 14:02:01.208062
+#8 365.1 Setting up libc-devtools (2.36-9+deb12u14) ...
+2026-Jun-20 14:02:01.208062
+#8 366.0 Setting up libpython3.11-stdlib:amd64 (3.11.2-6+deb12u7) ...
+2026-Jun-20 14:02:01.208062
+#8 366.4 Setting up gcc (4:12.2.0-3) ...
+2026-Jun-20 14:02:01.208062
+#8 367.3 Setting up libnsl-dev:amd64 (1.3.0-2) ...
+2026-Jun-20 14:02:01.208062
+#8 367.8 Setting up libc6-dev:amd64 (2.36-9+deb12u14) ...
+2026-Jun-20 14:02:01.208062
+#8 368.3 Setting up libpython3-stdlib:amd64 (3.11.2-1+b1) ...
+2026-Jun-20 14:02:01.208062
+#8 368.8 Setting up python3.11 (3.11.2-6+deb12u7) ...
+2026-Jun-20 14:02:01.208062
+#8 370.6 Setting up libstdc++-12-dev:amd64 (12.2.0-14+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 370.9 Setting up python3 (3.11.2-1+b1) ...
+2026-Jun-20 14:02:01.208062
+#8 371.1 running python rtupdate hooks for python3.11...
+2026-Jun-20 14:02:01.208062
+#8 371.1 running python post-rtupdate hooks for python3.11...
+2026-Jun-20 14:02:01.208062
+#8 371.4 Setting up g++-12 (12.2.0-14+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 371.7 Setting up g++ (4:12.2.0-3) ...
+2026-Jun-20 14:02:01.208062
+#8 372.0 update-alternatives: using /usr/bin/g++ to provide /usr/bin/c++ (c++) in auto mode
+2026-Jun-20 14:02:01.208062
+#8 372.3 Processing triggers for libc-bin (2.36-9+deb12u14) ...
+2026-Jun-20 14:02:01.208062
+#8 372.8 Processing triggers for ca-certificates (20230311+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#8 372.9 Updating certificates in /etc/ssl/certs...
+2026-Jun-20 14:02:01.208062
+#8 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 376.1 Unpacking libopenh264-7:amd64 (2.3.1+dfsg-3+deb12u2) ...
+2026-Jun-20 14:02:01.208062
+#7 379.0 Selecting previously unselected package libopenjp2-7:amd64.
+2026-Jun-20 14:02:01.208062
+#7 379.3 Preparing to unpack .../086-libopenjp2-7_2.5.0-2+deb12u3_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 379.7 Unpacking libopenjp2-7:amd64 (2.5.0-2+deb12u3) ...
+2026-Jun-20 14:02:01.208062
+#7 382.4 Selecting previously unselected package libopus0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 382.4 Preparing to unpack .../087-libopus0_1.3.1-3_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#8 [builder 3/8] RUN apt-get update && apt-get install -y     python3     make     g++     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#8 379.3 0 added, 0 removed; done.
+2026-Jun-20 14:02:01.208062
+#8 379.3 Running hooks in /etc/ca-certificates/update.d...
+2026-Jun-20 14:02:01.208062
+#8 379.3 done.
+2026-Jun-20 14:02:01.208062
+#8 DONE 381.1s
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 383.0 Unpacking libopus0:amd64 (1.3.1-3) ...
+2026-Jun-20 14:02:01.208062
+#7 384.5 Selecting previously unselected package fontconfig.
+2026-Jun-20 14:02:01.208062
+#7 384.6 Preparing to unpack .../088-fontconfig_2.14.1-4_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 385.0 Unpacking fontconfig (2.14.1-4) ...
+2026-Jun-20 14:02:01.208062
+#7 388.4 Selecting previously unselected package libfribidi0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 388.4 Preparing to unpack .../089-libfribidi0_1.0.8-2.1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#9 [builder 4/8] COPY package*.json ./
+2026-Jun-20 14:02:01.208062
+#9 DONE 4.6s
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 389.1 Unpacking libfribidi0:amd64 (1.0.8-2.1) ...
+2026-Jun-20 14:02:01.208062
+#7 391.1 Selecting previously unselected package libthai-data.
+2026-Jun-20 14:02:01.208062
+#7 391.1 Preparing to unpack .../090-libthai-data_0.1.29-1_all.deb ...
+2026-Jun-20 14:02:01.208062
+#7 391.3 Unpacking libthai-data (0.1.29-1) ...
+2026-Jun-20 14:02:01.208062
+#7 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#10 [builder 5/8] RUN sed -i 's|http://package-firewall\.replit\.local/npm/|https:<REDACTED>@types/uuid@11.0.0: This is a stub types definition. uuid provides its own type definitions, so you do not need this installed.
+2026-Jun-20 14:02:01.208062
+#11 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 464.7 Selecting previously unselected package libxkbcommon0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 464.7 Preparing to unpack .../106-libxkbcommon0_1.5.0-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 465.4 Unpacking libxkbcommon0:amd64 (1.5.0-1) ...
+2026-Jun-20 14:02:01.208062
+#7 471.7 Selecting previously unselected package libxnvctrl0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 471.7 Preparing to unpack .../107-libxnvctrl0_525.85.05-3~deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 472.9 Unpacking libxnvctrl0:amd64 (525.85.05-3~deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#7 479.3 Selecting previously unselected package libxrandr2:amd64.
+2026-Jun-20 14:02:01.208062
+#7 479.4 Preparing to unpack .../108-libxrandr2_2%3a1.5.2-2+b1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 480.2 Unpacking libxrandr2:amd64 (2:1.5.2-2+b1) ...
+2026-Jun-20 14:02:01.208062
+#7 486.0 Selecting previously unselected package libcairo-gobject2:amd64.
+2026-Jun-20 14:02:01.208062
+#7 486.0 Preparing to unpack .../109-libcairo-gobject2_1.16.0-7_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 486.3 Unpacking libcairo-gobject2:amd64 (1.16.0-7) ...
+2026-Jun-20 14:02:01.208062
+#7 492.9 Selecting previously unselected package libcolord2:amd64.
+2026-Jun-20 14:02:01.208062
+#7 492.9 Preparing to unpack .../110-libcolord2_1.4.6-2.2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 493.6 Unpacking libcolord2:amd64 (1.4.6-2.2) ...
+2026-Jun-20 14:02:01.208062
+#7 501.6 Selecting previously unselected package libepoxy0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 501.6 Preparing to unpack .../111-libepoxy0_1.5.10-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 502.8 Unpacking libepoxy0:amd64 (1.5.10-1) ...
+2026-Jun-20 14:02:01.208062
+#7 510.2 Selecting previously unselected package libpangoft2-1.0-0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 510.2 Preparing to unpack .../112-libpangoft2-1.0-0_1.50.12+ds-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 511.7 Unpacking libpangoft2-1.0-0:amd64 (1.50.12+ds-1) ...
+2026-Jun-20 14:02:01.208062
+#7 520.4 Selecting previously unselected package libpangocairo-1.0-0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 520.4 Preparing to unpack .../113-libpangocairo-1.0-0_1.50.12+ds-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 521.7 Unpacking libpangocairo-1.0-0:amd64 (1.50.12+ds-1) ...
+2026-Jun-20 14:02:01.208062
+#7 529.2 Selecting previously unselected package libwayland-client0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 529.2 Preparing to unpack .../114-libwayland-client0_1.21.0-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 530.1 Unpacking libwayland-client0:amd64 (1.21.0-1) ...
+2026-Jun-20 14:02:01.208062
+#7 536.6 Selecting previously unselected package libwayland-cursor0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 536.6 Preparing to unpack .../115-libwayland-cursor0_1.21.0-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 537.2 Unpacking libwayland-cursor0:amd64 (1.21.0-1) ...
+2026-Jun-20 14:02:01.208062
+#7 543.3 Selecting previously unselected package libwayland-egl1:amd64.
+2026-Jun-20 14:02:01.208062
+#7 543.3 Preparing to unpack .../116-libwayland-egl1_1.21.0-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 544.0 Unpacking libwayland-egl1:amd64 (1.21.0-1) ...
+2026-Jun-20 14:02:01.208062
+#7 547.1 Selecting previously unselected package libxcursor1:amd64.
+2026-Jun-20 14:02:01.208062
+#7 547.1 Preparing to unpack .../117-libxcursor1_1%3a1.2.1-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 547.8 Unpacking libxcursor1:amd64 (1:1.2.1-1) ...
+2026-Jun-20 14:02:01.208062
+#7 551.9 Selecting previously unselected package libxinerama1:amd64.
+2026-Jun-20 14:02:01.208062
+#7 551.9 Preparing to unpack .../118-libxinerama1_2%3a1.1.4-3_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 552.8 Unpacking libxinerama1:amd64 (2:1.1.4-3) ...
+2026-Jun-20 14:02:01.208062
+#7 555.6 Selecting previously unselected package libgtk-3-common.
+2026-Jun-20 14:02:01.208062
+#7 555.6 Preparing to unpack .../119-libgtk-3-common_3.24.38-2~deb12u3_all.deb ...
+2026-Jun-20 14:02:01.208062
+#7 556.4 Unpacking libgtk-3-common (3.24.38-2~deb12u3) ...
+2026-Jun-20 14:02:01.208062
+#7 561.3 Selecting previously unselected package libgtk-3-0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 561.3 Preparing to unpack .../120-libgtk-3-0_3.24.38-2~deb12u3_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 561.5 Unpacking libgtk-3-0:amd64 (3.24.38-2~deb12u3) ...
+2026-Jun-20 14:02:01.208062
+#7 564.0 Selecting previously unselected package libfontenc1:amd64.
+2026-Jun-20 14:02:01.208062
+#7 564.0 Preparing to unpack .../121-libfontenc1_1%3a1.1.4-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 564.1 Unpacking libfontenc1:amd64 (1:1.1.4-1) ...
+2026-Jun-20 14:02:01.208062
+#7 565.8 Selecting previously unselected package libglvnd0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 565.8 Preparing to unpack .../122-libglvnd0_1.6.0-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 566.0 Unpacking libglvnd0:amd64 (1.6.0-1) ...
+2026-Jun-20 14:02:01.208062
+#7 567.4 Selecting previously unselected package libglapi-mesa:amd64.
+2026-Jun-20 14:02:01.208062
+#7 567.4 Preparing to unpack .../123-libglapi-mesa_22.3.6-1+deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 567.5 Unpacking libglapi-mesa:amd64 (22.3.6-1+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#7 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#11 [builder 6/8] RUN npm ci
+2026-Jun-20 14:02:01.208062
+#11 175.9
+2026-Jun-20 14:02:01.208062
+#11 175.9 > openwa@0.4.5 postinstall
+2026-Jun-20 14:02:01.208062
+#11 175.9 > node -e "if (require('fs').existsSync('dashboard')) require('child_process').spawnSync('npm', ['run', 'dashboard:install'], { stdio: 'inherit', shell: true });"
+2026-Jun-20 14:02:01.208062
+#11 175.9
+2026-Jun-20 14:02:01.208062
+#11 176.0
+2026-Jun-20 14:02:01.208062
+#11 176.0 added 1212 packages, and audited 1213 packages in 3m
+2026-Jun-20 14:02:01.208062
+#11 176.0
+2026-Jun-20 14:02:01.208062
+#11 176.0 205 packages are looking for funding
+2026-Jun-20 14:02:01.208062
+#11 176.0   run `npm fund` for details
+2026-Jun-20 14:02:01.208062
+#11 176.1
+2026-Jun-20 14:02:01.208062
+#11 176.1 40 vulnerabilities (2 low, 18 moderate, 20 high)
+2026-Jun-20 14:02:01.208062
+#11 176.1
+2026-Jun-20 14:02:01.208062
+#11 176.1 To address issues that do not require attention, run:
+2026-Jun-20 14:02:01.208062
+#11 176.1   npm audit fix
+2026-Jun-20 14:02:01.208062
+#11 176.1
+2026-Jun-20 14:02:01.208062
+#11 176.1 To address all issues possible (including breaking changes), run:
+2026-Jun-20 14:02:01.208062
+#11 176.1   npm audit fix --force
+2026-Jun-20 14:02:01.208062
+#11 176.1
+2026-Jun-20 14:02:01.208062
+#11 176.1 Some issues need review, and may require choosing
+2026-Jun-20 14:02:01.208062
+#11 176.1 a different dependency.
+2026-Jun-20 14:02:01.208062
+#11 176.1
+2026-Jun-20 14:02:01.208062
+#11 176.1 Run `npm audit` for details.
+2026-Jun-20 14:02:01.208062
+#11 176.1 npm notice
+2026-Jun-20 14:02:01.208062
+#11 176.1 npm notice New major version of npm available! 10.9.8 -> 11.17.0
+2026-Jun-20 14:02:01.208062
+#11 176.1 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.17.0
+2026-Jun-20 14:02:01.208062
+#11 176.1 npm notice To update run:<REDACTED>@11.17.0
+2026-Jun-20 14:02:01.208062
+#11 176.1 npm notice
+2026-Jun-20 14:02:01.208062
+#11 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 568.9 Selecting previously unselected package libxcb-dri2-0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 568.9 Preparing to unpack .../124-libxcb-dri2-0_1.15-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 569.1 Unpacking libxcb-dri2-0:amd64 (1.15-1) ...
+2026-Jun-20 14:02:01.208062
+#7 570.7 Selecting previously unselected package libxcb-dri3-0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 570.7 Preparing to unpack .../125-libxcb-dri3-0_1.15-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 571.1 Unpacking libxcb-dri3-0:amd64 (1.15-1) ...
+2026-Jun-20 14:02:01.208062
+#7 572.7 Selecting previously unselected package libxcb-glx0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 572.7 Preparing to unpack .../126-libxcb-glx0_1.15-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 572.9 Unpacking libxcb-glx0:amd64 (1.15-1) ...
+2026-Jun-20 14:02:01.208062
+#7 574.1 Selecting previously unselected package libxcb-present0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 574.1 Preparing to unpack .../127-libxcb-present0_1.15-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 574.2 Unpacking libxcb-present0:amd64 (1.15-1) ...
+2026-Jun-20 14:02:01.208062
+#7 576.3 Selecting previously unselected package libxcb-randr0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 576.3 Preparing to unpack .../128-libxcb-randr0_1.15-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 576.6 Unpacking libxcb-randr0:amd64 (1.15-1) ...
+2026-Jun-20 14:02:01.208062
+#7 579.4 Selecting previously unselected package libxcb-sync1:amd64.
+2026-Jun-20 14:02:01.208062
+#7 579.4 Preparing to unpack .../129-libxcb-sync1_1.15-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 580.0 Unpacking libxcb-sync1:amd64 (1.15-1) ...
+2026-Jun-20 14:02:01.208062
+#7 582.0 Selecting previously unselected package libxcb-xfixes0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 582.0 Preparing to unpack .../130-libxcb-xfixes0_1.15-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 582.2 Unpacking libxcb-xfixes0:amd64 (1.15-1) ...
+2026-Jun-20 14:02:01.208062
+#7 584.1 Selecting previously unselected package libxshmfence1:amd64.
+2026-Jun-20 14:02:01.208062
+#7 584.1 Preparing to unpack .../131-libxshmfence1_1.3-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 584.3 Unpacking libxshmfence1:amd64 (1.3-1) ...
+2026-Jun-20 14:02:01.208062
+#7 586.9 Selecting previously unselected package libxxf86vm1:amd64.
+2026-Jun-20 14:02:01.208062
+#7 586.9 Preparing to unpack .../132-libxxf86vm1_1%3a1.1.4-1+b2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 587.4 Unpacking libxxf86vm1:amd64 (1:1.1.4-1+b2) ...
+2026-Jun-20 14:02:01.208062
+#7 590.0 Selecting previously unselected package libdrm-amdgpu1:amd64.
+2026-Jun-20 14:02:01.208062
+#7 590.0 Preparing to unpack .../133-libdrm-amdgpu1_2.4.114-1+b1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 590.7 Unpacking libdrm-amdgpu1:amd64 (2.4.114-1+b1) ...
+2026-Jun-20 14:02:01.208062
+#7 594.1 Selecting previously unselected package libpciaccess0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 594.1 Preparing to unpack .../134-libpciaccess0_0.17-2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 594.5 Unpacking libpciaccess0:amd64 (0.17-2) ...
+2026-Jun-20 14:02:01.208062
+#7 598.5 Selecting previously unselected package libdrm-intel1:amd64.
+2026-Jun-20 14:02:01.208062
+#7 598.5 Preparing to unpack .../135-libdrm-intel1_2.4.114-1+b1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 599.1 Unpacking libdrm-intel1:amd64 (2.4.114-1+b1) ...
+2026-Jun-20 14:02:01.208062
+#7 603.2 Selecting previously unselected package libdrm-nouveau2:amd64.
+2026-Jun-20 14:02:01.208062
+#7 603.2 Preparing to unpack .../136-libdrm-nouveau2_2.4.114-1+b1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 604.0 Unpacking libdrm-nouveau2:amd64 (2.4.114-1+b1) ...
+2026-Jun-20 14:02:01.208062
+#7 605.6 Selecting previously unselected package libdrm-radeon1:amd64.
+2026-Jun-20 14:02:01.208062
+#7 605.6 Preparing to unpack .../137-libdrm-radeon1_2.4.114-1+b1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 605.7 Unpacking libdrm-radeon1:amd64 (2.4.114-1+b1) ...
+2026-Jun-20 14:02:01.208062
+#7 606.9 Selecting previously unselected package libelf1:amd64.
+2026-Jun-20 14:02:01.208062
+#7 606.9 Preparing to unpack .../138-libelf1_0.188-2.1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 607.0 Unpacking libelf1:amd64 (0.188-2.1) ...
+2026-Jun-20 14:02:01.208062
+#7 608.5 Selecting previously unselected package libedit2:amd64.
+2026-Jun-20 14:02:01.208062
+#7 608.5 Preparing to unpack .../139-libedit2_3.1-20221030-2_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 608.6 Unpacking libedit2:amd64 (3.1-20221030-2) ...
+2026-Jun-20 14:02:01.208062
+#7 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#11 [builder 6/8] RUN npm ci
+2026-Jun-20 14:02:01.208062
+#11 DONE 216.1s
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#12 [builder 7/8] COPY . .
+2026-Jun-20 14:02:01.208062
+#12 DONE 4.4s
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 610.6 Selecting previously unselected package libz3-4:amd64.
+2026-Jun-20 14:02:01.208062
+#7 610.6 Preparing to unpack .../140-libz3-4_4.8.12-3.1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 610.7 Unpacking libz3-4:amd64 (4.8.12-3.1) ...
+2026-Jun-20 14:02:01.208062
+#7 612.8 Selecting previously unselected package libllvm15:amd64.
+2026-Jun-20 14:02:01.208062
+#7 612.8 Preparing to unpack .../141-libllvm15_1%3a15.0.6-4+b1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 613.0 Unpacking libllvm15:amd64 (1:15.0.6-4+b1) ...
+2026-Jun-20 14:02:01.208062
+#7 616.1 Selecting previously unselected package libsensors-config.
+2026-Jun-20 14:02:01.208062
+#7 616.1 Preparing to unpack .../142-libsensors-config_1%3a3.6.0-7.1_all.deb ...
+2026-Jun-20 14:02:01.208062
+#7 616.4 Unpacking libsensors-config (1:3.6.0-7.1) ...
+2026-Jun-20 14:02:01.208062
+#7 617.8 Selecting previously unselected package libsensors5:amd64.
+2026-Jun-20 14:02:01.208062
+#7 617.8 Preparing to unpack .../143-libsensors5_1%3a3.6.0-7.1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 618.1 Unpacking libsensors5:amd64 (1:3.6.0-7.1) ...
+2026-Jun-20 14:02:01.208062
+#7 619.2 Selecting previously unselected package libgl1-mesa-dri:amd64.
+2026-Jun-20 14:02:01.208062
+#7 619.3 Preparing to unpack .../144-libgl1-mesa-dri_22.3.6-1+deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 619.7 Unpacking libgl1-mesa-dri:amd64 (22.3.6-1+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#7 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#13 [builder 8/8] RUN npm run build && npm run dashboard:ci && npm run dashboard:build
+2026-Jun-20 14:02:01.208062
+#13 1.675
+2026-Jun-20 14:02:01.208062
+#13 1.675 > openwa@0.4.5 build
+2026-Jun-20 14:02:01.208062
+#13 1.675 > nest build
+2026-Jun-20 14:02:01.208062
+#13 1.675
+2026-Jun-20 14:02:01.208062
+#13 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 624.2 Selecting previously unselected package libglx-mesa0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 624.2 Preparing to unpack .../145-libglx-mesa0_22.3.6-1+deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 624.7 Unpacking libglx-mesa0:amd64 (22.3.6-1+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#7 627.7 Selecting previously unselected package libglx0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 627.7 Preparing to unpack .../146-libglx0_1.6.0-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 628.2 Unpacking libglx0:amd64 (1.6.0-1) ...
+2026-Jun-20 14:02:01.208062
+#7 630.7 Selecting previously unselected package libgl1:amd64.
+2026-Jun-20 14:02:01.208062
+#7 630.7 Preparing to unpack .../147-libgl1_1.6.0-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 631.0 Unpacking libgl1:amd64 (1.6.0-1) ...
+2026-Jun-20 14:02:01.208062
+#7 632.1 Selecting previously unselected package libice6:amd64.
+2026-Jun-20 14:02:01.208062
+#7 632.1 Preparing to unpack .../148-libice6_2%3a1.0.10-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 632.1 Unpacking libice6:amd64 (2:1.0.10-1) ...
+2026-Jun-20 14:02:01.208062
+#7 632.9 Selecting previously unselected package libsm6:amd64.
+2026-Jun-20 14:02:01.208062
+#7 632.9 Preparing to unpack .../149-libsm6_2%3a1.2.3-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 633.0 Unpacking libsm6:amd64 (2:1.2.3-1) ...
+2026-Jun-20 14:02:01.208062
+#7 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#13 [builder 8/8] RUN npm run build && npm run dashboard:ci && npm run dashboard:build
+2026-Jun-20 14:02:01.208062
+#13 21.12
+2026-Jun-20 14:02:01.208062
+#13 21.12 > openwa@0.4.5 dashboard:ci
+2026-Jun-20 14:02:01.208062
+#13 21.12 > cd dashboard && npm ci
+2026-Jun-20 14:02:01.208062
+#13 21.12
+2026-Jun-20 14:02:01.208062
+#13 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 635.9 Selecting previously unselected package libxt6:amd64.
+2026-Jun-20 14:02:01.208062
+#7 635.9 Preparing to unpack .../150-libxt6_1%3a1.2.1-1.1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 636.8 Unpacking libxt6:amd64 (1:1.2.1-1.1) ...
+2026-Jun-20 14:02:01.208062
+#7 640.9 Selecting previously unselected package libxmu6:amd64.
+2026-Jun-20 14:02:01.208062
+#7 640.9 Preparing to unpack .../151-libxmu6_2%3a1.1.3-3_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 641.7 Unpacking libxmu6:amd64 (2:1.1.3-3) ...
+2026-Jun-20 14:02:01.208062
+#7 646.5 Selecting previously unselected package libxpm4:amd64.
+2026-Jun-20 14:02:01.208062
+#7 646.5 Preparing to unpack .../152-libxpm4_1%3a3.5.12-1.1+deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 647.1 Unpacking libxpm4:amd64 (1:3.5.12-1.1+deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#7 649.9 Selecting previously unselected package libxaw7:amd64.
+2026-Jun-20 14:02:01.208062
+#7 649.9 Preparing to unpack .../153-libxaw7_2%3a1.0.14-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 650.8 Unpacking libxaw7:amd64 (2:1.0.14-1) ...
+2026-Jun-20 14:02:01.208062
+#7 655.2 Selecting previously unselected package libxcb-shape0:amd64.
+2026-Jun-20 14:02:01.208062
+#7 655.2 Preparing to unpack .../154-libxcb-shape0_1.15-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 655.9 Unpacking libxcb-shape0:amd64 (1.15-1) ...
+2026-Jun-20 14:02:01.208062
+#7 660.7 Selecting previously unselected package libxft2:amd64.
+2026-Jun-20 14:02:01.208062
+#7 660.7 Preparing to unpack .../155-libxft2_2.3.6-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 661.4 Unpacking libxft2:amd64 (2.3.6-1) ...
+2026-Jun-20 14:02:01.208062
+#7 665.3 Selecting previously unselected package libxkbfile1:amd64.
+2026-Jun-20 14:02:01.208062
+#7 665.3 Preparing to unpack .../156-libxkbfile1_1%3a1.1.0-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 666.0 Unpacking libxkbfile1:amd64 (1:1.1.0-1) ...
+2026-Jun-20 14:02:01.208062
+#7 669.3 Selecting previously unselected package libxmuu1:amd64.
+2026-Jun-20 14:02:01.208062
+#7 669.3 Preparing to unpack .../157-libxmuu1_2%3a1.1.3-3_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 669.9 Unpacking libxmuu1:amd64 (2:1.1.3-3) ...
+2026-Jun-20 14:02:01.208062
+#7 671.3 Selecting previously unselected package libxv1:amd64.
+2026-Jun-20 14:02:01.208062
+#7 671.3 Preparing to unpack .../158-libxv1_2%3a1.0.11-1.1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 671.8 Unpacking libxv1:amd64 (2:1.0.11-1.1) ...
+2026-Jun-20 14:02:01.208062
+#7 674.5 Selecting previously unselected package libxxf86dga1:amd64.
+2026-Jun-20 14:02:01.208062
+#7 674.6 Preparing to unpack .../159-libxxf86dga1_2%3a1.1.5-1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#13 [builder 8/8] RUN npm run build && npm run dashboard:ci && npm run dashboard:build
+2026-Jun-20 14:02:01.208062
+#13 61.06
+2026-Jun-20 14:02:01.208062
+#13 61.06 added 176 packages, and audited 177 packages in 40s
+2026-Jun-20 14:02:01.208062
+#13 61.06
+2026-Jun-20 14:02:01.208062
+#13 61.06 49 packages are looking for funding
+2026-Jun-20 14:02:01.208062
+#13 61.06   run `npm fund` for details
+2026-Jun-20 14:02:01.208062
+#13 61.06
+2026-Jun-20 14:02:01.208062
+#13 61.06 found 0 vulnerabilities
+2026-Jun-20 14:02:01.208062
+#13 61.41
+2026-Jun-20 14:02:01.208062
+#13 61.41 > openwa@0.4.5 dashboard:build
+2026-Jun-20 14:02:01.208062
+#13 61.41 > cd dashboard && npm run build
+2026-Jun-20 14:02:01.208062
+#13 61.41
+2026-Jun-20 14:02:01.208062
+#13 61.58
+2026-Jun-20 14:02:01.208062
+#13 61.58 > dashboard@0.4.5 build
+2026-Jun-20 14:02:01.208062
+#13 61.58 > tsc -b && vite build
+2026-Jun-20 14:02:01.208062
+#13 61.58
+2026-Jun-20 14:02:01.208062
+#13 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 675.1 Unpacking libxxf86dga1:amd64 (2:1.1.5-1) ...
+2026-Jun-20 14:02:01.208062
+#7 677.9 Selecting previously unselected package x11-utils.
+2026-Jun-20 14:02:01.208062
+#7 677.9 Preparing to unpack .../160-x11-utils_7.7+5_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 678.3 Unpacking x11-utils (7.7+5) ...
+2026-Jun-20 14:02:01.208062
+#7 681.1 Selecting previously unselected package xdg-utils.
+2026-Jun-20 14:02:01.208062
+#7 681.1 Preparing to unpack .../161-xdg-utils_1.1.3-4.1_all.deb ...
+2026-Jun-20 14:02:01.208062
+#7 681.7 Unpacking xdg-utils (1.1.3-4.1) ...
+2026-Jun-20 14:02:01.208062
+#7 684.5 Selecting previously unselected package chromium-common.
+2026-Jun-20 14:02:01.208062
+#7 684.5 Preparing to unpack .../162-chromium-common_149.0.7827.155-1~deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 684.7 Unpacking chromium-common (149.0.7827.155-1~deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#7 688.5 Selecting previously unselected package chromium.
+2026-Jun-20 14:02:01.208062
+#7 688.5 Preparing to unpack .../163-chromium_149.0.7827.155-1~deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 689.1 Unpacking chromium (149.0.7827.155-1~deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#7 ...
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#13 [builder 8/8] RUN npm run build && npm run dashboard:ci && npm run dashboard:build
+2026-Jun-20 14:02:01.208062
+#13 77.07 vite v8.0.16 building client environment for production...
+2026-Jun-20 14:02:01.208062
+#13 77.14 [2K
+transforming...✓ 1915 modules transformed.
+2026-Jun-20 14:02:01.208062
+#13 79.76 rendering chunks...
+2026-Jun-20 14:02:01.208062
+#13 80.23 computing gzip size...
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/index.html                            0.53 kB │ gzip:   0.32 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/postgresql-CvVbp3ks.svg       13.31 kB │ gzip:   6.38 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/PageHeader-bSeRVrlv.css        0.89 kB │ gzip:   0.35 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/Login-0qQ3Q-6B.css             3.41 kB │ gzip:   1.05 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/MessageTester-Dsa9T380.css     3.56 kB │ gzip:   1.07 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/Dashboard-BFNk9zXr.css         4.59 kB │ gzip:   1.29 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/Broadcast-D-7D20pD.css         4.73 kB │ gzip:   1.31 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/Logs-ZpWkNjx2.css              4.97 kB │ gzip:   1.29 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/Templates-BWVPCDHm.css         5.64 kB │ gzip:   1.47 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/ApiKeys-Bn-8zCBv.css           6.21 kB │ gzip:   1.50 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/Infrastructure-DQqz09tX.css    7.41 kB │ gzip:   1.80 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/Plugins-IDIfZuG8.css           7.59 kB │ gzip:   1.84 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/Webhooks-CKgLDbMC.css          7.74 kB │ gzip:   1.97 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/Sessions-Dt62oSMB.css          9.41 kB │ gzip:   2.21 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/Chats-q8eanvMo.css            14.46 kB │ gzip:   2.87 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/index-ny02k9ai.css            15.56 kB │ gzip:   3.94 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/check-D4_Q7BBf.js              0.11 kB │ gzip:   0.12 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/square-5I7j6Uv2.js             0.13 kB │ gzip:   0.14 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/plus-B9pxDgh9.js               0.14 kB │ gzip:   0.13 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/search-DQK0glwL.js             0.16 kB │ gzip:   0.16 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/play-BMJyz4Oq.js               0.17 kB │ gzip:   0.16 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/database-UaR30XUa.js           0.23 kB │ gzip:   0.19 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/external-link-CQDAxqoo.js      0.23 kB │ gzip:   0.18 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/eye-DOt-vUpA.js                0.24 kB │ gzip:   0.19 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/funnel-D7szJWwc.js             0.24 kB │ gzip:   0.20 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/triangle-alert-DbvUi-Xq.js     0.25 kB │ gzip:   0.20 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/square-pen-CesD2YdO.js         0.30 kB │ gzip:   0.22 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/trash-2-BNkfTseo.js            0.31 kB │ gzip:   0.20 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/eye-off-CNNd4l5D.js            0.41 kB │ gzip:   0.26 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/clipboard-Dpu8azMr.js          0.60 kB │ gzip:   0.41 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/PageHeader-4QzC3XKB.js         1.16 kB │ gzip:   0.44 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/Login-XFBOmRPe.js              5.38 kB │ gzip:   1.97 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/Dashboard-CVM4i-OC.js          6.95 kB │ gzip:   1.99 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/Logs-EUMvhiCf.js               7.37 kB │ gzip:   2.02 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/Trans-FHfTBV3Z.js              9.30 kB │ gzip:   3.99 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/Broadcast-aySJu_1r.js         10.33 kB │ gzip:   2.73 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/MessageTester-CKf_Q5hk.js     10.90 kB │ gzip:   2.33 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/Templates-CBN8aOen.js         14.01 kB │ gzip:   2.99 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/queries-fYRqrZC4.js           14.51 kB │ gzip:   4.73 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/Webhooks-pJ8Dy8KX.js          16.80 kB │ gzip:   3.29 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/Plugins-DashLgh2.js           20.04 kB │ gzip:   4.26 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/Chats-bTfCgUxE.js             24.93 kB │ gzip:   6.28 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/Sessions-DNi06z05.js          26.30 kB │ gzip:   4.87 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/api-B8v7_WHq.js               31.97 kB │ gzip:  10.24 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/Infrastructure-DJH2LusO.js    48.84 kB │ gzip:   8.85 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/useWebSocket-B6ZvhGBu.js      49.49 kB │ gzip:  15.85 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/ApiKeys-rNJF1BIE.js           59.73 kB │ gzip:  15.21 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25 dist/assets/index-C5lSl7OD.js            702.89 kB │ gzip: 206.22 kB
+2026-Jun-20 14:02:01.208062
+#13 80.25
+2026-Jun-20 14:02:01.208062
+#13 80.25 ✓ built in 3.18s
+2026-Jun-20 14:02:01.208062
+#13 80.25 [plugin builtin:vite-reporter]
+2026-Jun-20 14:02:01.208062
+#13 80.25 (!) Some chunks are larger than 500 kB after minification. Consider:
+2026-Jun-20 14:02:01.208062
+#13 80.25 - Using dynamic import() to code-split the application
+2026-Jun-20 14:02:01.208062
+#13 80.25 - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+2026-Jun-20 14:02:01.208062
+#13 80.25 - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+2026-Jun-20 14:02:01.208062
+#13 DONE 81.9s
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#7 [production  2/12] RUN apt-get update && apt-get install -y     chromium     fonts-liberation     libappindicator3-1     libasound2     libatk-bridge2.0-0     libatk1.0-0     libcups2     libdbus-1-3     libdrm2     libgbm1     libgtk-3-0     libnspr4     libnss3     libx11-xcb1     libxcomposite1     libxdamage1     libxrandr2     xdg-utils     dumb-init     gosu     curl     procps     && rm -rf /var/lib/apt/lists/*
+2026-Jun-20 14:02:01.208062
+#7 698.4 Selecting previously unselected package chromium-sandbox.
+2026-Jun-20 14:02:01.208062
+#7 698.4 Preparing to unpack .../164-chromium-sandbox_149.0.7827.155-1~deb12u1_amd64.deb ...
+2026-Jun-20 14:02:01.208062
+#7 698.8 Unpacking chromium-sandbox (149.0.7827.155-1~deb12u1) ...
+2026-Jun-20 14:02:01.208062
+#7 701.0 Selecting previously unselected package libisl23:<REDACTED>@0.4.5 postinstall
+2026-Jun-20 14:02:01.208062
+#18 32.20 > node -e "if (require('fs').existsSync('dashboard')) require('child_process').spawnSync('npm', ['run', 'dashboard:install'], { stdio: 'inherit', shell: true });"
+2026-Jun-20 14:02:01.208062
+#18 32.20
+2026-Jun-20 14:02:01.208062
+#18 32.27
+2026-Jun-20 14:02:01.208062
+#18 32.27 added 703 packages, and audited 704 packages in 31s
+2026-Jun-20 14:02:01.208062
+#18 32.27
+2026-Jun-20 14:02:01.208062
+#18 32.27 113 packages are looking for funding
+2026-Jun-20 14:02:01.208062
+#18 32.27   run `npm fund` for details
+2026-Jun-20 14:02:01.208062
+#18 32.32
+2026-Jun-20 14:02:01.208062
+#18 32.32 22 vulnerabilities (2 low, 1 moderate, 19 high)
+2026-Jun-20 14:02:01.208062
+#18 32.32
+2026-Jun-20 14:02:01.208062
+#18 32.32 To address all issues possible (including breaking changes), run:
+2026-Jun-20 14:02:01.208062
+#18 32.32   npm audit fix --force
+2026-Jun-20 14:02:01.208062
+#18 32.32
+2026-Jun-20 14:02:01.208062
+#18 32.32 Some issues need review, and may require choosing
+2026-Jun-20 14:02:01.208062
+#18 32.32 a different dependency.
+2026-Jun-20 14:02:01.208062
+#18 32.32
+2026-Jun-20 14:02:01.208062
+#18 32.32 Run `npm audit` for details.
+2026-Jun-20 14:02:01.208062
+#18 32.32 npm notice
+2026-Jun-20 14:02:01.208062
+#18 32.32 npm notice New major version of npm available! 10.9.8 -> 11.17.0
+2026-Jun-20 14:02:01.208062
+#18 32.32 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.17.0
+2026-Jun-20 14:02:01.208062
+#18 32.32 npm notice To update run:<REDACTED>@11.17.0
+2026-Jun-20 14:02:01.208062
+#18 32.32 npm notice
+2026-Jun-20 14:02:01.208062
+#18 38.62 npm warn using --force Recommended protections disabled.
+2026-Jun-20 14:02:01.208062
+#18 DONE 70.3s
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#19 [production  8/12] COPY --from=builder /app/dist ./dist
+2026-Jun-20 14:02:01.208062
+#19 DONE 4.9s
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#20 [production  9/12] COPY --from=builder /app/dashboard/dist ./dashboard/dist
+2026-Jun-20 14:02:01.208062
+#20 DONE 3.1s
+2026-Jun-20 14:02:01.208062
+2026-Jun-20 14:02:01.208062
+#21 [production 10/12] RUN mkdir -p ./data/sessions ./data/media &&     chown -R openwa:openwa /app
+2026-Jun-20 14:02:03.766396
+========================================
+2026-Jun-20 14:02:03.962504
+Deployment failed. Removing the new version of your application.
+2026-Jun-20 14:02:05.513487
+Gracefully shutting down build container: a8y4q3jjrl4oaxtvaqcvu2q0

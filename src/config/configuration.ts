@@ -47,7 +47,7 @@ export default () => ({
     host: process.env.DATABASE_HOST || 'localhost',
     port: parseInt(process.env.DATABASE_PORT || '5432', 10),
     username: process.env.DATABASE_USERNAME,
-    password: process.env.DATABASE_PASSWORD,
+    password: process.env.PGPASSWORD || process.env.DATABASE_PASSWORD,
     synchronize: process.env.DATABASE_SYNCHRONIZE === 'true',
     logging: process.env.DATABASE_LOGGING === 'true',
     // Connection pooling (PostgreSQL)

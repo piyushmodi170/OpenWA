@@ -91,9 +91,12 @@ COPY --from=builder /app/dist ./dist
 # (app.module.ts resolves dashboard/dist relative to dist/). Single container, single port.
 COPY --from=builder /app/dashboard/dist ./dashboard/dist
 
-# Create data directories with correct ownership
-RUN mkdir -p ./data/sessions ./data/media && \
-    chown -R openwa:openwa /app
+# Create data directories with correct ownership.
+# Only chown /app/data — the entrypoint already does this at runtime too.
+# Chowning all of /app (including node_modules) is extremely slow and causes
+# build timeouts in Coolify / self-hosted Docker environments.
+RUN mkdir -p ./data/sessions ./data/media ./data/plugins && \
+    chown -R openwa:openwa /app/data
 
 # The non-root openwa user has no home of its own (`useradd -r`, no -m). Chromium resolves the home
 # dir from the passwd entry via glib's getpwuid() — it IGNORES $HOME — so it tries to read/write
