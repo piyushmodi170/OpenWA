@@ -113,3 +113,18 @@ export class ListModelsDto {
   @IsString()
   apiKey: string;
 }
+
+export class SaveProviderKeyDto {
+  @ApiProperty({ enum: ['openai', 'gemini'] })
+  @IsIn(['openai', 'gemini'])
+  provider: string;
+
+  @ApiProperty({ description: 'Human-readable label for this key', required: false })
+  @IsOptional()
+  @IsString()
+  label?: string;
+
+  @ApiProperty({ description: 'The API key value' })
+  @IsString()
+  apiKey: string;
+}

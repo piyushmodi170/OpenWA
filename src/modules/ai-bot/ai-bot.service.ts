@@ -4,7 +4,8 @@ import { Repository } from 'typeorm';
 import OpenAI from 'openai';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { AiBotConfig } from './entities/ai-bot-config.entity';
-import { CreateAiBotConfigDto, UpdateAiBotConfigDto } from './dto/ai-bot.dto';
+import { AiProviderKey } from './entities/ai-provider-key.entity';
+import { CreateAiBotConfigDto, UpdateAiBotConfigDto, SaveProviderKeyDto } from './dto/ai-bot.dto';
 import { HookManager } from '../../core/hooks/hook-manager.service';
 import { HookContext, HookResult } from '../../core/hooks';
 import { IncomingMessage } from '../../engine/interfaces/whatsapp-engine.interface';
@@ -17,6 +18,8 @@ export class AiBotService implements OnModuleInit {
   constructor(
     @InjectRepository(AiBotConfig, 'data')
     private readonly repo: Repository<AiBotConfig>,
+    @InjectRepository(AiProviderKey, 'data')
+    private readonly providerKeyRepo: Repository<AiProviderKey>,
     private readonly hookManager: HookManager,
     @Inject(forwardRef(() => MessageService))
     private readonly messageService: MessageService,
@@ -63,12 +66,14 @@ export class AiBotService implements OnModuleInit {
   }
 
   async generateReplyRaw(config: AiBotConfig, userMessage: string): Promise<string> {
-    const apiKey = config.apiKey || process.env.OPENAI_API_KEY || '';
     const provider = config.aiProvider || 'openai';
     const systemPrompt = config.systemPrompt?.trim() || this.buildSystemPrompt(config);
 
+    // Resolve API key: per-config → saved provider key → env fallback
+    const apiKey = config.apiKey || await this.getProviderApiKey(provider);
+
     if (!apiKey) {
-      throw new Error(`No API key configured for provider "${provider}"`);
+      throw new Error(`No API key configured for provider "${provider}". Add one in Provider Keys.`);
     }
 
     if (provider === 'gemini') {
@@ -150,6 +155,8 @@ export class AiBotService implements OnModuleInit {
     return parts.join('\n\n');
   }
 
+  // ─── Bot Config CRUD ────────────────────────────────────────────────────────
+
   async findAll(): Promise<AiBotConfig[]> {
     return this.repo.find({ order: { createdAt: 'DESC' } });
   }
@@ -198,9 +205,56 @@ export class AiBotService implements OnModuleInit {
     await this.repo.remove(config);
   }
 
+  // ─── Provider Keys ──────────────────────────────────────────────────────────
+
+  async listProviderKeys(): Promise<{ id: string; provider: string; label: string; maskedKey: string; createdAt: Date }[]> {
+    const keys = await this.providerKeyRepo.find({ order: { createdAt: 'ASC' } });
+    return keys.map(k => ({
+      id: k.id,
+      provider: k.provider,
+      label: k.label,
+      maskedKey: this.maskKey(k.apiKey),
+      createdAt: k.createdAt,
+    }));
+  }
+
+  async saveProviderKey(dto: SaveProviderKeyDto): Promise<{ id: string; provider: string; label: string; maskedKey: string }> {
+    // One key per provider — upsert
+    let existing = await this.providerKeyRepo.findOne({ where: { provider: dto.provider } });
+    if (existing) {
+      existing.apiKey = dto.apiKey;
+      existing.label = dto.label || existing.label;
+      existing = await this.providerKeyRepo.save(existing);
+      return { id: existing.id, provider: existing.provider, label: existing.label, maskedKey: this.maskKey(existing.apiKey) };
+    }
+    const created = await this.providerKeyRepo.save(
+      this.providerKeyRepo.create({ provider: dto.provider, label: dto.label || dto.provider, apiKey: dto.apiKey }),
+    );
+    return { id: created.id, provider: created.provider, label: created.label, maskedKey: this.maskKey(created.apiKey) };
+  }
+
+  async deleteProviderKey(id: string): Promise<void> {
+    const key = await this.providerKeyRepo.findOne({ where: { id } });
+    if (!key) throw new NotFoundException(`Provider key ${id} not found`);
+    await this.providerKeyRepo.remove(key);
+  }
+
+  async getProviderApiKey(provider: string): Promise<string> {
+    const key = await this.providerKeyRepo.findOne({ where: { provider } });
+    if (key) return key.apiKey;
+    if (provider === 'openai') return process.env.OPENAI_API_KEY || '';
+    return '';
+  }
+
+  private maskKey(key: string): string {
+    if (!key || key.length < 8) return '••••••••';
+    return key.slice(0, 6) + '••••••••' + key.slice(-4);
+  }
+
+  // ─── Model Listing ──────────────────────────────────────────────────────────
+
   async listModels(provider: string, apiKey: string): Promise<{ id: string; label: string }[]> {
     if (provider === 'gemini') {
-      // Use the Gemini REST API directly — the SDK does not expose listModels
       const url = `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}&pageSize=100`;
       const res = await fetch(url);
       if (!res.ok) {
@@ -214,7 +268,6 @@ export class AiBotService implements OnModuleInit {
         .sort((a, b) => a.id.localeCompare(b.id));
     }
 
-    // OpenAI — filter to chat-capable models only
     const client = new OpenAI({ apiKey });
     const res = await client.models.list();
     return res.data

@@ -632,6 +632,14 @@ export interface AiBotStatus {
   hasEnvFallbackKey: boolean;
 }
 
+export interface AiProviderKey {
+  id: string;
+  provider: string;
+  label: string;
+  maskedKey: string;
+  createdAt: string;
+}
+
 export const aiBotApi = {
   getStatus: () => request<AiBotStatus>('/ai-bot/status'),
   listConfigs: () => request<AiBotConfig[]>('/ai-bot/configs'),
@@ -655,6 +663,14 @@ export const aiBotApi = {
       method: 'POST',
       body: JSON.stringify({ message }),
     }),
+  listProviderKeys: () => request<AiProviderKey[]>('/ai-bot/provider-keys'),
+  saveProviderKey: (provider: string, apiKey: string, label?: string) =>
+    request<AiProviderKey>('/ai-bot/provider-keys', {
+      method: 'POST',
+      body: JSON.stringify({ provider, apiKey, label }),
+    }),
+  deleteProviderKey: (id: string) =>
+    request<void>(`/ai-bot/provider-keys/${id}`, { method: 'DELETE' }),
 };
 
 // =============================================================================

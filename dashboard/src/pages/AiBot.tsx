@@ -24,7 +24,7 @@ import {
   Zap,
   Coffee,
 } from 'lucide-react';
-import { aiBotApi, type AiBotConfig } from '../services/api';
+import { aiBotApi, type AiBotConfig, type AiProviderKey } from '../services/api';
 
 const TONE_OPTIONS = [
   { value: 'friendly', label: 'Friendly', desc: 'Warm & approachable' },
@@ -93,6 +93,9 @@ export function AiBot() {
   const [dynamicModels, setDynamicModels] = useState<{ id: string; label: string }[]>([]);
   const [modelsLoading, setModelsLoading] = useState(false);
   const [modelsError, setModelsError] = useState('');
+  const [pkForm, setPkForm] = useState<{ provider: 'openai' | 'gemini'; apiKey: string; label: string } | null>(null);
+  const [pkSaving, setPkSaving] = useState(false);
+  const [pkError, setPkError] = useState('');
 
   const { data: sessions = [] } = useQuery({
     queryKey: ['sessions'],
@@ -108,6 +111,30 @@ export function AiBot() {
     queryKey: ['ai-bot-configs'],
     queryFn: aiBotApi.listConfigs,
   });
+
+  const { data: providerKeys = [] } = useQuery({
+    queryKey: ['ai-bot-provider-keys'],
+    queryFn: aiBotApi.listProviderKeys,
+  });
+
+  const deleteProviderKeyMutation = useMutation({
+    mutationFn: (id: string) => aiBotApi.deleteProviderKey(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['ai-bot-provider-keys'] }),
+  });
+
+  async function handleSaveProviderKey() {
+    if (!pkForm?.apiKey.trim()) { setPkError('API key is required.'); return; }
+    setPkSaving(true); setPkError('');
+    try {
+      await aiBotApi.saveProviderKey(pkForm.provider, pkForm.apiKey.trim(), pkForm.label.trim() || pkForm.provider);
+      qc.invalidateQueries({ queryKey: ['ai-bot-provider-keys'] });
+      setPkForm(null);
+    } catch (e) {
+      setPkError(e instanceof Error ? e.message : 'Failed to save key');
+    } finally {
+      setPkSaving(false);
+    }
+  }
 
   const createMutation = useMutation({
     mutationFn: (data: Partial<AiBotConfig>) => aiBotApi.createConfig(data),
@@ -322,8 +349,174 @@ export function AiBot() {
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 400px', gap: '24px', alignItems: 'start' }}>
 
-        {/* Left: Existing configs list */}
+        {/* Left: Provider Keys + configs list */}
         <div>
+
+          {/* ── Provider Keys Panel ─────────────────────────────────────── */}
+          <div style={{
+            border: '1px solid var(--border)', borderRadius: '12px',
+            background: 'var(--card-bg, var(--surface))', marginBottom: '20px', overflow: 'hidden',
+          }}>
+            <div style={{
+              padding: '14px 18px', borderBottom: '1px solid var(--border)',
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              background: 'var(--surface-alt, var(--surface))',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Key size={16} style={{ color: 'var(--primary)' }} />
+                <span style={{ fontWeight: 600, fontSize: '0.95rem' }}>Provider API Keys</span>
+                <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                  — stored once, shared by all bots
+                </span>
+              </div>
+              {!pkForm && (
+                <button
+                  onClick={() => { setPkForm({ provider: 'gemini', apiKey: '', label: '' }); setPkError(''); }}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: '5px',
+                    padding: '5px 12px', borderRadius: '6px', fontSize: '0.8rem', fontWeight: 600,
+                    background: 'var(--primary)', color: '#fff', border: 'none', cursor: 'pointer',
+                  }}
+                >
+                  <Plus size={13} /> Add Key
+                </button>
+              )}
+            </div>
+
+            <div style={{ padding: '14px 18px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+              {/* Existing saved keys */}
+              {(['gemini', 'openai'] as const).map(provider => {
+                const saved = providerKeys.find((k: AiProviderKey) => k.provider === provider);
+                const providerColor = provider === 'gemini' ? '#1b5e20' : '#1d4ed8';
+                const providerBg = provider === 'gemini' ? '#e8f5e9' : '#eff6ff';
+                const providerName = provider === 'gemini' ? 'Google Gemini' : 'OpenAI';
+                return (
+                  <div key={provider} style={{
+                    display: 'flex', alignItems: 'center', gap: '12px',
+                    padding: '10px 14px', borderRadius: '8px',
+                    border: `1px solid ${saved ? 'var(--success-border, #a7f3d0)' : 'var(--border)'}`,
+                    background: saved ? 'var(--success-bg, #f0fdf4)' : 'var(--surface-alt, var(--surface))',
+                  }}>
+                    <span style={{
+                      padding: '2px 8px', borderRadius: '8px', fontSize: '0.72rem', fontWeight: 700,
+                      background: providerBg, color: providerColor, flexShrink: 0,
+                    }}>{providerName}</span>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      {saved ? (
+                        <>
+                          <div style={{ fontSize: '0.85rem', fontWeight: 500, fontFamily: 'monospace' }}>
+                            {saved.maskedKey}
+                          </div>
+                          {saved.label && saved.label !== provider && (
+                            <div style={{ fontSize: '0.72rem', color: 'var(--text-secondary)' }}>{saved.label}</div>
+                          )}
+                        </>
+                      ) : (
+                        <span style={{ fontSize: '0.82rem', color: 'var(--text-secondary)' }}>No key saved</span>
+                      )}
+                    </div>
+                    <div style={{ display: 'flex', gap: '6px', flexShrink: 0 }}>
+                      <button
+                        onClick={() => { setPkForm({ provider, apiKey: '', label: '' }); setPkError(''); }}
+                        style={{
+                          padding: '4px 10px', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 600,
+                          border: '1px solid var(--border)', background: 'transparent',
+                          color: 'var(--text)', cursor: 'pointer',
+                        }}
+                      >
+                        {saved ? 'Replace' : 'Connect'}
+                      </button>
+                      {saved && (
+                        <button
+                          onClick={() => deleteProviderKeyMutation.mutate(saved.id)}
+                          style={{
+                            padding: '4px 8px', borderRadius: '6px', fontSize: '0.75rem',
+                            border: '1px solid var(--danger, #ef4444)', background: 'transparent',
+                            color: 'var(--danger, #ef4444)', cursor: 'pointer',
+                          }}
+                        >
+                          <Trash2 size={12} />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+
+              {/* Add / Replace form */}
+              {pkForm && (
+                <div style={{
+                  border: '1px solid var(--primary)', borderRadius: '8px',
+                  padding: '14px', display: 'flex', flexDirection: 'column', gap: '10px',
+                  background: 'var(--primary-subtle, #eff6ff)',
+                }}>
+                  <div style={{ fontWeight: 600, fontSize: '0.85rem', color: 'var(--primary)' }}>
+                    {pkForm.provider === 'gemini' ? 'Connect Google Gemini Key' : 'Connect OpenAI Key'}
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
+                    <div>
+                      <label style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>Provider</label>
+                      <select
+                        value={pkForm.provider}
+                        onChange={e => setPkForm(f => f ? { ...f, provider: e.target.value as 'openai' | 'gemini' } : f)}
+                        style={{ width: '100%', padding: '7px 10px', borderRadius: '6px', border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--text)', fontSize: '0.85rem' }}
+                      >
+                        <option value="gemini">Google Gemini</option>
+                        <option value="openai">OpenAI</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>Label (optional)</label>
+                      <input
+                        value={pkForm.label}
+                        onChange={e => setPkForm(f => f ? { ...f, label: e.target.value } : f)}
+                        placeholder="e.g. Production key"
+                        style={{ width: '100%', padding: '7px 10px', borderRadius: '6px', border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--text)', fontSize: '0.85rem', boxSizing: 'border-box' }}
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>
+                      API Key *
+                    </label>
+                    <input
+                      type="password"
+                      value={pkForm.apiKey}
+                      onChange={e => setPkForm(f => f ? { ...f, apiKey: e.target.value } : f)}
+                      placeholder={pkForm.provider === 'gemini' ? 'AIza...' : 'sk-...'}
+                      style={{ width: '100%', padding: '7px 10px', borderRadius: '6px', border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--text)', fontSize: '0.85rem', boxSizing: 'border-box' }}
+                    />
+                  </div>
+                  {pkError && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.78rem', color: 'var(--danger, #b91c1c)' }}>
+                      <AlertCircle size={13} /> {pkError}
+                    </div>
+                  )}
+                  <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
+                    <button
+                      onClick={() => { setPkForm(null); setPkError(''); }}
+                      style={{ padding: '6px 14px', borderRadius: '6px', border: '1px solid var(--border)', background: 'transparent', color: 'var(--text)', cursor: 'pointer', fontSize: '0.82rem' }}
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={handleSaveProviderKey}
+                      disabled={pkSaving}
+                      style={{
+                        padding: '6px 16px', borderRadius: '6px', border: 'none',
+                        background: 'var(--primary)', color: '#fff', cursor: pkSaving ? 'not-allowed' : 'pointer',
+                        fontWeight: 600, fontSize: '0.82rem', opacity: pkSaving ? 0.7 : 1,
+                      }}
+                    >
+                      {pkSaving ? 'Saving…' : 'Save Key'}
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* ── Bot Configurations ───────────────────────────────────────── */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
             <h2 style={{ margin: 0, fontSize: '1rem', fontWeight: 600 }}>
               Bot Configurations ({configs.length})
@@ -665,37 +858,66 @@ export function AiBot() {
                 </div>
 
                 {/* API Key */}
-                <div>
-                  <label style={labelStyle}>
-                    <Key size={12} style={{ marginRight: '4px', verticalAlign: 'middle' }} />
-                    {form.aiProvider === 'gemini' ? 'Google AI API Key' : 'OpenAI API Key'}
-                  </label>
-                  <div style={{ position: 'relative' }}>
-                    <input
-                      type={showApiKey ? 'text' : 'password'}
-                      value={form.apiKey || ''}
-                      onChange={e => setForm(f => ({ ...f, apiKey: e.target.value }))}
-                      placeholder={editingId ? '••••••• (leave blank to keep existing)' : `sk-... or AIza... key`}
-                      style={{ ...inputStyle, paddingRight: '40px' }}
-                    />
-                    <button
-                      onClick={() => setShowApiKey(v => !v)}
-                      style={{
-                        position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)',
-                        background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)', padding: '2px',
-                      }}
-                    >
-                      {showApiKey ? <EyeOff size={14} /> : <Eye size={14} />}
-                    </button>
-                  </div>
-                  <div style={hintStyle}>
-                    Stored securely per-config. Get your key from{' '}
-                    {form.aiProvider === 'gemini'
-                      ? <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noreferrer" style={{ color: 'var(--primary)' }}>Google AI Studio</a>
-                      : <a href="https://platform.openai.com/api-keys" target="_blank" rel="noreferrer" style={{ color: 'var(--primary)' }}>OpenAI Platform</a>
-                    }.
-                  </div>
-                </div>
+                {(() => {
+                  const savedProviderKey = providerKeys.find((k: AiProviderKey) => k.provider === form.aiProvider);
+                  const hasSavedKey = !!savedProviderKey;
+                  const hasOwnKey = !!form.apiKey || (editingId && configs.find(c => c.id === editingId)?.apiKey);
+                  return (
+                    <div>
+                      <label style={labelStyle}>
+                        <Key size={12} style={{ marginRight: '4px', verticalAlign: 'middle' }} />
+                        {form.aiProvider === 'gemini' ? 'API Key (override)' : 'API Key (override)'}
+                      </label>
+
+                      {hasSavedKey && !hasOwnKey && (
+                        <div style={{
+                          display: 'flex', alignItems: 'center', gap: '8px',
+                          padding: '8px 12px', borderRadius: '8px', marginBottom: '8px',
+                          background: 'var(--success-bg, #f0fdf4)', border: '1px solid var(--success-border, #a7f3d0)',
+                          fontSize: '0.8rem', color: 'var(--success-text, #065f46)',
+                        }}>
+                          <CheckCircle size={14} />
+                          <span>Using saved <strong>{form.aiProvider === 'gemini' ? 'Google Gemini' : 'OpenAI'}</strong> key from Provider Keys</span>
+                          <code style={{ marginLeft: 'auto', fontSize: '0.72rem', opacity: 0.7 }}>{savedProviderKey.maskedKey}</code>
+                        </div>
+                      )}
+
+                      <div style={{ position: 'relative' }}>
+                        <input
+                          type={showApiKey ? 'text' : 'password'}
+                          value={form.apiKey || ''}
+                          onChange={e => setForm(f => ({ ...f, apiKey: e.target.value }))}
+                          placeholder={
+                            hasSavedKey
+                              ? 'Leave blank to use saved Provider Key above'
+                              : editingId
+                                ? '••••••• (leave blank to keep existing)'
+                                : form.aiProvider === 'gemini' ? 'AIza...' : 'sk-...'
+                          }
+                          style={{ ...inputStyle, paddingRight: '40px' }}
+                        />
+                        <button
+                          onClick={() => setShowApiKey(v => !v)}
+                          style={{
+                            position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)',
+                            background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)', padding: '2px',
+                          }}
+                        >
+                          {showApiKey ? <EyeOff size={14} /> : <Eye size={14} />}
+                        </button>
+                      </div>
+                      <div style={hintStyle}>
+                        {hasSavedKey
+                          ? 'Optional — only fill in if you want this bot to use a different key than the saved one.'
+                          : <>No saved key for this provider yet. <span
+                              onClick={() => { setPkForm({ provider: form.aiProvider as 'openai' | 'gemini', apiKey: '', label: '' }); setPkError(''); }}
+                              style={{ color: 'var(--primary)', cursor: 'pointer', textDecoration: 'underline' }}
+                            >Add one in Provider Keys</span> to avoid entering it here, or enter it below.</>
+                        }
+                      </div>
+                    </div>
+                  );
+                })()}
 
                 {/* Model */}
                 <div>

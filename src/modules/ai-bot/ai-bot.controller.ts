@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Put, Delete, Param, Body, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { AiBotService } from './ai-bot.service';
-import { CreateAiBotConfigDto, UpdateAiBotConfigDto, TestAiBotDto, ListModelsDto } from './dto/ai-bot.dto';
+import { CreateAiBotConfigDto, UpdateAiBotConfigDto, TestAiBotDto, ListModelsDto, SaveProviderKeyDto } from './dto/ai-bot.dto';
 import { AiBotConfig } from './entities/ai-bot-config.entity';
 import { RequireRole } from '../auth/decorators/auth.decorators';
 import { ApiKeyRole } from '../auth/entities/api-key.entity';
@@ -23,10 +23,12 @@ export class AiBotController {
     };
   }
 
+  // ─── Bot Configs ────────────────────────────────────────────────────────────
+
   @Get('configs')
   @RequireRole(ApiKeyRole.VIEWER)
   @ApiOperation({ summary: 'List all AI bot configs' })
-  @ApiResponse({ status: 200, description: 'List of AI bot configs', type: [AiBotConfig] })
+  @ApiResponse({ status: 200, type: [AiBotConfig] })
   async findAll(): Promise<AiBotConfig[]> {
     return this.aiBotService.findAll();
   }
@@ -34,7 +36,7 @@ export class AiBotController {
   @Post('configs')
   @RequireRole(ApiKeyRole.OPERATOR)
   @ApiOperation({ summary: 'Create an AI bot config' })
-  @ApiResponse({ status: 201, description: 'AI bot config created', type: AiBotConfig })
+  @ApiResponse({ status: 201, type: AiBotConfig })
   async create(@Body() dto: CreateAiBotConfigDto): Promise<AiBotConfig> {
     return this.aiBotService.create(dto);
   }
@@ -61,6 +63,32 @@ export class AiBotController {
     return this.aiBotService.delete(id);
   }
 
+  // ─── Provider Keys ──────────────────────────────────────────────────────────
+
+  @Get('provider-keys')
+  @RequireRole(ApiKeyRole.VIEWER)
+  @ApiOperation({ summary: 'List saved AI provider keys (masked)' })
+  async listProviderKeys() {
+    return this.aiBotService.listProviderKeys();
+  }
+
+  @Post('provider-keys')
+  @RequireRole(ApiKeyRole.OPERATOR)
+  @ApiOperation({ summary: 'Save or replace an AI provider key' })
+  async saveProviderKey(@Body() dto: SaveProviderKeyDto) {
+    return this.aiBotService.saveProviderKey(dto);
+  }
+
+  @Delete('provider-keys/:id')
+  @RequireRole(ApiKeyRole.OPERATOR)
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Delete a saved provider key' })
+  async deleteProviderKey(@Param('id') id: string): Promise<void> {
+    return this.aiBotService.deleteProviderKey(id);
+  }
+
+  // ─── Model Listing ──────────────────────────────────────────────────────────
+
   @Post('list-models')
   @RequireRole(ApiKeyRole.OPERATOR)
   @ApiOperation({ summary: 'List available models for a given provider and API key' })
@@ -71,16 +99,16 @@ export class AiBotController {
 
   @Post('configs/:id/list-models')
   @RequireRole(ApiKeyRole.OPERATOR)
-  @ApiOperation({ summary: 'List available models using the stored API key of an existing config' })
+  @ApiOperation({ summary: 'List models using the stored key for this config (per-config key or saved provider key)' })
   async listModelsForConfig(@Param('id') id: string): Promise<{ models: { id: string; label: string }[] }> {
     const config = await this.aiBotService.findOne(id);
-    const apiKey = config.apiKey || process.env.OPENAI_API_KEY || '';
-    if (!apiKey) {
-      return { models: [] };
-    }
+    const apiKey = config.apiKey || await this.aiBotService.getProviderApiKey(config.aiProvider || 'openai');
+    if (!apiKey) return { models: [] };
     const models = await this.aiBotService.listModels(config.aiProvider || 'openai', apiKey);
     return { models };
   }
+
+  // ─── Test ───────────────────────────────────────────────────────────────────
 
   @Post('configs/:id/test')
   @RequireRole(ApiKeyRole.OPERATOR)
@@ -90,11 +118,11 @@ export class AiBotController {
     @Body() dto: TestAiBotDto,
   ): Promise<{ reply: string; error?: string; isError?: boolean }> {
     const config = await this.aiBotService.findOne(id);
-    const apiKey = config.apiKey || process.env.OPENAI_API_KEY || '';
+    const apiKey = config.apiKey || await this.aiBotService.getProviderApiKey(config.aiProvider || 'openai');
     if (!apiKey) {
       return {
         reply: config.fallbackMessage || 'Sorry, I am unable to respond right now.',
-        error: 'No API key configured. Add one in the AI Settings tab.',
+        error: 'No API key found. Add one in Provider Keys or set a per-config key.',
         isError: true,
       };
     }
