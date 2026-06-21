@@ -641,6 +641,11 @@ export const aiBotApi = {
   updateConfig: (id: string, data: Partial<AiBotConfig>) =>
     request<AiBotConfig>(`/ai-bot/configs/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
   deleteConfig: (id: string) => request<void>(`/ai-bot/configs/${id}`, { method: 'DELETE' }),
+  listModels: (provider: string, apiKey: string) =>
+    request<{ models: { id: string; label: string }[] }>('/ai-bot/list-models', {
+      method: 'POST',
+      body: JSON.stringify({ provider, apiKey }),
+    }),
   testConfig: (id: string, message: string) =>
     request<{ reply: string; error?: string; isError?: boolean }>(`/ai-bot/configs/${id}/test`, {
       method: 'POST',

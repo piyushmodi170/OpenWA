@@ -198,6 +198,31 @@ export class AiBotService implements OnModuleInit {
     await this.repo.remove(config);
   }
 
+  async listModels(provider: string, apiKey: string): Promise<{ id: string; label: string }[]> {
+    if (provider === 'gemini') {
+      // Use the Gemini REST API directly — the SDK does not expose listModels
+      const url = `https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}&pageSize=100`;
+      const res = await fetch(url);
+      if (!res.ok) {
+        const body = await res.text();
+        throw new Error(`Gemini API error ${res.status}: ${body}`);
+      }
+      const data = await res.json() as { models?: { name: string; displayName?: string; supportedGenerationMethods?: string[] }[] };
+      return (data.models ?? [])
+        .filter(m => m.supportedGenerationMethods?.includes('generateContent'))
+        .map(m => ({ id: m.name.replace('models/', ''), label: m.displayName || m.name.replace('models/', '') }))
+        .sort((a, b) => a.id.localeCompare(b.id));
+    }
+
+    // OpenAI — filter to chat-capable models only
+    const client = new OpenAI({ apiKey });
+    const res = await client.models.list();
+    return res.data
+      .filter(m => m.id.startsWith('gpt-') || m.id.startsWith('o1') || m.id.startsWith('o3') || m.id.startsWith('chatgpt'))
+      .sort((a, b) => b.created - a.created)
+      .map(m => ({ id: m.id, label: m.id }));
+  }
+
   hasEnvFallbackKey(): boolean {
     return !!process.env.OPENAI_API_KEY;
   }

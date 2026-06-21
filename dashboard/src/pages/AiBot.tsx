@@ -40,7 +40,7 @@ const OPENAI_MODELS = [
 
 const GEMINI_MODELS = [
   { value: 'gemini-2.0-flash', label: 'Gemini 2.0 Flash — latest, fast' },
-  { value: 'gemini-1.5-flash', label: 'Gemini 1.5 Flash — fast, cheap' },
+  { value: 'gemini-2.0-flash-lite', label: 'Gemini 2.0 Flash Lite — fast, cheap' },
   { value: 'gemini-1.5-pro', label: 'Gemini 1.5 Pro — most capable' },
 ];
 
@@ -84,6 +84,9 @@ export function AiBot() {
   const [newFaqA, setNewFaqA] = useState('');
   const [saveError, setSaveError] = useState('');
   const [showApiKey, setShowApiKey] = useState(false);
+  const [dynamicModels, setDynamicModels] = useState<{ id: string; label: string }[]>([]);
+  const [modelsLoading, setModelsLoading] = useState(false);
+  const [modelsError, setModelsError] = useState('');
 
   const { data: sessions = [] } = useQuery({
     queryKey: ['sessions'],
@@ -225,11 +228,41 @@ export function AiBot() {
   }
 
   function handleProviderChange(provider: 'openai' | 'gemini') {
-    const defaultModel = provider === 'gemini' ? 'gemini-1.5-flash' : 'gpt-4o-mini';
+    const defaultModel = provider === 'gemini' ? 'gemini-2.0-flash' : 'gpt-4o-mini';
     setForm(f => ({ ...f, aiProvider: provider, model: defaultModel }));
+    setDynamicModels([]);
+    setModelsError('');
   }
 
-  const modelOptions = form.aiProvider === 'gemini' ? GEMINI_MODELS : OPENAI_MODELS;
+  async function handleLoadModels() {
+    const apiKey = form.apiKey?.trim() || '';
+    if (!apiKey) {
+      setModelsError('Enter your API key first, then click Load Models.');
+      return;
+    }
+    setModelsLoading(true);
+    setModelsError('');
+    try {
+      const res = await aiBotApi.listModels(form.aiProvider as string, apiKey);
+      if (res.models.length === 0) {
+        setModelsError('No generateContent-capable models found for this key.');
+      } else {
+        setDynamicModels(res.models);
+        if (!res.models.find(m => m.id === form.model)) {
+          setForm(f => ({ ...f, model: res.models[0].id }));
+        }
+      }
+    } catch (e) {
+      setModelsError(e instanceof Error ? e.message : 'Failed to load models');
+    } finally {
+      setModelsLoading(false);
+    }
+  }
+
+  const staticModelOptions = form.aiProvider === 'gemini' ? GEMINI_MODELS : OPENAI_MODELS;
+  const modelOptions = dynamicModels.length > 0
+    ? dynamicModels.map(m => ({ value: m.id, label: m.label }))
+    : staticModelOptions;
   const isSaving = createMutation.isPending || updateMutation.isPending;
   const isCreating = !editingId;
   const isCasual = form.botType === 'casual';
@@ -648,9 +681,25 @@ export function AiBot() {
 
                 {/* Model */}
                 <div>
-                  <label style={labelStyle}>Model</label>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '6px' }}>
+                    <label style={{ ...labelStyle, marginBottom: 0 }}>Model</label>
+                    <button
+                      onClick={handleLoadModels}
+                      disabled={modelsLoading}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: '4px',
+                        padding: '3px 10px', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 600,
+                        border: '1px solid var(--primary)', background: 'transparent',
+                        color: 'var(--primary)', cursor: modelsLoading ? 'not-allowed' : 'pointer',
+                        opacity: modelsLoading ? 0.6 : 1,
+                      }}
+                    >
+                      <Zap size={12} />
+                      {modelsLoading ? 'Loading…' : dynamicModels.length > 0 ? 'Refresh' : 'Load from API'}
+                    </button>
+                  </div>
                   <select
-                    value={form.model || (form.aiProvider === 'gemini' ? 'gemini-1.5-flash' : 'gpt-4o-mini')}
+                    value={form.model || (form.aiProvider === 'gemini' ? 'gemini-2.0-flash' : 'gpt-4o-mini')}
                     onChange={e => setForm(f => ({ ...f, model: e.target.value }))}
                     style={inputStyle}
                   >
@@ -658,6 +707,20 @@ export function AiBot() {
                       <option key={m.value} value={m.value}>{m.label}</option>
                     ))}
                   </select>
+                  {modelsError && (
+                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '6px', marginTop: '4px', fontSize: '0.75rem', color: 'var(--danger, #b91c1c)' }}>
+                      <AlertCircle size={12} style={{ flexShrink: 0, marginTop: '1px' }} />
+                      {modelsError}
+                    </div>
+                  )}
+                  {dynamicModels.length > 0 && !modelsError && (
+                    <div style={{ fontSize: '0.75rem', color: 'var(--success-text, #065f46)', marginTop: '3px' }}>
+                      ✓ {dynamicModels.length} models loaded from your API key
+                    </div>
+                  )}
+                  {dynamicModels.length === 0 && !modelsError && (
+                    <div style={hintStyle}>Showing defaults. Click "Load from API" to see all models available on your key.</div>
+                  )}
                 </div>
 
                 {/* Tone */}

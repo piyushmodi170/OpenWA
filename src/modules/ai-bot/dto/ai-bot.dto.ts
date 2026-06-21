@@ -103,3 +103,13 @@ export class TestAiBotDto {
   @IsString()
   message: string;
 }
+
+export class ListModelsDto {
+  @ApiProperty({ enum: ['openai', 'gemini'] })
+  @IsIn(['openai', 'gemini'])
+  provider: string;
+
+  @ApiProperty({ description: 'API key to use for listing models' })
+  @IsString()
+  apiKey: string;
+}

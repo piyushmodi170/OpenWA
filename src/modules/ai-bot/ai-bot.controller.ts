@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Put, Delete, Param, Body, HttpCode, HttpStatus } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { AiBotService } from './ai-bot.service';
-import { CreateAiBotConfigDto, UpdateAiBotConfigDto, TestAiBotDto } from './dto/ai-bot.dto';
+import { CreateAiBotConfigDto, UpdateAiBotConfigDto, TestAiBotDto, ListModelsDto } from './dto/ai-bot.dto';
 import { AiBotConfig } from './entities/ai-bot-config.entity';
 import { RequireRole } from '../auth/decorators/auth.decorators';
 import { ApiKeyRole } from '../auth/entities/api-key.entity';
@@ -59,6 +59,14 @@ export class AiBotController {
   @ApiOperation({ summary: 'Delete AI bot config' })
   async delete(@Param('id') id: string): Promise<void> {
     return this.aiBotService.delete(id);
+  }
+
+  @Post('list-models')
+  @RequireRole(ApiKeyRole.OPERATOR)
+  @ApiOperation({ summary: 'List available models for a given provider and API key' })
+  async listModels(@Body() dto: ListModelsDto): Promise<{ models: { id: string; label: string }[] }> {
+    const models = await this.aiBotService.listModels(dto.provider, dto.apiKey);
+    return { models };
   }
 
   @Post('configs/:id/test')
