@@ -21,6 +21,7 @@ const MessageTester = lazy(() => import('./pages/MessageTester').then(m => ({ de
 const Broadcast = lazy(() => import('./pages/Broadcast').then(m => ({ default: m.Broadcast })));
 const Infrastructure = lazy(() => import('./pages/Infrastructure').then(m => ({ default: m.Infrastructure })));
 const Plugins = lazy(() => import('./pages/Plugins'));
+const AiBot = lazy(() => import('./pages/AiBot').then(m => ({ default: m.AiBot })));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -114,6 +115,7 @@ function AppContent() {
             <Route path="broadcast" element={<Broadcast />} />
             <Route path="infrastructure" element={<Infrastructure />} />
             {role === 'admin' && <Route path="plugins" element={<Plugins />} />}
+            <Route path="ai-bot" element={<AiBot />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
         </Routes>

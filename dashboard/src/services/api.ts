@@ -602,6 +602,50 @@ export interface Engine {
 }
 
 // =============================================================================
+// AI Bot API
+// =============================================================================
+
+export interface AiBotConfig {
+  id: string;
+  sessionId: string;
+  enabled: boolean;
+  companyName: string;
+  companyDescription: string;
+  companyServices: string;
+  companyFaqs: string;
+  tone: 'friendly' | 'professional' | 'formal';
+  responseLanguage: string;
+  systemPromptOverride: string | null;
+  openaiModel: string;
+  maxTokens: number;
+  fallbackMessage: string | null;
+  greetingMessage: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface AiBotStatus {
+  openaiConfigured: boolean;
+  configCount: number;
+}
+
+export const aiBotApi = {
+  getStatus: () => request<AiBotStatus>('/ai-bot/status'),
+  listConfigs: () => request<AiBotConfig[]>('/ai-bot/configs'),
+  getConfig: (id: string) => request<AiBotConfig>(`/ai-bot/configs/${id}`),
+  createConfig: (data: Partial<AiBotConfig>) =>
+    request<AiBotConfig>('/ai-bot/configs', { method: 'POST', body: JSON.stringify(data) }),
+  updateConfig: (id: string, data: Partial<AiBotConfig>) =>
+    request<AiBotConfig>(`/ai-bot/configs/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+  deleteConfig: (id: string) => request<void>(`/ai-bot/configs/${id}`, { method: 'DELETE' }),
+  testConfig: (id: string, message: string) =>
+    request<{ reply: string }>(`/ai-bot/configs/${id}/test`, {
+      method: 'POST',
+      body: JSON.stringify({ message }),
+    }),
+};
+
+// =============================================================================
 // Plugins API
 // =============================================================================
 

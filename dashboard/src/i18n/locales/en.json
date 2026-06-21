@@ -64,6 +64,7 @@
     "apiKeys": "API Keys",
     "messageTester": "Message Tester",
     "broadcast": "Broadcast",
+    "aiBot": "AI Bot",
     "infrastructure": "Infrastructure",
     "plugins": "Plugins",
     "logs": "Logs"
