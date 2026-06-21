@@ -2,7 +2,9 @@ export default () => ({
   port: parseInt(process.env.PORT || '2785', 10),
 
   // Redis configuration
+  // REDIS_URL takes precedence when set (e.g. redis://:password@host:port)
   redis: {
+    url: process.env.REDIS_URL,
     host: process.env.REDIS_HOST || 'localhost',
     port: parseInt(process.env.REDIS_PORT || '6379', 10),
     password: process.env.REDIS_PASSWORD,

@@ -63,24 +63,35 @@ export class CacheService implements OnModuleDestroy {
     this.connectionAttempts++;
 
     try {
-      const host = process.env.REDIS_HOST || this.configService.get<string>('REDIS_HOST', 'localhost');
-      const port = parseInt(process.env.REDIS_PORT || '', 10) || this.configService.get<number>('REDIS_PORT', 6379);
-
-      this.logger.log(`Connecting to Redis at ${host}:${port} (attempt ${this.connectionAttempts})`);
-
-      this.redis = new Redis({
-        host,
-        port,
-        password: this.configService.get<string>('REDIS_PASSWORD'),
+      const redisUrl = process.env.REDIS_URL;
+      const redisOpts = {
         db: this.configService.get<number>('REDIS_CACHE_DB', 1),
         lazyConnect: true,
         maxRetriesPerRequest: 3,
         connectTimeout: 5000,
-        retryStrategy: times => {
+        retryStrategy: (times: number) => {
           if (times > 3) return null;
           return Math.min(times * 500, 3000);
         },
-      });
+      };
+
+      if (redisUrl) {
+        this.logger.log(`Connecting to Redis via REDIS_URL (attempt ${this.connectionAttempts})`);
+        this.redis = new Redis(redisUrl, redisOpts);
+      } else {
+        const host = process.env.REDIS_HOST || this.configService.get<string>('redis.host', 'localhost');
+        const port = parseInt(process.env.REDIS_PORT || '', 10) || this.configService.get<number>('redis.port', 6379);
+        const password = process.env.REDIS_PASSWORD || this.configService.get<string>('redis.password');
+
+        this.logger.log(`Connecting to Redis at ${host}:${port} (attempt ${this.connectionAttempts})`);
+
+        this.redis = new Redis({
+          host,
+          port,
+          password,
+          ...redisOpts,
+        });
+      }
 
       this.redis.on('error', err => {
         this.logger.warn(`Redis error: ${err.message}`);
