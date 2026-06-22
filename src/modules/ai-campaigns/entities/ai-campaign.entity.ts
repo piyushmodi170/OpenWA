@@ -29,6 +29,9 @@ export class AiCampaign {
   @Column({ type: 'text', default: '' })
   messageTemplate: string;
 
+  @Column({ type: 'varchar', length: 100, nullable: true })
+  employeeId: string | null;
+
   @Column({ type: 'boolean', default: true })
   useAiPersonalization: boolean;
 

@@ -7,6 +7,8 @@ import { AiCampaign } from './entities/ai-campaign.entity';
 import { CampaignLead } from './entities/campaign-lead.entity';
 import { CreateAiCampaignDto, UpdateAiCampaignDto, ImportLeadsDto } from './dto/ai-campaign.dto';
 import { MessageService } from '../message/message.service';
+import { AiEmployeesService } from '../ai-employees/ai-employees.service';
+import { AiTrainingService } from '../ai-training/ai-training.service';
 
 @Injectable()
 export class AiCampaignsService {
@@ -19,6 +21,8 @@ export class AiCampaignsService {
     private readonly leadRepo: Repository<CampaignLead>,
     @Optional() @Inject(forwardRef(() => MessageService))
     private readonly messageService: MessageService,
+    @Optional() private readonly employeesService: AiEmployeesService,
+    @Optional() private readonly trainingService: AiTrainingService,
   ) {}
 
   // ─── Campaigns ────────────────────────────────────────────────────────────
@@ -37,8 +41,9 @@ export class AiCampaignsService {
     const campaign = this.campaignRepo.create({
       name: dto.name,
       goal: dto.goal || '',
-      sessionId: dto.sessionId || '*',
-      messageTemplate: dto.messageTemplate,
+      sessionId: dto.sessionId || '',
+      messageTemplate: dto.messageTemplate || '',
+      employeeId: dto.employeeId || null,
       useAiPersonalization: dto.useAiPersonalization ?? true,
       aiProvider: dto.aiProvider || 'openai',
       aiModel: dto.aiModel || 'gpt-4o-mini',
@@ -67,7 +72,6 @@ export class AiCampaignsService {
 
   async launch(id: string): Promise<{ status: string; queued: number; message: string }> {
     const campaign = await this.findOne(id);
-
     if (campaign.status === 'running') {
       return { status: 'running', queued: 0, message: 'Campaign is already running' };
     }
@@ -83,7 +87,6 @@ export class AiCampaignsService {
     campaign.status = 'running';
     await this.campaignRepo.save(campaign);
 
-    // Fire-and-forget background send
     this.runSendLoop(campaign, readyLeads).catch(err =>
       this.logger.error(`Campaign ${id} send loop failed`, err),
     );
@@ -98,36 +101,18 @@ export class AiCampaignsService {
   }
 
   private async runSendLoop(campaign: AiCampaign, leads: CampaignLead[]): Promise<void> {
-    let sessionId = campaign.sessionId;
-
-    // Resolve wildcard session to first available ready session
-    if (sessionId === '*' && this.messageService) {
-      try {
-        // Use a simple ready session heuristic — grab any session
-        sessionId = 'default';
-      } catch {
-        sessionId = 'default';
-      }
-    }
-
     for (const lead of leads) {
-      // Check if campaign was paused between sends
       const fresh = await this.campaignRepo.findOne({ where: { id: campaign.id } });
       if (!fresh || fresh.status !== 'running') break;
 
       try {
         const messageText = lead.personalizedMessage?.trim() ||
-          campaign.messageTemplate
-            .replace(/\{\{name\}\}/gi, lead.name || 'there')
-            .replace(/\{\{phone\}\}/gi, lead.phone);
+          (campaign.messageTemplate || '').replace(/\{\{name\}\}/gi, lead.name || 'there');
 
         const chatId = lead.phone.includes('@') ? lead.phone : `${lead.phone}@c.us`;
 
-        if (this.messageService) {
-          await this.messageService.sendText(campaign.sessionId === '*' ? 'default' : campaign.sessionId, {
-            chatId,
-            text: messageText,
-          });
+        if (this.messageService && campaign.sessionId) {
+          await this.messageService.sendText(campaign.sessionId, { chatId, text: messageText });
         }
 
         lead.status = 'sent';
@@ -142,13 +127,11 @@ export class AiCampaignsService {
         await this.campaignRepo.increment({ id: campaign.id }, 'failed', 1);
       }
 
-      // Delay between messages
       if (campaign.delayBetweenMessages > 0) {
         await new Promise(r => setTimeout(r, campaign.delayBetweenMessages));
       }
     }
 
-    // Mark as completed if all leads processed
     const remaining = await this.leadRepo.count({ where: { campaignId: campaign.id, status: 'ready' } });
     if (remaining === 0) {
       await this.campaignRepo.update({ id: campaign.id }, { status: 'completed' });
@@ -172,11 +155,8 @@ export class AiCampaignsService {
       const existing = await this.leadRepo.findOne({ where: { campaignId, phone } });
       if (existing) { skipped++; continue; }
       await this.leadRepo.save(this.leadRepo.create({
-        campaignId,
-        phone,
-        name: lead.name || '',
-        customData: lead.customData || '{}',
-        status: 'pending',
+        campaignId, phone, name: lead.name || '',
+        customData: lead.customData || '{}', status: 'pending',
       }));
       imported++;
     }
@@ -202,25 +182,45 @@ export class AiCampaignsService {
     let personalized = 0;
     let failed = 0;
 
+    // Build employee context once if employeeId is set
+    let employeeContext: { name: string; role: string; personality: string; tone: string; goals: string; knowledge: string; examples: string; rules: string } | null = null;
+    if (campaign.employeeId && this.employeesService && this.trainingService) {
+      try {
+        const emp = await this.employeesService.findOne(campaign.employeeId);
+        const knowledge = await this.trainingService.buildKnowledgeContext(emp.id, 4000);
+        const examples = await this.trainingService.buildExamplesContext(emp.id);
+        const rules = await this.trainingService.buildRulesContext(emp.id);
+        employeeContext = {
+          name: emp.name,
+          role: emp.role,
+          personality: emp.personality || '',
+          tone: emp.tone,
+          goals: emp.goals,
+          knowledge,
+          examples,
+          rules,
+        };
+      } catch (err) {
+        this.logger.warn(`Could not load employee ${campaign.employeeId}`, err);
+      }
+    }
+
     for (const lead of leads) {
       try {
         lead.status = 'personalizing';
         await this.leadRepo.save(lead);
-        const message = campaign.useAiPersonalization && key
-          ? await this.generatePersonalizedMessage(campaign, lead, key)
-          : campaign.messageTemplate
-              .replace(/\{\{name\}\}/gi, lead.name || 'there')
-              .replace(/\{\{phone\}\}/gi, lead.phone);
+
+        const message = key
+          ? await this.generateMessage(campaign, lead, key, employeeContext)
+          : this.simpleReplace(campaign.messageTemplate, lead);
+
         lead.personalizedMessage = message;
         lead.status = 'ready';
         await this.leadRepo.save(lead);
         personalized++;
       } catch (err) {
         this.logger.error(`Failed to personalize lead ${lead.id}`, err);
-        const simpleMsg = campaign.messageTemplate
-          .replace(/\{\{name\}\}/gi, lead.name || 'there')
-          .replace(/\{\{phone\}\}/gi, lead.phone);
-        lead.personalizedMessage = simpleMsg;
+        lead.personalizedMessage = this.simpleReplace(campaign.messageTemplate || '', lead);
         lead.status = 'ready';
         await this.leadRepo.save(lead);
         failed++;
@@ -230,22 +230,59 @@ export class AiCampaignsService {
     return { personalized, failed };
   }
 
-  private async generatePersonalizedMessage(campaign: AiCampaign, lead: CampaignLead, apiKey: string): Promise<string> {
+  private simpleReplace(template: string, lead: CampaignLead): string {
+    return template
+      .replace(/\{\{name\}\}/gi, lead.name || 'there')
+      .replace(/\{\{phone\}\}/gi, lead.phone);
+  }
+
+  private async generateMessage(
+    campaign: AiCampaign,
+    lead: CampaignLead,
+    apiKey: string,
+    empCtx: { name: string; role: string; personality: string; tone: string; goals: string; knowledge: string; examples: string; rules: string } | null,
+  ): Promise<string> {
     const customData = JSON.parse(lead.customData || '{}') as Record<string, string>;
     const customContext = Object.entries(customData).map(([k, v]) => `${k}: ${v}`).join(', ');
-    const prompt = `Personalize this WhatsApp message template for a specific lead. Keep the same meaning but make it feel personal.
 
+    let systemPrompt: string;
+    let userPrompt: string;
+
+    if (empCtx) {
+      // Employee-driven mode
+      systemPrompt = `You are ${empCtx.name}, a ${empCtx.role}.
+Personality: ${empCtx.personality || 'Professional and helpful'}
+Tone: ${empCtx.tone}
+Goals: ${empCtx.goals}
+
+${empCtx.knowledge ? `Knowledge base:\n${empCtx.knowledge}\n` : ''}
+${empCtx.examples ? `Example conversations:\n${empCtx.examples}\n` : ''}
+${empCtx.rules ? `Rules:\n${empCtx.rules}\n` : ''}
+
+Write a short, personalized WhatsApp outreach message (2-4 sentences max). 
+Sound like a real person. Return ONLY the message text, no quotes.`;
+
+      userPrompt = `Write a WhatsApp message to this lead:
+Name: ${lead.name || 'Unknown'}
+Phone: ${lead.phone}
+${customContext ? `Info: ${customContext}` : ''}
+Campaign goal: ${campaign.goal || 'Connect and start a conversation'}
+${campaign.messageTemplate ? `Base message context: ${campaign.messageTemplate}` : ''}`;
+    } else {
+      // Template-based mode
+      systemPrompt = 'You personalize WhatsApp marketing messages. Return ONLY the message text, nothing else.';
+      userPrompt = `Personalize this message template for the lead.
 Template: "${campaign.messageTemplate}"
 Goal: "${campaign.goal}"
 Lead Name: "${lead.name || 'Unknown'}"
 ${customContext ? `Lead Info: ${customContext}` : ''}
-
-Return ONLY the personalized message text, nothing else.`;
+Return ONLY the personalized message.`;
+    }
 
     if (campaign.aiProvider === 'gemini') {
       const genAI = new GoogleGenerativeAI(apiKey);
       const model = genAI.getGenerativeModel({ model: campaign.aiModel || 'gemini-2.0-flash' });
-      const result = await model.generateContent(prompt);
+      const result = await model.generateContent(`${systemPrompt}\n\n${userPrompt}`);
       return result.response.text().trim();
     }
 
@@ -253,9 +290,12 @@ Return ONLY the personalized message text, nothing else.`;
     const completion = await client.chat.completions.create({
       model: campaign.aiModel || 'gpt-4o-mini',
       max_tokens: 300,
-      messages: [{ role: 'user', content: prompt }],
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user', content: userPrompt },
+      ],
     });
-    return completion.choices[0]?.message?.content?.trim() || campaign.messageTemplate;
+    return completion.choices[0]?.message?.content?.trim() || this.simpleReplace(campaign.messageTemplate || '', lead);
   }
 
   async getAnalytics(campaignId: string): Promise<{

@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Plus, Trash2, BookOpen, Lightbulb, Shield, TrendingUp, ChevronDown, ChevronUp } from 'lucide-react';
+import { Plus, Trash2, BookOpen, Lightbulb, Shield, TrendingUp, ChevronDown, ChevronUp, Link, FileText } from 'lucide-react';
 import { apiRequest } from '../services/api';
 import './AiTraining.css';
 
-interface KnowledgeDoc { id: string; title: string; content: string; type: string; wordCount: number; qualityScore: number; enabled: boolean; createdAt: string; }
+interface KnowledgeDoc { id: string; title: string; content: string; type: string; source: string; wordCount: number; qualityScore: number; enabled: boolean; createdAt: string; }
 interface TrainingExample { id: string; trigger: string; response: string; category: string; priority: number; enabled: boolean; }
 interface TrainingRule { id: string; rule: string; type: string; enabled: boolean; }
 interface TrainingStats { documentCount: number; wordCount: number; averageQualityScore: number; exampleCount: number; ruleCount: number; overallScore: number; }
@@ -18,7 +18,11 @@ export function AiTraining() {
   const [employeeFilter, setEmployeeFilter] = useState('');
   const [expandedDoc, setExpandedDoc] = useState<string | null>(null);
 
+  // Knowledge form — two modes: text or url
+  const [docMode, setDocMode] = useState<'text' | 'url'>('text');
   const [docForm, setDocForm] = useState({ title: '', content: '', type: 'text', source: '' });
+  const [urlForm, setUrlForm] = useState({ url: '', title: '' });
+
   const [exForm, setExForm] = useState({ trigger: '', response: '', category: 'general', priority: 5 });
   const [ruleForm, setRuleForm] = useState({ rule: '', type: 'never' });
   const [showDocForm, setShowDocForm] = useState(false);
@@ -33,7 +37,27 @@ export function AiTraining() {
   const { data: stats } = useQuery<TrainingStats>({ queryKey: ['training-stats', eid], queryFn: () => apiRequest(`/ai-training/stats${eid ? `?employeeId=${eid}` : ''}`) });
   const { data: employees = [] } = useQuery<{ id: string; name: string; avatar: string }[]>({ queryKey: ['ai-employees'], queryFn: () => apiRequest('/ai-employees') });
 
-  const createDoc = useMutation({ mutationFn: (d: typeof docForm) => apiRequest('/ai-training/documents', { method: 'POST', body: JSON.stringify({ ...d, employeeId: eid || null }) }), onSuccess: () => { void qc.invalidateQueries({ queryKey: ['training-docs'] }); void qc.invalidateQueries({ queryKey: ['training-stats'] }); setDocForm({ title: '', content: '', type: 'text', source: '' }); setShowDocForm(false); } });
+  const createDoc = useMutation({
+    mutationFn: (d: typeof docForm) => apiRequest('/ai-training/documents', { method: 'POST', body: JSON.stringify({ ...d, employeeId: eid || null }) }),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ['training-docs'] });
+      void qc.invalidateQueries({ queryKey: ['training-stats'] });
+      setDocForm({ title: '', content: '', type: 'text', source: '' });
+      setShowDocForm(false);
+    },
+  });
+
+  const fetchUrlMut = useMutation({
+    mutationFn: (d: { url: string; title?: string; employeeId?: string }) =>
+      apiRequest('/ai-training/documents/fetch-url', { method: 'POST', body: JSON.stringify(d) }),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ['training-docs'] });
+      void qc.invalidateQueries({ queryKey: ['training-stats'] });
+      setUrlForm({ url: '', title: '' });
+      setShowDocForm(false);
+    },
+  });
+
   const deleteDoc = useMutation({ mutationFn: (id: string) => apiRequest(`/ai-training/documents/${id}`, { method: 'DELETE' }), onSuccess: () => { void qc.invalidateQueries({ queryKey: ['training-docs'] }); void qc.invalidateQueries({ queryKey: ['training-stats'] }); } });
   const toggleDoc = useMutation({ mutationFn: ({ id, enabled }: { id: string; enabled: boolean }) => apiRequest(`/ai-training/documents/${id}`, { method: 'PUT', body: JSON.stringify({ enabled }) }), onSuccess: () => void qc.invalidateQueries({ queryKey: ['training-docs'] }) });
 
@@ -96,29 +120,94 @@ export function AiTraining() {
 
       {activeTab === 'knowledge' && (
         <div className="tab-content">
-          <div className="tab-actions"><button className="btn-primary" onClick={() => setShowDocForm(!showDocForm)}><Plus size={16} /> Add Knowledge</button></div>
+          <div className="tab-actions">
+            <button className="btn-primary" onClick={() => { setShowDocForm(!showDocForm); setDocMode('text'); }}>
+              <FileText size={16} /> Add Text
+            </button>
+            <button className="btn-secondary" onClick={() => { setShowDocForm(!showDocForm); setDocMode('url'); }}>
+              <Link size={16} /> Add URL
+            </button>
+          </div>
+
           {showDocForm && (
             <div className="mini-form">
-              <input className="form-input" placeholder="Title" value={docForm.title} onChange={e => setDocForm(f => ({ ...f, title: e.target.value }))} />
-              <div className="form-row">
-                <select className="form-select" value={docForm.type} onChange={e => setDocForm(f => ({ ...f, type: e.target.value }))}>
-                  {DOC_TYPES.map(t => <option key={t} value={t}>{t.replace(/_/g, ' ')}</option>)}
-                </select>
-                <input className="form-input" placeholder="Source (optional)" value={docForm.source} onChange={e => setDocForm(f => ({ ...f, source: e.target.value }))} />
+              {/* Mode toggle tabs */}
+              <div className="doc-mode-toggle">
+                <button className={`mode-tab ${docMode === 'text' ? 'active' : ''}`} onClick={() => setDocMode('text')}>
+                  <FileText size={14} /> Paste Text
+                </button>
+                <button className={`mode-tab ${docMode === 'url' ? 'active' : ''}`} onClick={() => setDocMode('url')}>
+                  <Link size={14} /> From URL
+                </button>
               </div>
-              <textarea className="form-textarea" rows={6} placeholder="Paste your knowledge content here..." value={docForm.content} onChange={e => setDocForm(f => ({ ...f, content: e.target.value }))} />
-              <div className="form-actions">
-                <button className="btn-secondary" onClick={() => setShowDocForm(false)}>Cancel</button>
-                <button className="btn-primary" onClick={() => createDoc.mutate(docForm)} disabled={createDoc.isPending || !docForm.title || !docForm.content}>{createDoc.isPending ? 'Saving...' : 'Save Document'}</button>
-              </div>
+
+              {docMode === 'text' ? (
+                <>
+                  <input className="form-input" placeholder="Title" value={docForm.title} onChange={e => setDocForm(f => ({ ...f, title: e.target.value }))} />
+                  <div className="form-row">
+                    <select className="form-select" value={docForm.type} onChange={e => setDocForm(f => ({ ...f, type: e.target.value }))}>
+                      {DOC_TYPES.map(t => <option key={t} value={t}>{t.replace(/_/g, ' ')}</option>)}
+                    </select>
+                    <input className="form-input" placeholder="Source (optional)" value={docForm.source} onChange={e => setDocForm(f => ({ ...f, source: e.target.value }))} />
+                  </div>
+                  <textarea className="form-textarea" rows={6} placeholder="Paste your knowledge content here — FAQs, product info, company policies..." value={docForm.content} onChange={e => setDocForm(f => ({ ...f, content: e.target.value }))} />
+                  <div className="form-actions">
+                    <button className="btn-secondary" onClick={() => setShowDocForm(false)}>Cancel</button>
+                    <button className="btn-primary" onClick={() => createDoc.mutate(docForm)} disabled={createDoc.isPending || !docForm.title || !docForm.content}>
+                      {createDoc.isPending ? 'Saving...' : 'Save Document'}
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="url-fetch-hint">
+                    <Link size={14} />
+                    <span>Enter any webpage URL — the content will be automatically extracted and saved as a knowledge document.</span>
+                  </div>
+                  <input
+                    className="form-input"
+                    placeholder="https://yourwebsite.com/about"
+                    value={urlForm.url}
+                    onChange={e => setUrlForm(f => ({ ...f, url: e.target.value }))}
+                  />
+                  <input
+                    className="form-input"
+                    placeholder="Title (optional — auto-detected from page)"
+                    value={urlForm.title}
+                    onChange={e => setUrlForm(f => ({ ...f, title: e.target.value }))}
+                  />
+                  {fetchUrlMut.isError && (
+                    <div className="fetch-error">
+                      ❌ {(fetchUrlMut.error as Error).message || 'Failed to fetch URL'}
+                    </div>
+                  )}
+                  <div className="form-actions">
+                    <button className="btn-secondary" onClick={() => setShowDocForm(false)}>Cancel</button>
+                    <button
+                      className="btn-primary"
+                      disabled={fetchUrlMut.isPending || !urlForm.url.trim()}
+                      onClick={() => fetchUrlMut.mutate({ url: urlForm.url.trim(), title: urlForm.title || undefined, employeeId: eid })}
+                    >
+                      <Link size={14} />
+                      {fetchUrlMut.isPending ? 'Fetching page...' : 'Fetch & Save'}
+                    </button>
+                  </div>
+                </>
+              )}
             </div>
           )}
+
           <div className="docs-list">
             {docs.map(doc => (
               <div key={doc.id} className={`doc-card ${!doc.enabled ? 'disabled' : ''}`}>
                 <div className="doc-header">
                   <div>
                     <span className="doc-type-badge">{doc.type.replace(/_/g, ' ')}</span>
+                    {doc.source && doc.source.startsWith('http') && (
+                      <a className="doc-source-link" href={doc.source} target="_blank" rel="noreferrer">
+                        <Link size={11} /> {new URL(doc.source).hostname}
+                      </a>
+                    )}
                     <h4>{doc.title}</h4>
                     <span className="doc-meta">{doc.wordCount} words · Quality: <strong style={{ color: scoreColor(doc.qualityScore) }}>{doc.qualityScore}%</strong></span>
                   </div>
@@ -128,10 +217,19 @@ export function AiTraining() {
                     <button className="icon-btn danger" onClick={() => { if (confirm('Delete this document?')) deleteDoc.mutate(doc.id); }}><Trash2 size={16} /></button>
                   </div>
                 </div>
-                {expandedDoc === doc.id && <div className="doc-content-preview">{doc.content}</div>}
+                {expandedDoc === doc.id && (
+                  <div className="doc-content-preview">
+                    {doc.source && doc.source.startsWith('http') && (
+                      <div className="doc-source-info">
+                        <Link size={12} /> Source: <a href={doc.source} target="_blank" rel="noreferrer">{doc.source}</a>
+                      </div>
+                    )}
+                    {doc.content}
+                  </div>
+                )}
               </div>
             ))}
-            {docs.length === 0 && <div className="empty-tab">No knowledge documents yet. Add your company info, FAQs, and more.</div>}
+            {docs.length === 0 && <div className="empty-tab">No knowledge documents yet. Add text or paste a URL to get started.</div>}
           </div>
         </div>
       )}

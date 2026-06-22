@@ -31,6 +31,13 @@ export class AiTrainingController {
     return this.service.createDocument(dto);
   }
 
+  @Post('documents/fetch-url')
+  @RequireRole(ApiKeyRole.OPERATOR)
+  @ApiOperation({ summary: 'Fetch a URL and create a knowledge document from its content' })
+  async fetchUrl(@Body() dto: { url: string; title?: string; employeeId?: string }) {
+    return this.service.fetchUrlDocument(dto);
+  }
+
   @Get('documents/:id')
   @RequireRole(ApiKeyRole.VIEWER)
   @ApiOperation({ summary: 'Get knowledge document by ID' })

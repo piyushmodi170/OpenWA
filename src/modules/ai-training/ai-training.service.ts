@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { KnowledgeDocument } from './entities/knowledge-document.entity';
@@ -12,6 +12,8 @@ import {
 
 @Injectable()
 export class AiTrainingService {
+  private readonly logger = new Logger(AiTrainingService.name);
+
   constructor(
     @InjectRepository(KnowledgeDocument, 'data')
     private readonly docRepo: Repository<KnowledgeDocument>,
@@ -64,6 +66,90 @@ export class AiTrainingService {
   async deleteDocument(id: string): Promise<void> {
     const doc = await this.findOneDocument(id);
     await this.docRepo.remove(doc);
+  }
+
+  // ─── URL Fetch ────────────────────────────────────────────────────────────────
+
+  async fetchUrlDocument(dto: { url: string; title?: string; employeeId?: string }): Promise<KnowledgeDocument> {
+    const { url, title, employeeId } = dto;
+
+    // Validate URL
+    let parsed: URL;
+    try {
+      parsed = new URL(url);
+    } catch {
+      throw new BadRequestException('Invalid URL');
+    }
+    if (!['http:', 'https:'].includes(parsed.protocol)) {
+      throw new BadRequestException('Only HTTP/HTTPS URLs are supported');
+    }
+
+    this.logger.log(`Fetching URL for knowledge base: ${url}`);
+
+    let content = '';
+    try {
+      const response = await fetch(url, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (compatible; OpenWA-KnowledgeBot/1.0)',
+          'Accept': 'text/html,text/plain',
+        },
+        signal: AbortSignal.timeout(10_000),
+      });
+
+      if (!response.ok) {
+        throw new BadRequestException(`Failed to fetch URL: HTTP ${response.status}`);
+      }
+
+      const contentType = response.headers.get('content-type') || '';
+      const raw = await response.text();
+
+      if (contentType.includes('text/html')) {
+        content = this.stripHtml(raw);
+      } else {
+        content = raw;
+      }
+
+      // Truncate to 10k chars to avoid huge documents
+      if (content.length > 10_000) {
+        content = content.slice(0, 10_000) + '\n\n[Content truncated at 10,000 characters]';
+      }
+
+      if (content.trim().length < 50) {
+        throw new BadRequestException('Page content is too short or could not be extracted');
+      }
+    } catch (err) {
+      if (err instanceof BadRequestException) throw err;
+      throw new BadRequestException(`Could not fetch URL: ${(err as Error).message}`);
+    }
+
+    // Derive title from URL if not provided
+    const docTitle = title?.trim() || parsed.hostname + parsed.pathname;
+
+    return this.createDocument({
+      title: docTitle.slice(0, 199),
+      content,
+      type: 'text',
+      source: url,
+      employeeId: employeeId || undefined,
+    });
+  }
+
+  private stripHtml(html: string): string {
+    // Remove scripts and styles
+    let text = html
+      .replace(/<script[\s\S]*?<\/script>/gi, '')
+      .replace(/<style[\s\S]*?<\/style>/gi, '')
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/&nbsp;/g, ' ')
+      .replace(/&amp;/g, '&')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+      .replace(/&#39;/g, "'")
+      .replace(/\s{2,}/g, ' ')
+      .replace(/\n{3,}/g, '\n\n')
+      .trim();
+    return text;
   }
 
   // ─── Training Examples ────────────────────────────────────────────────────────
