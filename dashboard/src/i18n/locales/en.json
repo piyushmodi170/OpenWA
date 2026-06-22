@@ -65,6 +65,10 @@
     "messageTester": "Message Tester",
     "broadcast": "Broadcast",
     "aiBot": "AI Bot",
+    "aiEmployees": "AI Employees",
+    "aiTraining": "Training Studio",
+    "conversationIntelligence": "Conv. Intelligence",
+    "aiCampaigns": "AI Campaigns",
     "infrastructure": "Infrastructure",
     "plugins": "Plugins",
     "logs": "Logs"

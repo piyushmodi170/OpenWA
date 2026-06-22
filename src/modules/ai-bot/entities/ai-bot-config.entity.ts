@@ -14,6 +14,9 @@ export class AiBotConfig {
   @Column({ type: 'varchar', length: 100, default: '*' })
   sessionId: string;
 
+  @Column({ type: 'varchar', length: 36, nullable: true })
+  employeeId: string | null;
+
   @Column({ type: 'boolean', default: false })
   enabled: boolean;
 

@@ -22,6 +22,10 @@ const Broadcast = lazy(() => import('./pages/Broadcast').then(m => ({ default: m
 const Infrastructure = lazy(() => import('./pages/Infrastructure').then(m => ({ default: m.Infrastructure })));
 const Plugins = lazy(() => import('./pages/Plugins'));
 const AiBot = lazy(() => import('./pages/AiBot').then(m => ({ default: m.AiBot })));
+const AiEmployees = lazy(() => import('./pages/AiEmployees').then(m => ({ default: m.AiEmployees })));
+const AiTraining = lazy(() => import('./pages/AiTraining').then(m => ({ default: m.AiTraining })));
+const ConversationIntelligence = lazy(() => import('./pages/ConversationIntelligence').then(m => ({ default: m.ConversationIntelligence })));
+const AiCampaigns = lazy(() => import('./pages/AiCampaigns').then(m => ({ default: m.AiCampaigns })));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -116,6 +120,10 @@ function AppContent() {
             <Route path="infrastructure" element={<Infrastructure />} />
             {role === 'admin' && <Route path="plugins" element={<Plugins />} />}
             <Route path="ai-bot" element={<AiBot />} />
+            <Route path="ai-employees" element={<AiEmployees />} />
+            <Route path="ai-training" element={<AiTraining />} />
+            <Route path="conversation-intelligence" element={<ConversationIntelligence />} />
+            <Route path="ai-campaigns" element={<AiCampaigns />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
         </Routes>

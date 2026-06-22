@@ -701,3 +701,11 @@ export const pluginsApi = {
   getEngines: () => request<Engine[]>('/infra/engines'),
   getCurrentEngine: () => request<{ engineType: string }>('/infra/engines/current'),
 };
+
+// =============================================================================
+// Generic API Request Helper (used by new AI OS pages)
+// =============================================================================
+
+export async function apiRequest<T = unknown>(endpoint: string, options: RequestInit = {}): Promise<T> {
+  return request<T>(endpoint, options);
+}

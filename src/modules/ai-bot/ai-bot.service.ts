@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit, NotFoundException, Logger, forwardRef, Inject } from '@nestjs/common';
+import { Injectable, OnModuleInit, NotFoundException, Logger, forwardRef, Inject, Optional } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import OpenAI from 'openai';
@@ -10,6 +10,8 @@ import { HookManager } from '../../core/hooks/hook-manager.service';
 import { HookContext, HookResult } from '../../core/hooks';
 import { IncomingMessage } from '../../engine/interfaces/whatsapp-engine.interface';
 import { MessageService } from '../message/message.service';
+import { AiEmployeesService } from '../ai-employees/ai-employees.service';
+import { AiTrainingService } from '../ai-training/ai-training.service';
 
 @Injectable()
 export class AiBotService implements OnModuleInit {
@@ -23,6 +25,8 @@ export class AiBotService implements OnModuleInit {
     private readonly hookManager: HookManager,
     @Inject(forwardRef(() => MessageService))
     private readonly messageService: MessageService,
+    @Optional() private readonly employeesService: AiEmployeesService,
+    @Optional() private readonly trainingService: AiTrainingService,
   ) {}
 
   onModuleInit(): void {
@@ -67,7 +71,6 @@ export class AiBotService implements OnModuleInit {
 
   async generateReplyRaw(config: AiBotConfig, userMessage: string): Promise<string> {
     const provider = config.aiProvider || 'openai';
-    const systemPrompt = config.systemPrompt?.trim() || this.buildSystemPrompt(config);
 
     // Resolve API key: per-config → saved provider key → env fallback
     const apiKey = config.apiKey || await this.getProviderApiKey(provider);
@@ -76,10 +79,33 @@ export class AiBotService implements OnModuleInit {
       throw new Error(`No API key configured for provider "${provider}". Add one in Provider Keys.`);
     }
 
+    // Build system prompt — employee-mode takes priority over legacy bot config
+    let systemPrompt: string;
+    if (config.employeeId && this.employeesService && this.trainingService) {
+      systemPrompt = await this.buildEmployeeSystemPrompt(config.employeeId);
+    } else {
+      systemPrompt = config.systemPrompt?.trim() || this.buildSystemPrompt(config);
+    }
+
     if (provider === 'gemini') {
       return this.callGemini(apiKey, config.model || 'gemini-2.0-flash', systemPrompt, userMessage, config.maxTokens || 500);
     }
     return this.callOpenAI(apiKey, config.model || 'gpt-4o-mini', systemPrompt, userMessage, config.maxTokens || 500);
+  }
+
+  private async buildEmployeeSystemPrompt(employeeId: string): Promise<string> {
+    try {
+      const [employee, knowledge, examples, rules] = await Promise.all([
+        this.employeesService!.findOne(employeeId),
+        this.trainingService!.buildKnowledgeContext(employeeId),
+        this.trainingService!.buildExamplesContext(employeeId),
+        this.trainingService!.buildRulesContext(employeeId),
+      ]);
+      return this.employeesService!.buildSystemPrompt(employee, knowledge, examples, rules);
+    } catch (err) {
+      this.logger.warn(`Failed to build employee prompt for ${employeeId}, falling back to default`, err);
+      return 'You are a helpful AI assistant. Keep responses concise and friendly.';
+    }
   }
 
   private async callOpenAI(apiKey: string, model: string, systemPrompt: string, userMessage: string, maxTokens: number): Promise<string> {

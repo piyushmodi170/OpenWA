@@ -65,7 +65,11 @@
     "messageTester": "בדיקת הודעות",
     "infrastructure": "תשתית",
     "plugins": "תוספים",
-    "logs": "לוגים"
+    "logs": "לוגים",
+    "aiEmployees": "AI Employees",
+    "aiTraining": "Training Studio",
+    "conversationIntelligence": "Conv. Intelligence",
+    "aiCampaigns": "AI Campaigns"
   },
   "chats": {
     "subtitle": "שליחה ומענה להודעות WhatsApp בזמן אמת",

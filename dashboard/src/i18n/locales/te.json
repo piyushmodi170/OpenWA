@@ -65,7 +65,11 @@
     "messageTester": "మెసేజ్ టెస్టర్",
     "infrastructure": "ఇన్‌ఫ్రాస్ట్రక్చర్",
     "plugins": "ప్లగిన్స్",
-    "logs": "లాగ్స్"
+    "logs": "లాగ్స్",
+    "aiEmployees": "AI Employees",
+    "aiTraining": "Training Studio",
+    "conversationIntelligence": "Conv. Intelligence",
+    "aiCampaigns": "AI Campaigns"
   },
   "chats": {
     "subtitle": "వాట్సాప్ సందేశాలను నిజ-సమయంలో పంపండి మరియు ప్రత్యుత్తరం ఇవ్వండి",

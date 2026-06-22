@@ -65,7 +65,11 @@
     "infrastructure": "Infraestructura",
     "plugins": "Plugins",
     "logs": "Registros",
-    "templates": "Plantillas"
+    "templates": "Plantillas",
+    "aiEmployees": "AI Employees",
+    "aiTraining": "Training Studio",
+    "conversationIntelligence": "Conv. Intelligence",
+    "aiCampaigns": "AI Campaigns"
   },
   "chats": {
     "subtitle": "Envía y responde mensajes de WhatsApp en tiempo real",

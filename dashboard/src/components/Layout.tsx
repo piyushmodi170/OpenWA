@@ -23,6 +23,10 @@ import {
   Languages,
   Radio,
   Bot,
+  Users,
+  BookOpen,
+  Brain,
+  Megaphone,
 } from 'lucide-react';
 import { useTheme } from '../hooks/useTheme';
 import { type UserRole } from '../hooks/useRole';
@@ -44,6 +48,10 @@ const allNavItems = [
   { to: '/message-tester', icon: Send, key: 'messageTester' as const, adminOnly: false },
   { to: '/broadcast', icon: Radio, key: 'broadcast' as const, adminOnly: false },
   { to: '/ai-bot', icon: Bot, key: 'aiBot' as const, adminOnly: false },
+  { to: '/ai-employees', icon: Users, key: 'aiEmployees' as const, adminOnly: false },
+  { to: '/ai-training', icon: BookOpen, key: 'aiTraining' as const, adminOnly: false },
+  { to: '/conversation-intelligence', icon: Brain, key: 'conversationIntelligence' as const, adminOnly: false },
+  { to: '/ai-campaigns', icon: Megaphone, key: 'aiCampaigns' as const, adminOnly: false },
   // Backend /infra/* is ADMIN-only; hide the nav item from non-admins (UX + defense-in-depth).
   { to: '/infrastructure', icon: Server, key: 'infrastructure' as const, adminOnly: true },
   { to: '/plugins', icon: Puzzle, key: 'plugins' as const, adminOnly: true },

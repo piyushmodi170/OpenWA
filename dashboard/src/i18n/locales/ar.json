@@ -65,7 +65,11 @@
     "messageTester": "اختبار الرسائل",
     "infrastructure": "البنية التحتية",
     "plugins": "الإضافات",
-    "logs": "السجلات"
+    "logs": "السجلات",
+    "aiEmployees": "AI Employees",
+    "aiTraining": "Training Studio",
+    "conversationIntelligence": "Conv. Intelligence",
+    "aiCampaigns": "AI Campaigns"
   },
   "chats": {
     "subtitle": "أرسل ورد على رسائل واتساب في الوقت الفعلي",

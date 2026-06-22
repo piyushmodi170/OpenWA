@@ -1,1 +1,2 @@
 - [NODE_ENV=production breaks devDependencies](node-env-production-devdeps.md) — always use `NODE_ENV=development npm install` at root and dashboard; plain install drops @nestjs/cli and vite.
+- [AI OS module wiring](ai-os-modules.md) — 4 new modules use TypeORM `'data'` connection; AiBotModule imports AiEmployeesModule + AiTrainingModule for knowledge injection; employeeId on AiBotConfig triggers employee prompt mode.
