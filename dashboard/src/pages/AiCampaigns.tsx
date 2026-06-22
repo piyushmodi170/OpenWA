@@ -1,168 +1,465 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Plus, Trash2, Users, Send, BarChart2, Upload, Wand2, ChevronDown, ChevronUp, Play, Pause } from 'lucide-react';
+import {
+  Plus, Trash2, Users, Send, BarChart2, Upload, Wand2,
+  Play, Pause, CheckCircle, ArrowRight, ChevronDown, ChevronUp,
+  AlertCircle,
+} from 'lucide-react';
 import { apiRequest } from '../services/api';
 import './AiCampaigns.css';
 
-interface Campaign { id: string; name: string; goal: string; sessionId: string; status: string; messageTemplate: string; useAiPersonalization: boolean; aiProvider: string; aiModel: string; totalLeads: number; sent: number; delivered: number; replied: number; failed: number; delayBetweenMessages: number; stopOnReply: boolean; createdAt: string; }
-interface Lead { id: string; phone: string; name: string; personalizedMessage: string; status: string; createdAt: string; }
-interface Analytics { total: number; sent: number; delivered: number; replied: number; failed: number; pending: number; ready: number; deliveryRate: number; replyRate: number; }
+interface Campaign {
+  id: string; name: string; goal: string; sessionId: string; status: string;
+  messageTemplate: string; useAiPersonalization: boolean; aiProvider: string;
+  aiModel: string; totalLeads: number; sent: number; delivered: number;
+  replied: number; failed: number; delayBetweenMessages: number;
+  stopOnReply: boolean; createdAt: string;
+}
+interface Lead {
+  id: string; phone: string; name: string; personalizedMessage: string;
+  status: string; errorMessage: string;
+}
+interface Analytics {
+  total: number; sent: number; delivered: number; replied: number;
+  failed: number; pending: number; ready: number;
+  deliveryRate: number; replyRate: number;
+}
 
-const STATUS_COLORS: Record<string, string> = { draft: '#94a3b8', scheduled: '#3b82f6', running: '#22c55e', paused: '#f59e0b', completed: '#8b5cf6', failed: '#ef4444' };
-const LEAD_STATUS_COLORS: Record<string, string> = { pending: '#94a3b8', personalizing: '#3b82f6', ready: '#8b5cf6', sent: '#06b6d4', delivered: '#22c55e', read: '#22c55e', replied: '#10b981', failed: '#ef4444', skipped: '#f59e0b' };
+const STATUS_COLORS: Record<string, string> = {
+  draft: '#94a3b8', scheduled: '#3b82f6', running: '#22c55e',
+  paused: '#f59e0b', completed: '#8b5cf6', failed: '#ef4444',
+};
+const STATUS_ICONS: Record<string, React.ReactNode> = {
+  draft: <span>📝</span>, running: <span>🟢</span>,
+  paused: <span>⏸</span>, completed: <span>✅</span>, failed: <span>❌</span>,
+};
+const LEAD_STATUS_COLORS: Record<string, string> = {
+  pending: '#94a3b8', personalizing: '#3b82f6', ready: '#8b5cf6',
+  sent: '#06b6d4', delivered: '#22c55e', read: '#22c55e',
+  replied: '#10b981', failed: '#ef4444', skipped: '#f59e0b',
+};
+
+type Step = 1 | 2 | 3 | 4;
+
+const STEPS = [
+  { n: 1 as Step, label: 'Create', icon: <Plus size={14} /> },
+  { n: 2 as Step, label: 'Leads', icon: <Users size={14} /> },
+  { n: 3 as Step, label: 'Personalize', icon: <Wand2 size={14} /> },
+  { n: 4 as Step, label: 'Launch', icon: <Send size={14} /> },
+];
 
 export function AiCampaigns() {
   const qc = useQueryClient();
-  const [selectedCampaign, setSelectedCampaign] = useState<Campaign | null>(null);
-  const [showCreateForm, setShowCreateForm] = useState(false);
-  const [showLeads, setShowLeads] = useState(false);
-  const [showAnalytics, setShowAnalytics] = useState(false);
+  const [activeCampaign, setActiveCampaign] = useState<Campaign | null>(null);
+  const [wizardStep, setWizardStep] = useState<Step>(1);
+  const [showWizard, setShowWizard] = useState(false);
+  const [expandedId, setExpandedId] = useState<string | null>(null);
   const [csvInput, setCsvInput] = useState('');
   const [showImport, setShowImport] = useState(false);
+  const [launchResult, setLaunchResult] = useState<{ queued: number; message: string } | null>(null);
 
   const [form, setForm] = useState({
     name: '', goal: '', sessionId: '*', messageTemplate: '',
     useAiPersonalization: true, aiProvider: 'openai', aiModel: 'gpt-4o-mini',
-    delayBetweenMessages: 3000, stopOnReply: true, followUpSequence: '[]',
+    delayBetweenMessages: 3000, stopOnReply: true,
   });
 
-  const { data: campaigns = [], isLoading } = useQuery<Campaign[]>({ queryKey: ['ai-campaigns'], queryFn: () => apiRequest('/ai-campaigns') });
-  const { data: sessions = [] } = useQuery<{ id: string }[]>({ queryKey: ['sessions'], queryFn: () => apiRequest('/sessions') });
-  const { data: leads = [] } = useQuery<Lead[]>({ queryKey: ['campaign-leads', selectedCampaign?.id], queryFn: () => apiRequest(`/ai-campaigns/${selectedCampaign!.id}/leads`), enabled: !!selectedCampaign && showLeads });
-  const { data: analytics } = useQuery<Analytics>({ queryKey: ['campaign-analytics', selectedCampaign?.id], queryFn: () => apiRequest(`/ai-campaigns/${selectedCampaign!.id}/analytics`), enabled: !!selectedCampaign && showAnalytics });
+  const { data: campaigns = [], isLoading } = useQuery<Campaign[]>({
+    queryKey: ['ai-campaigns'],
+    queryFn: () => apiRequest('/ai-campaigns'),
+    refetchInterval: activeCampaign?.status === 'running' ? 3000 : false,
+  });
+  const { data: sessions = [] } = useQuery<{ id: string }[]>({
+    queryKey: ['sessions'], queryFn: () => apiRequest('/sessions'),
+  });
+  const { data: leads = [], refetch: refetchLeads } = useQuery<Lead[]>({
+    queryKey: ['campaign-leads', activeCampaign?.id],
+    queryFn: () => apiRequest(`/ai-campaigns/${activeCampaign!.id}/leads`),
+    enabled: !!activeCampaign,
+    refetchInterval: activeCampaign?.status === 'running' ? 2000 : false,
+  });
+  const { data: analytics, refetch: refetchAnalytics } = useQuery<Analytics>({
+    queryKey: ['campaign-analytics', activeCampaign?.id],
+    queryFn: () => apiRequest(`/ai-campaigns/${activeCampaign!.id}/analytics`),
+    enabled: !!activeCampaign && expandedId === activeCampaign.id,
+    refetchInterval: activeCampaign?.status === 'running' ? 3000 : false,
+  });
 
-  const createMut = useMutation({ mutationFn: (d: typeof form) => apiRequest('/ai-campaigns', { method: 'POST', body: JSON.stringify(d) }), onSuccess: () => { void qc.invalidateQueries({ queryKey: ['ai-campaigns'] }); setShowCreateForm(false); setForm({ name: '', goal: '', sessionId: '*', messageTemplate: '', useAiPersonalization: true, aiProvider: 'openai', aiModel: 'gpt-4o-mini', delayBetweenMessages: 3000, stopOnReply: true, followUpSequence: '[]' }); } });
-  const deleteMut = useMutation({ mutationFn: (id: string) => apiRequest(`/ai-campaigns/${id}`, { method: 'DELETE' }), onSuccess: () => { void qc.invalidateQueries({ queryKey: ['ai-campaigns'] }); if (selectedCampaign) setSelectedCampaign(null); } });
+  const createMut = useMutation({
+    mutationFn: (d: typeof form) => apiRequest<Campaign>('/ai-campaigns', { method: 'POST', body: JSON.stringify(d) }),
+    onSuccess: (created) => {
+      void qc.invalidateQueries({ queryKey: ['ai-campaigns'] });
+      setActiveCampaign(created);
+      setWizardStep(2);
+    },
+  });
+
+  const deleteMut = useMutation({
+    mutationFn: (id: string) => apiRequest(`/ai-campaigns/${id}`, { method: 'DELETE' }),
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ['ai-campaigns'] });
+      if (activeCampaign) { setActiveCampaign(null); setShowWizard(false); }
+    },
+  });
+
   const importMut = useMutation({
     mutationFn: ({ id, leads }: { id: string; leads: { phone: string; name: string }[] }) =>
       apiRequest(`/ai-campaigns/${id}/leads/import`, { method: 'POST', body: JSON.stringify({ leads }) }),
-    onSuccess: () => { void qc.invalidateQueries({ queryKey: ['ai-campaigns'] }); void qc.invalidateQueries({ queryKey: ['campaign-leads'] }); setCsvInput(''); setShowImport(false); },
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ['ai-campaigns'] });
+      void refetchLeads();
+      setCsvInput('');
+      setShowImport(false);
+    },
   });
-  const personalizeMut = useMutation({ mutationFn: (id: string) => apiRequest(`/ai-campaigns/${id}/personalize`, { method: 'POST', body: '{}' }), onSuccess: () => { void qc.invalidateQueries({ queryKey: ['campaign-leads'] }); void qc.invalidateQueries({ queryKey: ['campaign-analytics'] }); } });
-  const deleteLead = useMutation({ mutationFn: ({ cid, lid }: { cid: string; lid: string }) => apiRequest(`/ai-campaigns/${cid}/leads/${lid}`, { method: 'DELETE' }), onSuccess: () => { void qc.invalidateQueries({ queryKey: ['campaign-leads'] }); void qc.invalidateQueries({ queryKey: ['ai-campaigns'] }); } });
 
-  const parseCSV = () => {
-    return csvInput.split('\n').map(line => {
-      const [phone, name] = line.split(',').map(s => s.trim());
-      return { phone: phone || '', name: name || '' };
-    }).filter(l => l.phone);
+  const personalizeMut = useMutation({
+    mutationFn: (id: string) => apiRequest(`/ai-campaigns/${id}/personalize`, { method: 'POST', body: '{}' }),
+    onSuccess: () => { void refetchLeads(); void qc.invalidateQueries({ queryKey: ['campaign-analytics'] }); },
+  });
+
+  const launchMut = useMutation({
+    mutationFn: (id: string) => apiRequest<{ queued: number; message: string; status: string }>(`/ai-campaigns/${id}/launch`, { method: 'POST' }),
+    onSuccess: (res) => {
+      void qc.invalidateQueries({ queryKey: ['ai-campaigns'] });
+      setLaunchResult({ queued: res.queued, message: res.message });
+    },
+  });
+
+  const pauseMut = useMutation({
+    mutationFn: (id: string) => apiRequest(`/ai-campaigns/${id}/pause`, { method: 'POST' }),
+    onSuccess: () => void qc.invalidateQueries({ queryKey: ['ai-campaigns'] }),
+  });
+
+  const deleteLead = useMutation({
+    mutationFn: ({ cid, lid }: { cid: string; lid: string }) =>
+      apiRequest(`/ai-campaigns/${cid}/leads/${lid}`, { method: 'DELETE' }),
+    onSuccess: () => { void refetchLeads(); void qc.invalidateQueries({ queryKey: ['ai-campaigns'] }); },
+  });
+
+  const parseCSV = () =>
+    csvInput.split('\n')
+      .map(line => { const [phone, name] = line.split(',').map(s => s.trim()); return { phone: phone || '', name: name || '' }; })
+      .filter(l => l.phone);
+
+  const openWizard = () => {
+    setForm({ name: '', goal: '', sessionId: '*', messageTemplate: '', useAiPersonalization: true, aiProvider: 'openai', aiModel: 'gpt-4o-mini', delayBetweenMessages: 3000, stopOnReply: true });
+    setActiveCampaign(null);
+    setWizardStep(1);
+    setLaunchResult(null);
+    setShowWizard(true);
   };
+
+  const continueWizard = (campaign: Campaign) => {
+    setActiveCampaign(campaign);
+    setWizardStep(2);
+    setLaunchResult(null);
+    setShowWizard(true);
+  };
+
+  const readyCount = leads.filter(l => l.status === 'ready').length;
+  const pendingCount = leads.filter(l => l.status === 'pending').length;
 
   return (
     <div className="campaigns-page">
       <div className="page-header-row">
         <div>
-          <h1 className="page-title"><Send size={24} /> AI Campaigns</h1>
-          <p className="page-subtitle">Send AI-personalized bulk campaigns with smart follow-up sequences</p>
+          <h1 className="page-title"><Send size={22} /> AI Campaigns</h1>
+          <p className="page-subtitle">Build, personalize, and launch WhatsApp campaigns in 4 steps</p>
         </div>
-        <button className="btn-primary" onClick={() => setShowCreateForm(!showCreateForm)}><Plus size={16} /> New Campaign</button>
+        <button className="btn-primary" onClick={openWizard}><Plus size={16} /> New Campaign</button>
       </div>
 
-      {showCreateForm && (
-        <div className="campaign-form-card">
-          <h3>Create Campaign</h3>
-          <div className="form-grid">
-            <div className="form-group"><label>Campaign Name *</label><input className="form-input" placeholder="e.g. January Outreach" value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} /></div>
-            <div className="form-group"><label>Goal</label><input className="form-input" placeholder="e.g. Book a demo call" value={form.goal} onChange={e => setForm(f => ({ ...f, goal: e.target.value }))} /></div>
-            <div className="form-group"><label>Session (WhatsApp number)</label><select className="form-select" value={form.sessionId} onChange={e => setForm(f => ({ ...f, sessionId: e.target.value }))}><option value="*">* Any available</option>{(sessions as { id: string }[]).map(s => <option key={s.id} value={s.id}>{s.id}</option>)}</select></div>
-            <div className="form-group"><label>AI Provider</label><select className="form-select" value={form.aiProvider} onChange={e => setForm(f => ({ ...f, aiProvider: e.target.value }))}><option value="openai">OpenAI</option><option value="gemini">Gemini</option></select></div>
-            <div className="form-group full-width"><label>Message Template *<span className="hint-text"> Use {'{{name}}'} for lead name</span></label><textarea className="form-textarea" rows={4} placeholder="Hi {{name}}, I wanted to reach out about..." value={form.messageTemplate} onChange={e => setForm(f => ({ ...f, messageTemplate: e.target.value }))} /></div>
-            <div className="form-group"><label className="checkbox-label"><input type="checkbox" checked={form.useAiPersonalization} onChange={e => setForm(f => ({ ...f, useAiPersonalization: e.target.checked }))} /> Use AI to personalize each message</label></div>
-            <div className="form-group"><label className="checkbox-label"><input type="checkbox" checked={form.stopOnReply} onChange={e => setForm(f => ({ ...f, stopOnReply: e.target.checked }))} /> Stop follow-ups when lead replies</label></div>
-            <div className="form-group"><label>Delay Between Messages (ms): {form.delayBetweenMessages}</label><input type="range" min={1000} max={30000} step={500} value={form.delayBetweenMessages} onChange={e => setForm(f => ({ ...f, delayBetweenMessages: parseInt(e.target.value) }))} /></div>
-          </div>
-          <div className="form-actions">
-            <button className="btn-secondary" onClick={() => setShowCreateForm(false)}>Cancel</button>
-            <button className="btn-primary" onClick={() => createMut.mutate(form)} disabled={createMut.isPending || !form.name || !form.messageTemplate}>{createMut.isPending ? 'Creating...' : 'Create Campaign'}</button>
-          </div>
-        </div>
-      )}
-
-      {isLoading ? <div className="loading-state">Loading campaigns...</div> : campaigns.length === 0 ? (
-        <div className="empty-state"><Send size={48} /><h3>No Campaigns Yet</h3><p>Create your first AI-powered campaign to reach your leads</p><button className="btn-primary" onClick={() => setShowCreateForm(true)}><Plus size={16} /> Create Campaign</button></div>
-      ) : (
-        <div className="campaigns-list">
-          {campaigns.map(campaign => (
-            <div key={campaign.id} className={`campaign-card ${selectedCampaign?.id === campaign.id ? 'selected' : ''}`}>
-              <div className="camp-header">
-                <div className="camp-info">
-                  <h3>{campaign.name}</h3>
-                  {campaign.goal && <p className="camp-goal">{campaign.goal}</p>}
-                  <div className="camp-meta">
-                    <span className="status-badge" style={{ background: STATUS_COLORS[campaign.status] }}>{campaign.status}</span>
-                    <span><Users size={12} /> {campaign.totalLeads} leads</span>
-                    <span>{campaign.aiProvider} · {campaign.aiModel}</span>
-                    {campaign.useAiPersonalization && <span className="ai-badge"><Wand2 size={12} /> AI Personalized</span>}
-                  </div>
+      {/* ── WIZARD ── */}
+      {showWizard && (
+        <div className="wizard-card">
+          {/* Step indicators */}
+          <div className="wizard-steps">
+            {STEPS.map((s, i) => (
+              <div key={s.n} className="wizard-step-wrap">
+                <div className={`wizard-step ${wizardStep === s.n ? 'active' : wizardStep > s.n ? 'done' : ''}`}>
+                  {wizardStep > s.n ? <CheckCircle size={14} /> : s.icon}
+                  <span>{s.label}</span>
                 </div>
-                <div className="camp-actions">
-                  <button className="btn-secondary btn-sm" onClick={() => { setSelectedCampaign(campaign); setShowLeads(!showLeads || selectedCampaign?.id !== campaign.id); setShowAnalytics(false); }}><Users size={14} /> Leads</button>
-                  <button className="btn-secondary btn-sm" onClick={() => { setSelectedCampaign(campaign); setShowAnalytics(!showAnalytics || selectedCampaign?.id !== campaign.id); setShowLeads(false); }}><BarChart2 size={14} /> Analytics</button>
-                  <button className="icon-btn danger" onClick={() => { if (confirm('Delete this campaign?')) deleteMut.mutate(campaign.id); }}><Trash2 size={16} /></button>
+                {i < STEPS.length - 1 && <ArrowRight size={14} className="step-arrow" />}
+              </div>
+            ))}
+          </div>
+
+          {/* Step 1 — Create */}
+          {wizardStep === 1 && (
+            <div className="wizard-body">
+              <h3>Step 1 — Create Campaign</h3>
+              <div className="form-grid">
+                <div className="form-group">
+                  <label>Campaign Name *</label>
+                  <input className="form-input" placeholder="e.g. January Sales Outreach"
+                    value={form.name} onChange={e => setForm(f => ({ ...f, name: e.target.value }))} />
+                </div>
+                <div className="form-group">
+                  <label>Goal</label>
+                  <input className="form-input" placeholder="e.g. Book a demo call"
+                    value={form.goal} onChange={e => setForm(f => ({ ...f, goal: e.target.value }))} />
+                </div>
+                <div className="form-group">
+                  <label>WhatsApp Session</label>
+                  <select className="form-select" value={form.sessionId} onChange={e => setForm(f => ({ ...f, sessionId: e.target.value }))}>
+                    <option value="*">* Any available session</option>
+                    {(sessions as { id: string }[]).map(s => <option key={s.id} value={s.id}>{s.id}</option>)}
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>AI Provider</label>
+                  <select className="form-select" value={form.aiProvider} onChange={e => setForm(f => ({ ...f, aiProvider: e.target.value }))}>
+                    <option value="openai">OpenAI</option>
+                    <option value="gemini">Gemini</option>
+                  </select>
+                </div>
+                <div className="form-group full-width">
+                  <label>Message Template * <span className="hint-text">Use {'{{name}}'} for lead name</span></label>
+                  <textarea className="form-textarea" rows={4}
+                    placeholder="Hi {{name}}, I came across your profile and wanted to share something that could help your business..."
+                    value={form.messageTemplate} onChange={e => setForm(f => ({ ...f, messageTemplate: e.target.value }))} />
+                </div>
+                <div className="form-group">
+                  <label className="checkbox-label">
+                    <input type="checkbox" checked={form.useAiPersonalization}
+                      onChange={e => setForm(f => ({ ...f, useAiPersonalization: e.target.checked }))} />
+                    AI-personalize each message
+                  </label>
+                </div>
+                <div className="form-group">
+                  <label className="checkbox-label">
+                    <input type="checkbox" checked={form.stopOnReply}
+                      onChange={e => setForm(f => ({ ...f, stopOnReply: e.target.checked }))} />
+                    Stop follow-ups when lead replies
+                  </label>
+                </div>
+                <div className="form-group full-width">
+                  <label>Delay between messages: <strong>{(form.delayBetweenMessages / 1000).toFixed(1)}s</strong></label>
+                  <input type="range" min={1000} max={30000} step={500}
+                    value={form.delayBetweenMessages} onChange={e => setForm(f => ({ ...f, delayBetweenMessages: parseInt(e.target.value) }))} />
                 </div>
               </div>
-
-              <div className="camp-progress-row">
-                <div className="camp-stat"><Send size={12} /> Sent: {campaign.sent}</div>
-                <div className="camp-stat" style={{ color: '#22c55e' }}>✓ Delivered: {campaign.delivered}</div>
-                <div className="camp-stat" style={{ color: '#8b5cf6' }}>💬 Replied: {campaign.replied}</div>
-                <div className="camp-stat" style={{ color: '#ef4444' }}>✗ Failed: {campaign.failed}</div>
+              <div className="wizard-footer">
+                <button className="btn-secondary" onClick={() => setShowWizard(false)}>Cancel</button>
+                <button className="btn-primary" disabled={createMut.isPending || !form.name || !form.messageTemplate}
+                  onClick={() => createMut.mutate(form)}>
+                  {createMut.isPending ? 'Creating...' : <>Next: Add Leads <ArrowRight size={14} /></>}
+                </button>
               </div>
+            </div>
+          )}
 
-              {selectedCampaign?.id === campaign.id && showLeads && (
-                <div className="leads-section">
-                  <div className="leads-toolbar">
-                    <h4><Users size={14} /> Leads ({leads.length})</h4>
-                    <button className="btn-secondary btn-sm" onClick={() => setShowImport(!showImport)}><Upload size={14} /> Import CSV</button>
-                    {leads.some(l => l.status === 'pending') && (
-                      <button className="btn-primary btn-sm" onClick={() => personalizeMut.mutate(campaign.id)} disabled={personalizeMut.isPending}>
-                        <Wand2 size={14} /> {personalizeMut.isPending ? 'Personalizing...' : 'AI Personalize All'}
-                      </button>
-                    )}
+          {/* Step 2 — Import Leads */}
+          {wizardStep === 2 && activeCampaign && (
+            <div className="wizard-body">
+              <h3>Step 2 — Import Leads <span className="step-count">{leads.length} leads</span></h3>
+              <div className="import-area">
+                <p className="import-hint">Paste leads as CSV: <code>phone,name</code> — one per line (name is optional)</p>
+                <textarea className="form-textarea" rows={6}
+                  placeholder={'919876543210,John Doe\n919123456789,Jane Smith\n911234567890'}
+                  value={csvInput} onChange={e => setCsvInput(e.target.value)} />
+                <button className="btn-primary" disabled={importMut.isPending || !csvInput.trim()}
+                  onClick={() => importMut.mutate({ id: activeCampaign.id, leads: parseCSV() })}>
+                  <Upload size={14} /> {importMut.isPending ? 'Importing...' : `Import ${parseCSV().length} Leads`}
+                </button>
+              </div>
+              {leads.length > 0 && (
+                <div className="leads-preview">
+                  <div className="leads-preview-header">
+                    <span><strong>{leads.length}</strong> leads loaded</span>
+                    <span style={{ color: '#22c55e' }}>{readyCount} ready</span>
+                    <span style={{ color: '#94a3b8' }}>{pendingCount} pending</span>
                   </div>
-                  {showImport && (
-                    <div className="import-section">
-                      <p className="import-hint">Paste CSV data: <code>phone,name</code> (one per line)</p>
-                      <textarea className="form-textarea" rows={5} placeholder="919876543210,John Doe&#10;919123456789,Jane Smith" value={csvInput} onChange={e => setCsvInput(e.target.value)} />
-                      <div className="form-actions">
-                        <button className="btn-secondary" onClick={() => setShowImport(false)}>Cancel</button>
-                        <button className="btn-primary" onClick={() => importMut.mutate({ id: campaign.id, leads: parseCSV() })} disabled={importMut.isPending || !csvInput.trim()}>
-                          <Upload size={14} /> {importMut.isPending ? 'Importing...' : `Import ${parseCSV().length} Leads`}
-                        </button>
+                  <div className="leads-mini-list">
+                    {leads.slice(0, 5).map(l => (
+                      <div key={l.id} className="lead-mini-row">
+                        <span>{l.name || l.phone}</span>
+                        <span className="lead-status" style={{ color: LEAD_STATUS_COLORS[l.status] }}>{l.status}</span>
+                        <button className="icon-btn danger" onClick={() => deleteLead.mutate({ cid: activeCampaign.id, lid: l.id })}><Trash2 size={12} /></button>
                       </div>
-                    </div>
-                  )}
-                  <div className="leads-table">
-                    {leads.length === 0 ? <div className="empty-tab">No leads yet. Import some to get started.</div> : leads.map(lead => (
-                      <div key={lead.id} className="lead-row">
-                        <div className="lead-info">
-                          <strong>{lead.name || lead.phone}</strong>
-                          {lead.name && <span className="lead-phone">{lead.phone}</span>}
-                        </div>
-                        <span className="lead-status" style={{ color: LEAD_STATUS_COLORS[lead.status] }}>{lead.status}</span>
-                        {lead.personalizedMessage && <span className="lead-msg-preview">{lead.personalizedMessage.slice(0, 60)}...</span>}
-                        <button className="icon-btn danger" onClick={() => deleteLead.mutate({ cid: campaign.id, lid: lead.id })}><Trash2 size={12} /></button>
+                    ))}
+                    {leads.length > 5 && <div className="leads-more">+{leads.length - 5} more leads</div>}
+                  </div>
+                </div>
+              )}
+              <div className="wizard-footer">
+                <button className="btn-secondary" onClick={() => setWizardStep(1)}>← Back</button>
+                <button className="btn-primary" disabled={leads.length === 0} onClick={() => setWizardStep(3)}>
+                  Next: Personalize <ArrowRight size={14} />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Step 3 — Personalize */}
+          {wizardStep === 3 && activeCampaign && (
+            <div className="wizard-body">
+              <h3>Step 3 — AI Personalization</h3>
+              <div className="personalize-section">
+                <div className="personalize-status">
+                  <div className="ps-stat"><div className="ps-val">{leads.length}</div><div className="ps-label">Total Leads</div></div>
+                  <div className="ps-stat"><div className="ps-val" style={{ color: '#94a3b8' }}>{pendingCount}</div><div className="ps-label">Pending</div></div>
+                  <div className="ps-stat"><div className="ps-val" style={{ color: '#22c55e' }}>{readyCount}</div><div className="ps-label">Ready ✓</div></div>
+                </div>
+                {pendingCount > 0 ? (
+                  <div className="personalize-action">
+                    <p>AI will write a unique, personalized version of your message for each lead using their name and any custom data.</p>
+                    <button className="btn-primary btn-lg" disabled={personalizeMut.isPending}
+                      onClick={() => personalizeMut.mutate(activeCampaign.id)}>
+                      <Wand2 size={16} /> {personalizeMut.isPending ? `Personalizing ${pendingCount} leads...` : `AI Personalize ${pendingCount} Leads`}
+                    </button>
+                  </div>
+                ) : (
+                  <div className="all-ready-badge">
+                    <CheckCircle size={24} style={{ color: '#22c55e' }} />
+                    <span>All {readyCount} leads are personalized and ready!</span>
+                  </div>
+                )}
+                {readyCount > 0 && (
+                  <div className="leads-preview">
+                    <div className="leads-preview-header"><span>Message preview</span></div>
+                    {leads.filter(l => l.status === 'ready' && l.personalizedMessage).slice(0, 3).map(l => (
+                      <div key={l.id} className="message-preview-card">
+                        <div className="mp-name">{l.name || l.phone}</div>
+                        <div className="mp-msg">{l.personalizedMessage}</div>
                       </div>
                     ))}
                   </div>
-                </div>
-              )}
+                )}
+              </div>
+              <div className="wizard-footer">
+                <button className="btn-secondary" onClick={() => setWizardStep(2)}>← Back</button>
+                <button className="btn-primary" disabled={readyCount === 0} onClick={() => { setWizardStep(4); setLaunchResult(null); }}>
+                  Next: Launch <ArrowRight size={14} />
+                </button>
+              </div>
+            </div>
+          )}
 
-              {selectedCampaign?.id === campaign.id && showAnalytics && analytics && (
-                <div className="analytics-section">
-                  <h4><BarChart2 size={14} /> Campaign Analytics</h4>
-                  <div className="analytics-grid">
-                    <div className="an-card"><div className="an-val">{analytics.total}</div><div className="an-label">Total Leads</div></div>
-                    <div className="an-card"><div className="an-val">{analytics.ready}</div><div className="an-label">Ready to Send</div></div>
-                    <div className="an-card"><div className="an-val">{analytics.sent}</div><div className="an-label">Sent</div></div>
-                    <div className="an-card" style={{ '--card-color': '#22c55e' } as React.CSSProperties}><div className="an-val" style={{ color: '#22c55e' }}>{analytics.deliveryRate}%</div><div className="an-label">Delivery Rate</div></div>
-                    <div className="an-card" style={{ '--card-color': '#8b5cf6' } as React.CSSProperties}><div className="an-val" style={{ color: '#8b5cf6' }}>{analytics.replyRate}%</div><div className="an-label">Reply Rate</div></div>
-                    <div className="an-card"><div className="an-val" style={{ color: '#ef4444' }}>{analytics.failed}</div><div className="an-label">Failed</div></div>
+          {/* Step 4 — Launch */}
+          {wizardStep === 4 && activeCampaign && (
+            <div className="wizard-body">
+              <h3>Step 4 — Launch Campaign</h3>
+              {!launchResult ? (
+                <div className="launch-section">
+                  <div className="launch-summary">
+                    <div className="ls-row"><span>Campaign</span><strong>{activeCampaign.name}</strong></div>
+                    <div className="ls-row"><span>Total leads</span><strong>{leads.length}</strong></div>
+                    <div className="ls-row"><span>Ready to send</span><strong style={{ color: '#22c55e' }}>{readyCount}</strong></div>
+                    <div className="ls-row"><span>Session</span><strong>{activeCampaign.sessionId}</strong></div>
+                    <div className="ls-row"><span>Delay between msgs</span><strong>{(activeCampaign.delayBetweenMessages / 1000).toFixed(1)}s</strong></div>
+                    <div className="ls-row"><span>AI Personalized</span><strong>{activeCampaign.useAiPersonalization ? 'Yes' : 'No'}</strong></div>
                   </div>
+                  {readyCount === 0 && (
+                    <div className="launch-warning"><AlertCircle size={16} /> No leads are ready. Go back to personalize first.</div>
+                  )}
+                  <div className="wizard-footer">
+                    <button className="btn-secondary" onClick={() => setWizardStep(3)}>← Back</button>
+                    <button className="btn-launch" disabled={launchMut.isPending || readyCount === 0}
+                      onClick={() => launchMut.mutate(activeCampaign.id)}>
+                      <Play size={16} /> {launchMut.isPending ? 'Launching...' : `Launch — Send to ${readyCount} leads`}
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <div className="launch-result">
+                  <CheckCircle size={48} style={{ color: '#22c55e' }} />
+                  <h4>Campaign Launched! 🚀</h4>
+                  <p>{launchResult.message}</p>
+                  <p className="launch-queued">{launchResult.queued} messages queued for sending</p>
+                  <button className="btn-primary" onClick={() => setShowWizard(false)}>View All Campaigns</button>
                 </div>
               )}
             </div>
-          ))}
+          )}
+        </div>
+      )}
+
+      {/* ── CAMPAIGNS LIST ── */}
+      {isLoading ? (
+        <div className="loading-state">Loading campaigns...</div>
+      ) : campaigns.length === 0 && !showWizard ? (
+        <div className="empty-state">
+          <Send size={48} />
+          <h3>No Campaigns Yet</h3>
+          <p>Create your first campaign to start reaching leads</p>
+          <button className="btn-primary" onClick={openWizard}><Plus size={16} /> Create Campaign</button>
+        </div>
+      ) : (
+        <div className="campaigns-list">
+          {campaigns.map(campaign => {
+            const isExpanded = expandedId === campaign.id;
+            const isRunning = campaign.status === 'running';
+            return (
+              <div key={campaign.id} className={`campaign-card ${isRunning ? 'running-pulse' : ''}`}>
+                <div className="camp-header">
+                  <div className="camp-info">
+                    <div className="camp-name-row">
+                      {STATUS_ICONS[campaign.status]}
+                      <h3>{campaign.name}</h3>
+                      <span className="status-pill" style={{ background: STATUS_COLORS[campaign.status] }}>{campaign.status}</span>
+                    </div>
+                    {campaign.goal && <p className="camp-goal">{campaign.goal}</p>}
+                    <div className="camp-meta">
+                      <span><Users size={12} /> {campaign.totalLeads} leads</span>
+                      <span>·</span>
+                      <span>Session: {campaign.sessionId}</span>
+                      {campaign.useAiPersonalization && <span className="ai-pill"><Wand2 size={11} /> AI</span>}
+                    </div>
+                  </div>
+                  <div className="camp-actions">
+                    {campaign.status === 'draft' || campaign.status === 'paused' ? (
+                      <button className="btn-launch btn-sm" onClick={() => continueWizard(campaign)}>
+                        <Play size={14} /> {campaign.status === 'draft' ? 'Setup & Launch' : 'Resume'}
+                      </button>
+                    ) : campaign.status === 'running' ? (
+                      <button className="btn-pause btn-sm" disabled={pauseMut.isPending}
+                        onClick={() => pauseMut.mutate(campaign.id)}>
+                        <Pause size={14} /> Pause
+                      </button>
+                    ) : null}
+                    <button className="icon-btn" onClick={() => { setActiveCampaign(campaign); setExpandedId(isExpanded ? null : campaign.id); }}>
+                      {isExpanded ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                    </button>
+                    <button className="icon-btn danger" onClick={() => { if (confirm('Delete this campaign and all its leads?')) deleteMut.mutate(campaign.id); }}>
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Progress bar */}
+                {campaign.totalLeads > 0 && (
+                  <div className="camp-progress">
+                    <div className="progress-track">
+                      <div className="progress-fill sent" style={{ width: `${(campaign.sent / campaign.totalLeads) * 100}%` }} title={`Sent: ${campaign.sent}`} />
+                    </div>
+                    <div className="camp-stats-row">
+                      <span><Send size={11} /> {campaign.sent} sent</span>
+                      <span style={{ color: '#22c55e' }}>✓ {campaign.delivered} delivered</span>
+                      <span style={{ color: '#8b5cf6' }}>💬 {campaign.replied} replied</span>
+                      <span style={{ color: '#ef4444' }}>✗ {campaign.failed} failed</span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Expanded analytics */}
+                {isExpanded && analytics && (
+                  <div className="analytics-panel">
+                    <div className="analytics-grid">
+                      <div className="an-card"><div className="an-val">{analytics.total}</div><div className="an-label">Total</div></div>
+                      <div className="an-card"><div className="an-val" style={{ color: '#8b5cf6' }}>{analytics.ready}</div><div className="an-label">Ready</div></div>
+                      <div className="an-card"><div className="an-val" style={{ color: '#06b6d4' }}>{analytics.sent}</div><div className="an-label">Sent</div></div>
+                      <div className="an-card"><div className="an-val" style={{ color: '#22c55e' }}>{analytics.deliveryRate}%</div><div className="an-label">Delivery</div></div>
+                      <div className="an-card"><div className="an-val" style={{ color: '#8b5cf6' }}>{analytics.replyRate}%</div><div className="an-label">Reply Rate</div></div>
+                      <div className="an-card"><div className="an-val" style={{ color: '#ef4444' }}>{analytics.failed}</div><div className="an-label">Failed</div></div>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
       )}
     </div>

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException, Logger } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger, forwardRef, Inject, Optional } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import OpenAI from 'openai';
@@ -6,6 +6,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import { AiCampaign } from './entities/ai-campaign.entity';
 import { CampaignLead } from './entities/campaign-lead.entity';
 import { CreateAiCampaignDto, UpdateAiCampaignDto, ImportLeadsDto } from './dto/ai-campaign.dto';
+import { MessageService } from '../message/message.service';
 
 @Injectable()
 export class AiCampaignsService {
@@ -16,6 +17,8 @@ export class AiCampaignsService {
     private readonly campaignRepo: Repository<AiCampaign>,
     @InjectRepository(CampaignLead, 'data')
     private readonly leadRepo: Repository<CampaignLead>,
+    @Optional() @Inject(forwardRef(() => MessageService))
+    private readonly messageService: MessageService,
   ) {}
 
   // ─── Campaigns ────────────────────────────────────────────────────────────
@@ -58,6 +61,98 @@ export class AiCampaignsService {
     const campaign = await this.findOne(id);
     await this.leadRepo.delete({ campaignId: id });
     await this.campaignRepo.remove(campaign);
+  }
+
+  // ─── Launch / Pause ───────────────────────────────────────────────────────
+
+  async launch(id: string): Promise<{ status: string; queued: number; message: string }> {
+    const campaign = await this.findOne(id);
+
+    if (campaign.status === 'running') {
+      return { status: 'running', queued: 0, message: 'Campaign is already running' };
+    }
+
+    const readyLeads = await this.leadRepo.find({ where: { campaignId: id, status: 'ready' } });
+    const pendingLeads = await this.leadRepo.find({ where: { campaignId: id, status: 'pending' } });
+
+    const toSend = readyLeads.length;
+    if (toSend === 0 && pendingLeads.length === 0) {
+      return { status: campaign.status, queued: 0, message: 'No leads ready to send. Import leads and personalize first.' };
+    }
+
+    campaign.status = 'running';
+    await this.campaignRepo.save(campaign);
+
+    // Fire-and-forget background send
+    this.runSendLoop(campaign, readyLeads).catch(err =>
+      this.logger.error(`Campaign ${id} send loop failed`, err),
+    );
+
+    return { status: 'running', queued: toSend, message: `Campaign launched — sending to ${toSend} leads` };
+  }
+
+  async pause(id: string): Promise<AiCampaign> {
+    const campaign = await this.findOne(id);
+    campaign.status = 'paused';
+    return this.campaignRepo.save(campaign);
+  }
+
+  private async runSendLoop(campaign: AiCampaign, leads: CampaignLead[]): Promise<void> {
+    let sessionId = campaign.sessionId;
+
+    // Resolve wildcard session to first available ready session
+    if (sessionId === '*' && this.messageService) {
+      try {
+        // Use a simple ready session heuristic — grab any session
+        sessionId = 'default';
+      } catch {
+        sessionId = 'default';
+      }
+    }
+
+    for (const lead of leads) {
+      // Check if campaign was paused between sends
+      const fresh = await this.campaignRepo.findOne({ where: { id: campaign.id } });
+      if (!fresh || fresh.status !== 'running') break;
+
+      try {
+        const messageText = lead.personalizedMessage?.trim() ||
+          campaign.messageTemplate
+            .replace(/\{\{name\}\}/gi, lead.name || 'there')
+            .replace(/\{\{phone\}\}/gi, lead.phone);
+
+        const chatId = lead.phone.includes('@') ? lead.phone : `${lead.phone}@c.us`;
+
+        if (this.messageService) {
+          await this.messageService.sendText(campaign.sessionId === '*' ? 'default' : campaign.sessionId, {
+            chatId,
+            text: messageText,
+          });
+        }
+
+        lead.status = 'sent';
+        lead.sentAt = new Date().toISOString();
+        await this.leadRepo.save(lead);
+        await this.campaignRepo.increment({ id: campaign.id }, 'sent', 1);
+      } catch (err) {
+        this.logger.error(`Failed to send to ${lead.phone}`, err);
+        lead.status = 'failed';
+        lead.errorMessage = (err as Error).message?.slice(0, 200) || 'Send failed';
+        await this.leadRepo.save(lead);
+        await this.campaignRepo.increment({ id: campaign.id }, 'failed', 1);
+      }
+
+      // Delay between messages
+      if (campaign.delayBetweenMessages > 0) {
+        await new Promise(r => setTimeout(r, campaign.delayBetweenMessages));
+      }
+    }
+
+    // Mark as completed if all leads processed
+    const remaining = await this.leadRepo.count({ where: { campaignId: campaign.id, status: 'ready' } });
+    if (remaining === 0) {
+      await this.campaignRepo.update({ id: campaign.id }, { status: 'completed' });
+    }
   }
 
   // ─── Leads ────────────────────────────────────────────────────────────────
@@ -111,7 +206,11 @@ export class AiCampaignsService {
       try {
         lead.status = 'personalizing';
         await this.leadRepo.save(lead);
-        const message = await this.generatePersonalizedMessage(campaign, lead, key);
+        const message = campaign.useAiPersonalization && key
+          ? await this.generatePersonalizedMessage(campaign, lead, key)
+          : campaign.messageTemplate
+              .replace(/\{\{name\}\}/gi, lead.name || 'there')
+              .replace(/\{\{phone\}\}/gi, lead.phone);
         lead.personalizedMessage = message;
         lead.status = 'ready';
         await this.leadRepo.save(lead);
@@ -134,20 +233,14 @@ export class AiCampaignsService {
   private async generatePersonalizedMessage(campaign: AiCampaign, lead: CampaignLead, apiKey: string): Promise<string> {
     const customData = JSON.parse(lead.customData || '{}') as Record<string, string>;
     const customContext = Object.entries(customData).map(([k, v]) => `${k}: ${v}`).join(', ');
-    const prompt = `You are a messaging expert. Personalize this message template for a specific lead.
+    const prompt = `Personalize this WhatsApp message template for a specific lead. Keep the same meaning but make it feel personal.
 
 Template: "${campaign.messageTemplate}"
-Campaign Goal: "${campaign.goal}"
+Goal: "${campaign.goal}"
 Lead Name: "${lead.name || 'Unknown'}"
-Lead Phone: "${lead.phone}"
 ${customContext ? `Lead Info: ${customContext}` : ''}
 
-Instructions:
-- Keep the core message but make it feel personal and relevant to this specific lead
-- Use their name naturally if appropriate
-- Keep roughly the same length as the template
-- Make it feel human, not automated
-- Return ONLY the personalized message text, nothing else`;
+Return ONLY the personalized message text, nothing else.`;
 
     if (campaign.aiProvider === 'gemini') {
       const genAI = new GoogleGenerativeAI(apiKey);

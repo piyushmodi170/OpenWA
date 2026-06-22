@@ -14,11 +14,8 @@ const Dashboard = lazy(() => import('./pages/Dashboard').then(m => ({ default: m
 const Sessions = lazy(() => import('./pages/Sessions').then(m => ({ default: m.Sessions })));
 const Chats = lazy(() => import('./pages/Chats').then(m => ({ default: m.Chats })));
 const Webhooks = lazy(() => import('./pages/Webhooks').then(m => ({ default: m.Webhooks })));
-const Templates = lazy(() => import('./pages/Templates').then(m => ({ default: m.Templates })));
 const Logs = lazy(() => import('./pages/Logs').then(m => ({ default: m.Logs })));
 const ApiKeys = lazy(() => import('./pages/ApiKeys').then(m => ({ default: m.ApiKeys })));
-const MessageTester = lazy(() => import('./pages/MessageTester').then(m => ({ default: m.MessageTester })));
-const Broadcast = lazy(() => import('./pages/Broadcast').then(m => ({ default: m.Broadcast })));
 const Infrastructure = lazy(() => import('./pages/Infrastructure').then(m => ({ default: m.Infrastructure })));
 const Plugins = lazy(() => import('./pages/Plugins'));
 const AiBot = lazy(() => import('./pages/AiBot').then(m => ({ default: m.AiBot })));
@@ -38,7 +35,6 @@ const queryClient = new QueryClient({
 });
 
 function AppContent() {
-  // Initialize from sessionStorage to avoid setState in effect
   const savedKey = sessionStorage.getItem('openwa_api_key');
   const [isAuthenticated, setIsAuthenticated] = useState(!!savedKey);
   const [, setApiKey] = useState(savedKey || '');
@@ -47,8 +43,6 @@ function AppContent() {
   const handleLogin = async (key: string) => {
     setApiKey(key);
     sessionStorage.setItem('openwa_api_key', key);
-
-    // Fetch the role from API
     try {
       const response = await fetch(`${API_BASE_URL}/auth/validate`, {
         method: 'POST',
@@ -59,10 +53,8 @@ function AppContent() {
         setRole(data.role as UserRole);
       }
     } catch {
-      // Default to viewer if we can't fetch role
       setRole('viewer');
     }
-
     setIsAuthenticated(true);
   };
 
@@ -73,23 +65,15 @@ function AppContent() {
     sessionStorage.removeItem('openwa_api_key');
   };
 
-  // Re-validate and get role on mount if already authenticated
   useEffect(() => {
     if (!savedKey) return;
-
     fetch(`${API_BASE_URL}/auth/validate`, {
       method: 'POST',
       headers: { 'X-API-Key': savedKey },
     })
       .then(res => res.json())
-      .then(data => {
-        if (data.valid && data.role) {
-          setRole(data.role as UserRole);
-        }
-      })
-      .catch(() => {
-        // Keep existing role from localStorage if validation fails
-      });
+      .then(data => { if (data.valid && data.role) setRole(data.role as UserRole); })
+      .catch(() => {});
   }, [savedKey, setRole]);
 
   const loadingFallback = (
@@ -106,27 +90,24 @@ function AppContent() {
     <ToastProvider>
       <BrowserRouter>
         <Suspense fallback={loadingFallback}>
-        <Routes>
-          <Route path="/" element={<Layout onLogout={handleLogout} userRole={role} />}>
-            <Route index element={<Dashboard />} />
-            <Route path="sessions" element={<Sessions />} />
-            <Route path="chats" element={<Chats />} />
-            <Route path="webhooks" element={<Webhooks />} />
-            <Route path="templates" element={<Templates />} />
-            {role === 'admin' && <Route path="api-keys" element={<ApiKeys />} />}
-            <Route path="logs" element={<Logs />} />
-            <Route path="message-tester" element={<MessageTester />} />
-            <Route path="broadcast" element={<Broadcast />} />
-            <Route path="infrastructure" element={<Infrastructure />} />
-            {role === 'admin' && <Route path="plugins" element={<Plugins />} />}
-            <Route path="ai-bot" element={<AiBot />} />
-            <Route path="ai-employees" element={<AiEmployees />} />
-            <Route path="ai-training" element={<AiTraining />} />
-            <Route path="conversation-intelligence" element={<ConversationIntelligence />} />
-            <Route path="ai-campaigns" element={<AiCampaigns />} />
-            <Route path="*" element={<Navigate to="/" replace />} />
-          </Route>
-        </Routes>
+          <Routes>
+            <Route path="/" element={<Layout onLogout={handleLogout} userRole={role} />}>
+              <Route index element={<Dashboard />} />
+              <Route path="sessions" element={<Sessions />} />
+              <Route path="chats" element={<Chats />} />
+              <Route path="webhooks" element={<Webhooks />} />
+              {role === 'admin' && <Route path="api-keys" element={<ApiKeys />} />}
+              <Route path="logs" element={<Logs />} />
+              <Route path="infrastructure" element={<Infrastructure />} />
+              {role === 'admin' && <Route path="plugins" element={<Plugins />} />}
+              <Route path="ai-bot" element={<AiBot />} />
+              <Route path="ai-employees" element={<AiEmployees />} />
+              <Route path="ai-training" element={<AiTraining />} />
+              <Route path="conversation-intelligence" element={<ConversationIntelligence />} />
+              <Route path="ai-campaigns" element={<AiCampaigns />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Route>
+          </Routes>
         </Suspense>
       </BrowserRouter>
     </ToastProvider>

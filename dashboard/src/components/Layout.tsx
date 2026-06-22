@@ -8,9 +8,7 @@ import {
   Webhook,
   Key,
   FileText,
-  ClipboardList,
   LogOut,
-  Send,
   Server,
   Puzzle,
   Sun,
@@ -21,12 +19,13 @@ import {
   ChevronLeft,
   ChevronRight,
   Languages,
-  Radio,
   Bot,
   Users,
   BookOpen,
   Brain,
   Megaphone,
+  Building2,
+  User,
 } from 'lucide-react';
 import { useTheme } from '../hooks/useTheme';
 import { type UserRole } from '../hooks/useRole';
@@ -38,21 +37,27 @@ interface LayoutProps {
   userRole: UserRole | null;
 }
 
-const allNavItems = [
+type AppMode = 'personal' | 'company';
+
+const personalNavItems = [
+  { to: '/', icon: LayoutDashboard, key: 'dashboard' as const, adminOnly: false },
+  { to: '/sessions', icon: Smartphone, key: 'sessions' as const, adminOnly: false },
+  { to: '/chats', icon: MessageSquare, key: 'chats' as const, adminOnly: false },
+  { to: '/ai-bot', icon: Bot, key: 'aiBot' as const, adminOnly: false },
+  { to: '/logs', icon: FileText, key: 'logs' as const, adminOnly: false },
+];
+
+const companyNavItems = [
   { to: '/', icon: LayoutDashboard, key: 'dashboard' as const, adminOnly: false },
   { to: '/sessions', icon: Smartphone, key: 'sessions' as const, adminOnly: false },
   { to: '/chats', icon: MessageSquare, key: 'chats' as const, adminOnly: false },
   { to: '/webhooks', icon: Webhook, key: 'webhooks' as const, adminOnly: false },
-  { to: '/templates', icon: ClipboardList, key: 'templates' as const, adminOnly: false },
   { to: '/api-keys', icon: Key, key: 'apiKeys' as const, adminOnly: true },
-  { to: '/message-tester', icon: Send, key: 'messageTester' as const, adminOnly: false },
-  { to: '/broadcast', icon: Radio, key: 'broadcast' as const, adminOnly: false },
   { to: '/ai-bot', icon: Bot, key: 'aiBot' as const, adminOnly: false },
   { to: '/ai-employees', icon: Users, key: 'aiEmployees' as const, adminOnly: false },
   { to: '/ai-training', icon: BookOpen, key: 'aiTraining' as const, adminOnly: false },
   { to: '/conversation-intelligence', icon: Brain, key: 'conversationIntelligence' as const, adminOnly: false },
   { to: '/ai-campaigns', icon: Megaphone, key: 'aiCampaigns' as const, adminOnly: false },
-  // Backend /infra/* is ADMIN-only; hide the nav item from non-admins (UX + defense-in-depth).
   { to: '/infrastructure', icon: Server, key: 'infrastructure' as const, adminOnly: true },
   { to: '/plugins', icon: Puzzle, key: 'plugins' as const, adminOnly: true },
   { to: '/logs', icon: FileText, key: 'logs' as const, adminOnly: false },
@@ -66,7 +71,17 @@ export function Layout({ onLogout, userRole }: LayoutProps) {
   const ThemeIcon = themeIcons[theme];
   const themeLabel = t(`theme.${theme}`);
 
+  const [appMode, setAppMode] = useState<AppMode>(
+    () => (localStorage.getItem('openwa_mode') as AppMode) || 'company',
+  );
+
+  const allNavItems = appMode === 'personal' ? personalNavItems : companyNavItems;
   const navItems = allNavItems.filter(item => !item.adminOnly || userRole === 'admin');
+
+  const switchMode = (mode: AppMode) => {
+    setAppMode(mode);
+    localStorage.setItem('openwa_mode', mode);
+  };
 
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -90,23 +105,17 @@ export function Layout({ onLogout, userRole }: LayoutProps) {
 
   useEffect(() => {
     document.body.style.overflow = isMobileOpen ? 'hidden' : '';
-    return () => {
-      document.body.style.overflow = '';
-    };
+    return () => { document.body.style.overflow = ''; };
   }, [isMobileOpen]);
 
   useEffect(() => {
     if (!isLanguageMenuOpen) return;
-
     const closeOnOutsideClick = (event: MouseEvent) => {
-      if (!languageMenuRef.current?.contains(event.target as Node)) {
-        setIsLanguageMenuOpen(false);
-      }
+      if (!languageMenuRef.current?.contains(event.target as Node)) setIsLanguageMenuOpen(false);
     };
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') setIsLanguageMenuOpen(false);
     };
-
     document.addEventListener('mousedown', closeOnOutsideClick);
     document.addEventListener('keydown', closeOnEscape);
     return () => {
@@ -143,9 +152,7 @@ export function Layout({ onLogout, userRole }: LayoutProps) {
 
       {isMobile && isMobileOpen && <div className="sidebar-overlay" onClick={() => setIsMobileOpen(false)} />}
 
-      <aside
-        className={`sidebar ${isCollapsed ? 'collapsed' : ''} ${isMobile ? 'mobile' : ''} ${isMobileOpen ? 'open' : ''}`}
-      >
+      <aside className={`sidebar ${isCollapsed ? 'collapsed' : ''} ${isMobile ? 'mobile' : ''} ${isMobileOpen ? 'open' : ''}`}>
         <div className="sidebar-header">
           <img src="/openwa_logo.webp" alt="OpenWA" className="sidebar-logo" />
           {!isCollapsed && (
@@ -168,6 +175,26 @@ export function Layout({ onLogout, userRole }: LayoutProps) {
               : (isRtl ? <ChevronRight size={16} /> : <ChevronLeft size={16} />)}
           </button>
         )}
+
+        {/* Mode Switcher */}
+        <div className={`mode-switcher ${isCollapsed ? 'collapsed' : ''}`}>
+          <button
+            className={`mode-btn ${appMode === 'personal' ? 'active' : ''}`}
+            onClick={() => switchMode('personal')}
+            title="Personal"
+          >
+            <User size={14} />
+            {!isCollapsed && <span>Personal</span>}
+          </button>
+          <button
+            className={`mode-btn ${appMode === 'company' ? 'active' : ''}`}
+            onClick={() => switchMode('company')}
+            title="Company"
+          >
+            <Building2 size={14} />
+            {!isCollapsed && <span>Company</span>}
+          </button>
+        </div>
 
         <nav className="sidebar-nav">
           {navItems.map(({ to, icon: Icon, key }) => {
@@ -217,11 +244,7 @@ export function Layout({ onLogout, userRole }: LayoutProps) {
               </div>
             )}
           </div>
-          <button
-            className="theme-toggle-btn"
-            onClick={toggleTheme}
-            title={t('theme.label', { value: themeLabel })}
-          >
+          <button className="theme-toggle-btn" onClick={toggleTheme} title={t('theme.label', { value: themeLabel })}>
             <ThemeIcon size={18} />
             {!isCollapsed && <span>{themeLabel}</span>}
           </button>

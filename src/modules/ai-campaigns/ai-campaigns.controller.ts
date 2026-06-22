@@ -57,6 +57,16 @@ export class AiCampaignsController {
   @ApiOperation({ summary: 'AI-personalize messages for all pending leads' })
   async personalizeLeads(@Param('id') id: string, @Body() dto: PersonalizeLeadsDto) { return this.service.personalizeLeads(id, dto.apiKey); }
 
+  @Post(':id/launch')
+  @RequireRole(ApiKeyRole.OPERATOR)
+  @ApiOperation({ summary: 'Launch campaign — start sending to ready leads' })
+  async launch(@Param('id') id: string) { return this.service.launch(id); }
+
+  @Post(':id/pause')
+  @RequireRole(ApiKeyRole.OPERATOR)
+  @ApiOperation({ summary: 'Pause a running campaign' })
+  async pause(@Param('id') id: string) { return this.service.pause(id); }
+
   @Get(':id/analytics')
   @RequireRole(ApiKeyRole.VIEWER)
   @ApiOperation({ summary: 'Get campaign analytics' })
