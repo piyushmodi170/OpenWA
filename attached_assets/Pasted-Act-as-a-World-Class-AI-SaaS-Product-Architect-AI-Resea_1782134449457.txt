@@ -1,0 +1,176 @@
+Act as a World-Class AI SaaS Product Architect, AI Research Scientist, and Enterprise Communication System Designer.
+
+Your task is to design a revolutionary WhatsApp AI Operating System with two completely separate AI modes:
+
+1. PERSONAL AI MODE (AI Twin)
+2. BUSINESS AI MODE (AI Employee)
+
+The AI must be trainable in both modes. The system should not be a simple chatbot. It should create a unique AI identity that learns behavior, knowledge, communication style, and decision patterns.
+
+Do NOT copy existing platforms like Wati, Respond.io, Interakt, Gupshup, or normal chatbot builders. Think from first principles and create innovative features.
+
+--------------------------------------------------
+MODE 1 — PERSONAL AI TWIN
+--------------------------------------------------
+
+Create an AI that behaves exactly like a person.
+
+Training Sources:
+- WhatsApp chat history
+- Voice notes
+- Text messages
+- Social media conversations
+- Personal documents
+- Notes and diaries
+- User-written examples
+- Custom instructions
+
+The AI should learn:
+- Speaking style
+- Favorite words and phrases
+- Humor style
+- Emoji usage
+- Language preference (Hindi, Hinglish, English, etc.)
+- How short or long the person replies
+- Relationship style with different people
+- Response timing patterns
+- Personality traits
+- Interests and hobbies
+- Memories and important events
+
+Advanced Personal AI Features:
+- Different behavior for family, friends, clients, and strangers
+- Understand emotional connection with contacts
+- Remember previous conversations
+- Detect user's mood and adapt responses
+- Learn new communication patterns over time
+- Ask for approval before learning sensitive behaviors
+- Create a personal communication DNA profile
+- Clone writing style ethically and transparently
+
+Examples:
+Friend: "Kaha hai bhai?"
+AI: "Bas bhai thoda kaam me busy hu 😂 Tu bata kya chal raha hai?"
+
+Family:
+"Khane khaya?"
+AI can reply in the natural style of the person.
+
+--------------------------------------------------
+MODE 2 — BUSINESS AI EMPLOYEE
+--------------------------------------------------
+
+Create an AI employee trained on complete company knowledge.
+
+Training Sources:
+- Company PDFs
+- Website data
+- Product catalogs
+- Price lists
+- FAQs
+- SOPs
+- Sales scripts
+- Previous customer conversations
+- CRM data
+- Support tickets
+- Google Drive/Notion files
+- Videos and audio transcripts
+
+The AI should learn:
+- Company information
+- Products and services
+- Brand voice
+- Sales methodology
+- Customer support rules
+- Policies and compliance
+- Common objections and answers
+- Successful sales conversations
+
+Business AI Employees:
+- AI Sales Representative
+- AI Customer Support Agent
+- AI Appointment Setter
+- AI Follow-up Manager
+- AI Marketing Assistant
+- AI Research Assistant
+
+Each AI employee should have:
+- Name and avatar
+- Role
+- Goals
+- Permissions
+- Knowledge access level
+- Tools and integrations
+- KPIs and performance tracking
+- Memory of customer interactions
+
+--------------------------------------------------
+ADVANCED TRAINING SYSTEM (FOR BOTH MODES)
+--------------------------------------------------
+
+Build an AI Training Studio where users can:
+
+- Upload knowledge
+- Import previous chats
+- Train through examples ("When someone says X, reply like Y")
+- Add rules ("Never say this")
+- Define personality
+- Set response style
+- Add allowed and blocked topics
+- Review AI learning
+- Approve or reject new knowledge
+
+The system should include:
+- Knowledge quality score
+- Outdated information detection
+- Missing knowledge suggestions
+- Training progress score
+- AI confidence score before replying
+
+--------------------------------------------------
+WHATSAPP AI CAMPAIGN INTELLIGENCE
+--------------------------------------------------
+
+Design a smart campaign system with:
+
+- Bulk lead import
+- AI-generated campaign ideas
+- Personalized messages for every lead
+- Multi-step follow-up sequences
+- Lead interest prediction
+- Best time to contact prediction
+- A/B testing of messages
+- Campaign analytics
+- Automatic stopping when a lead replies
+- Human takeover when required
+
+--------------------------------------------------
+CONVERSATION INTELLIGENCE
+--------------------------------------------------
+
+The AI should analyze every conversation and generate:
+
+- Customer sentiment
+- Interest level
+- Purchase intent
+- Relationship score
+- Important extracted information
+- Suggested next actions
+
+--------------------------------------------------
+OUTPUT REQUIREMENTS
+--------------------------------------------------
+
+For every feature provide:
+
+1. Feature Name
+2. Why users need it
+3. How it works
+4. AI technology required
+5. Database architecture needed
+6. User interface idea
+7. Competitive advantage
+8. Monetization potential
+9. Development complexity (Easy / Medium / Hard)
+
+Create at least 100 innovative features and think like you are designing the next-generation AI communication platform, not a normal WhatsApp automation tool.
