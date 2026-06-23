@@ -1,0 +1,40 @@
+582
+========================================
+2026-Jun-22 14:24:10.722884
+Deployment failed: Command execution failed (exit code 1): docker exec pejmi1r4qeop3pe922cyoyro bash -c 'bash /artifacts/build.sh'
+2026-Jun-22 14:24:10.722884
+Error: ERROR: BuildKit is enabled but the buildx component is missing or broken.
+2026-Jun-22 14:24:10.722884
+Install the buildx component to build images with BuildKit:
+2026-Jun-22 14:24:10.722884
+https://docs.docker.com/go/buildx/
+2026-Jun-22 14:24:10.744955
+Error type: App\Exceptions\DeploymentException
+2026-Jun-22 14:24:10.763255
+Error code: 0
+2026-Jun-22 14:24:10.781870
+Location: /var/www/html/app/Traits/ExecuteRemoteCommand.php:242
+2026-Jun-22 14:24:10.810511
+Stack trace (first 5 lines):
+2026-Jun-22 14:24:10.830033
+#0 /var/www/html/app/Traits/ExecuteRemoteCommand.php(106): App\Jobs\ApplicationDeploymentJob->executeCommandWithProcess()
+2026-Jun-22 14:24:10.841356
+#1 /var/www/html/vendor/laravel/framework/src/Illuminate/Collections/Traits/EnumeratesValues.php(275): App\Jobs\ApplicationDeploymentJob->{closure:App\Traits\ExecuteRemoteCommand::execute_remote_command():72}()
+2026-Jun-22 14:24:10.852911
+#2 /var/www/html/app/Traits/ExecuteRemoteCommand.php(72): Illuminate\Support\Collection->each()
+2026-Jun-22 14:24:10.864158
+#3 /var/www/html/app/Jobs/ApplicationDeploymentJob.php(3821): App\Jobs\ApplicationDeploymentJob->execute_remote_command()
+2026-Jun-22 14:24:10.878488
+#4 /var/www/html/app/Jobs/ApplicationDeploymentJob.php(912): App\Jobs\ApplicationDeploymentJob->build_image()
+2026-Jun-22 14:24:10.894468
+========================================
+2026-Jun-22 14:24:10.911515
+Deployment failed. Removing the new version of your application.
+2026-Jun-22 14:24:11.627626
+Gracefully shutting down build container: pejmi1r4qeop3pe922cyoyro
+2026-Jun-22 14:24:11.805129
+[CMD]: docker stop --time=30 pejmi1r4qeop3pe922cyoyro
+2026-Jun-22 14:24:11.805129
+Flag --time has been deprecated, use --timeout instead
+2026-Jun-22 14:24:12.118042
+pejmi1r4qeop3pe922cyoyro
