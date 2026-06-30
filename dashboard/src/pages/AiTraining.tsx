@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Plus, Trash2, BookOpen, Lightbulb, Shield, TrendingUp, ChevronDown, ChevronUp, Link, FileText } from 'lucide-react';
+import { Plus, Trash2, BookOpen, Lightbulb, Shield, TrendingUp, ChevronDown, ChevronUp, Link, FileText, Upload } from 'lucide-react';
 import { apiRequest } from '../services/api';
 import './AiTraining.css';
 
@@ -18,10 +18,12 @@ export function AiTraining() {
   const [employeeFilter, setEmployeeFilter] = useState('');
   const [expandedDoc, setExpandedDoc] = useState<string | null>(null);
 
-  // Knowledge form — two modes: text or url
-  const [docMode, setDocMode] = useState<'text' | 'url'>('text');
+  // Knowledge form — three modes: text, url, file
+  const [docMode, setDocMode] = useState<'text' | 'url' | 'file'>('text');
   const [docForm, setDocForm] = useState({ title: '', content: '', type: 'text', source: '' });
   const [urlForm, setUrlForm] = useState({ url: '', title: '' });
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [exForm, setExForm] = useState({ trigger: '', response: '', category: 'general', priority: 5 });
   const [ruleForm, setRuleForm] = useState({ rule: '', type: 'never' });
@@ -58,6 +60,28 @@ export function AiTraining() {
     },
   });
 
+  const uploadFileMut = useMutation({
+    mutationFn: async (file: File) => {
+      const form = new FormData();
+      form.append('file', file);
+      const url = `/api/ai-training/documents/upload${eid ? `?employeeId=${eid}` : ''}`;
+      const token = localStorage.getItem('apiKey') || '';
+      const res = await fetch(url, { method: 'POST', headers: { 'x-api-key': token }, body: form });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ message: res.statusText })) as { message?: string };
+        throw new Error(err.message || 'Upload failed');
+      }
+      return res.json();
+    },
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ['training-docs'] });
+      void qc.invalidateQueries({ queryKey: ['training-stats'] });
+      setSelectedFile(null);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      setShowDocForm(false);
+    },
+  });
+
   const deleteDoc = useMutation({ mutationFn: (id: string) => apiRequest(`/ai-training/documents/${id}`, { method: 'DELETE' }), onSuccess: () => { void qc.invalidateQueries({ queryKey: ['training-docs'] }); void qc.invalidateQueries({ queryKey: ['training-stats'] }); } });
   const toggleDoc = useMutation({ mutationFn: ({ id, enabled }: { id: string; enabled: boolean }) => apiRequest(`/ai-training/documents/${id}`, { method: 'PUT', body: JSON.stringify({ enabled }) }), onSuccess: () => void qc.invalidateQueries({ queryKey: ['training-docs'] }) });
 
@@ -68,6 +92,17 @@ export function AiTraining() {
   const deleteRule = useMutation({ mutationFn: (id: string) => apiRequest(`/ai-training/rules/${id}`, { method: 'DELETE' }), onSuccess: () => void qc.invalidateQueries({ queryKey: ['training-rules'] }) });
 
   const scoreColor = (s: number) => s >= 80 ? '#22c55e' : s >= 50 ? '#f59e0b' : '#ef4444';
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const f = e.target.files?.[0];
+    if (f) setSelectedFile(f);
+  };
+
+  const handleFileDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const f = e.dataTransfer.files?.[0];
+    if (f) setSelectedFile(f);
+  };
 
   return (
     <div className="ai-training-page">
@@ -127,17 +162,22 @@ export function AiTraining() {
             <button className="btn-secondary" onClick={() => { setShowDocForm(!showDocForm); setDocMode('url'); }}>
               <Link size={16} /> Add URL
             </button>
+            <button className="btn-secondary" onClick={() => { setShowDocForm(!showDocForm); setDocMode('file'); }}>
+              <Upload size={16} /> Upload File
+            </button>
           </div>
 
           {showDocForm && (
             <div className="mini-form">
-              {/* Mode toggle tabs */}
               <div className="doc-mode-toggle">
                 <button className={`mode-tab ${docMode === 'text' ? 'active' : ''}`} onClick={() => setDocMode('text')}>
                   <FileText size={14} /> Paste Text
                 </button>
                 <button className={`mode-tab ${docMode === 'url' ? 'active' : ''}`} onClick={() => setDocMode('url')}>
                   <Link size={14} /> From URL
+                </button>
+                <button className={`mode-tab ${docMode === 'file' ? 'active' : ''}`} onClick={() => setDocMode('file')}>
+                  <Upload size={14} /> Upload File
                 </button>
               </div>
 
@@ -158,7 +198,7 @@ export function AiTraining() {
                     </button>
                   </div>
                 </>
-              ) : (
+              ) : docMode === 'url' ? (
                 <>
                   <div className="url-fetch-hint">
                     <Link size={14} />
@@ -193,6 +233,58 @@ export function AiTraining() {
                     </button>
                   </div>
                 </>
+              ) : (
+                <>
+                  <div className="url-fetch-hint">
+                    <Upload size={14} />
+                    <span>Upload a PDF, Word document (.docx/.doc), or plain text file. Text will be extracted automatically.</span>
+                  </div>
+                  <div
+                    className={`file-drop-zone ${selectedFile ? 'has-file' : ''}`}
+                    onDragOver={e => e.preventDefault()}
+                    onDrop={handleFileDrop}
+                    onClick={() => fileInputRef.current?.click()}
+                  >
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept=".pdf,.doc,.docx,.txt"
+                      style={{ display: 'none' }}
+                      onChange={handleFileChange}
+                    />
+                    {selectedFile ? (
+                      <div className="file-selected">
+                        <FileText size={24} />
+                        <div>
+                          <div className="file-name">{selectedFile.name}</div>
+                          <div className="file-size">{(selectedFile.size / 1024).toFixed(1)} KB</div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="file-drop-hint">
+                        <Upload size={28} />
+                        <div>Drop a file here or click to browse</div>
+                        <div className="file-types">PDF · DOCX · DOC · TXT · Max 10 MB</div>
+                      </div>
+                    )}
+                  </div>
+                  {uploadFileMut.isError && (
+                    <div className="fetch-error">
+                      ❌ {(uploadFileMut.error as Error).message || 'Upload failed'}
+                    </div>
+                  )}
+                  <div className="form-actions">
+                    <button className="btn-secondary" onClick={() => { setShowDocForm(false); setSelectedFile(null); }}>Cancel</button>
+                    <button
+                      className="btn-primary"
+                      disabled={uploadFileMut.isPending || !selectedFile}
+                      onClick={() => selectedFile && uploadFileMut.mutate(selectedFile)}
+                    >
+                      <Upload size={14} />
+                      {uploadFileMut.isPending ? 'Uploading...' : 'Upload & Extract'}
+                    </button>
+                  </div>
+                </>
               )}
             </div>
           )}
@@ -207,6 +299,9 @@ export function AiTraining() {
                       <a className="doc-source-link" href={doc.source} target="_blank" rel="noreferrer">
                         <Link size={11} /> {new URL(doc.source).hostname}
                       </a>
+                    )}
+                    {doc.source && doc.source.startsWith('file:') && (
+                      <span className="doc-source-link"><Upload size={11} /> {doc.source.slice(5)}</span>
                     )}
                     <h4>{doc.title}</h4>
                     <span className="doc-meta">{doc.wordCount} words · Quality: <strong style={{ color: scoreColor(doc.qualityScore) }}>{doc.qualityScore}%</strong></span>
@@ -229,7 +324,7 @@ export function AiTraining() {
                 )}
               </div>
             ))}
-            {docs.length === 0 && <div className="empty-tab">No knowledge documents yet. Add text or paste a URL to get started.</div>}
+            {docs.length === 0 && <div className="empty-tab">No knowledge documents yet. Add text, paste a URL, or upload a PDF/DOCX to get started.</div>}
           </div>
         </div>
       )}

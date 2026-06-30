@@ -219,22 +219,22 @@ export class BaileysAdapter implements IWhatsAppEngine {
     this.sock = sock;
 
     sock.ev.on('creds.update', () => void saveCreds());
-    sock.ev.on('connection.update', update => this.handleConnectionUpdate(update));
-    sock.ev.on('messages.upsert', event => this.handleMessagesUpsert(event));
-    sock.ev.on('messages.update', updates => this.handleMessagesUpdate(updates));
-    sock.ev.on('contacts.upsert', contacts => {
+    sock.ev.on('connection.update', (update: any) => this.handleConnectionUpdate(update));
+    sock.ev.on('messages.upsert', (event: any) => this.handleMessagesUpsert(event));
+    sock.ev.on('messages.update', (updates: any) => this.handleMessagesUpdate(updates));
+    sock.ev.on('contacts.upsert', (contacts: any[]) => {
       this.logContactEvent('contacts.upsert', contacts);
       this.sessionStore.upsertContacts(contacts);
     });
-    sock.ev.on('contacts.update', updates => {
+    sock.ev.on('contacts.update', (updates: any[]) => {
       this.logContactEvent('contacts.update', updates);
       this.sessionStore.upsertContacts(updates);
     });
-    sock.ev.on('chats.upsert', chats => {
+    sock.ev.on('chats.upsert', (chats: any[]) => {
       this.logger.debug('Baileys chats event', { action: 'baileys_chats', event: 'upsert', count: chats?.length ?? 0 });
       this.sessionStore.upsertChats(chats);
     });
-    sock.ev.on('chats.update', updates => {
+    sock.ev.on('chats.update', (updates: any[]) => {
       this.logger.debug('Baileys chats event', {
         action: 'baileys_chats',
         event: 'update',
@@ -242,12 +242,10 @@ export class BaileysAdapter implements IWhatsAppEngine {
       });
       this.sessionStore.upsertChats(updates);
     });
-    sock.ev.on('messaging-history.set', history => {
+    sock.ev.on('messaging-history.set', (history: any) => {
       this.sessionStore.upsertContacts(history.contacts);
       this.sessionStore.upsertChats(history.chats);
-      // lidPnMappings is not in the installed @whiskeysockets/baileys@6.7.23 type definition but
-      // is present at runtime in later protocol versions; cast to access it safely.
-      const h = history as unknown as { lidPnMappings?: { lid: string; pn: string }[]; syncType?: unknown };
+      const h = history as { lidPnMappings?: { lid: string; pn: string }[]; syncType?: unknown };
       const lidPnMappings = h.lidPnMappings;
       this.sessionStore.addLidMappings(lidPnMappings ?? []);
       this.logger.debug('History sync received', {
@@ -259,13 +257,13 @@ export class BaileysAdapter implements IWhatsAppEngine {
         chats: history.chats?.length ?? 0,
         messages: history.messages?.length ?? 0,
         contacts: history.contacts?.length ?? 0,
-        namedContacts: history.contacts?.filter(c => c.name || c.notify).length ?? 0,
-        lidContacts: history.contacts?.filter(c => c.lid).length ?? 0,
+        namedContacts: history.contacts?.filter((c: any) => c.name || c.notify).length ?? 0,
+        lidContacts: history.contacts?.filter((c: any) => c.lid).length ?? 0,
         lidPnMappings: lidPnMappings?.length ?? 0,
       });
     });
     // WhatsApp pushes this when a lid contact shares its phone number - a direct lid->phone pair.
-    sock.ev.on('chats.phoneNumberShare', ({ lid, jid }) => this.sessionStore.addLidMappings([{ lid, pn: jid }]));
+    sock.ev.on('chats.phoneNumberShare', ({ lid, jid }: { lid: string; jid: string }) => this.sessionStore.addLidMappings([{ lid, pn: jid }]));
   }
 
   private handleConnectionUpdate(update: {

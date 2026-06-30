@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException, Logger, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import * as path from 'path';
 import { KnowledgeDocument } from './entities/knowledge-document.entity';
 import { TrainingExample } from './entities/training-example.entity';
 import { TrainingRule } from './entities/training-rule.entity';
@@ -130,6 +131,52 @@ export class AiTrainingService {
       content,
       type: 'text',
       source: url,
+      employeeId: employeeId || undefined,
+    });
+  }
+
+  async uploadFileDocument(file: Express.Multer.File, employeeId?: string): Promise<KnowledgeDocument> {
+    const ext = path.extname(file.originalname).toLowerCase();
+    const allowedExt = ['.pdf', '.doc', '.docx', '.txt'];
+    if (!allowedExt.includes(ext)) {
+      throw new BadRequestException(`Unsupported file type "${ext}". Allowed: PDF, DOC, DOCX, TXT`);
+    }
+
+    this.logger.log(`Processing uploaded file: ${file.originalname} (${file.mimetype})`);
+
+    let content = '';
+    try {
+      if (ext === '.pdf') {
+        const { PDFParse } = await import('pdf-parse');
+        const parser = new PDFParse({ data: new Uint8Array(file.buffer) });
+        const result = await parser.getText();
+        content = result.text;
+        await parser.destroy();
+      } else if (ext === '.docx' || ext === '.doc') {
+        const mammoth = await import('mammoth');
+        const result = await mammoth.extractRawText({ buffer: file.buffer });
+        content = result.value;
+      } else {
+        content = file.buffer.toString('utf-8');
+      }
+    } catch (err) {
+      throw new BadRequestException(`Could not parse file: ${(err as Error).message}`);
+    }
+
+    content = content.replace(/\r\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
+    if (content.length > 50_000) {
+      content = content.slice(0, 50_000) + '\n\n[Content truncated at 50,000 characters]';
+    }
+    if (content.trim().length < 10) {
+      throw new BadRequestException('File appears to be empty or could not extract text');
+    }
+
+    const title = path.basename(file.originalname, ext);
+    return this.createDocument({
+      title: title.slice(0, 199),
+      content,
+      type: 'text',
+      source: `file:${file.originalname}`,
       employeeId: employeeId || undefined,
     });
   }

@@ -64,6 +64,31 @@
 
 .empty-tab { text-align: center; padding: 32px; color: var(--color-muted); font-size: 0.875rem; background: var(--color-surface); border: 1px dashed var(--color-border); border-radius: 10px; }
 
+.tab-actions { display: flex; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
+
+.doc-mode-toggle { display: flex; gap: 4px; background: var(--color-surface-2); border-radius: 8px; padding: 4px; }
+.mode-tab { display: flex; align-items: center; gap: 5px; padding: 6px 12px; border: none; background: none; border-radius: 6px; cursor: pointer; font-size: 0.8rem; color: var(--color-muted); transition: all 0.15s; }
+.mode-tab.active { background: var(--color-surface); color: var(--color-primary); font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+
+.url-fetch-hint { display: flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--color-muted); background: var(--color-surface-2); border-radius: 8px; padding: 8px 12px; }
+
+.fetch-error { font-size: 0.82rem; color: #ef4444; background: #fef2f2; border-radius: 8px; padding: 8px 12px; }
+
+.doc-source-link { display: inline-flex; align-items: center; gap: 4px; font-size: 0.72rem; color: var(--color-muted); margin-left: 8px; text-decoration: none; }
+.doc-source-link:hover { color: var(--color-primary); }
+.doc-source-info { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; color: var(--color-muted); margin-bottom: 8px; }
+
+.file-drop-zone { border: 2px dashed var(--color-border); border-radius: 10px; padding: 32px 20px; text-align: center; cursor: pointer; transition: all 0.2s; background: var(--color-surface-2); }
+.file-drop-zone:hover { border-color: var(--color-primary); background: color-mix(in srgb, var(--color-primary) 5%, transparent); }
+.file-drop-zone.has-file { border-color: var(--color-primary); background: color-mix(in srgb, var(--color-primary) 5%, transparent); }
+.file-drop-hint { display: flex; flex-direction: column; align-items: center; gap: 8px; color: var(--color-muted); }
+.file-drop-hint svg { color: var(--color-muted); }
+.file-types { font-size: 0.75rem; color: var(--color-muted); opacity: 0.7; }
+.file-selected { display: flex; align-items: center; justify-content: center; gap: 12px; }
+.file-selected svg { color: var(--color-primary); flex-shrink: 0; }
+.file-name { font-weight: 600; font-size: 0.9rem; color: var(--color-text); }
+.file-size { font-size: 0.75rem; color: var(--color-muted); margin-top: 2px; }
+
 .icon-btn { padding: 6px; border: none; background: none; cursor: pointer; color: var(--color-muted); border-radius: 6px; display: flex; align-items: center; }
 .icon-btn:hover { background: var(--color-surface-2); color: var(--color-text); }
 .icon-btn.danger:hover { background: #fef2f2; color: #ef4444; }

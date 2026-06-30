@@ -1,5 +1,6 @@
-import { Controller, Get, Post, Put, Delete, Param, Body, HttpCode, HttpStatus, Query } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiQuery } from '@nestjs/swagger';
+import { Controller, Get, Post, Put, Delete, Param, Body, HttpCode, HttpStatus, Query, UploadedFile, UseInterceptors, BadRequestException } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiTags, ApiOperation, ApiQuery, ApiConsumes } from '@nestjs/swagger';
 import { AiTrainingService } from './ai-training.service';
 import {
   CreateKnowledgeDocumentDto, UpdateKnowledgeDocumentDto,
@@ -36,6 +37,19 @@ export class AiTrainingController {
   @ApiOperation({ summary: 'Fetch a URL and create a knowledge document from its content' })
   async fetchUrl(@Body() dto: { url: string; title?: string; employeeId?: string }) {
     return this.service.fetchUrlDocument(dto);
+  }
+
+  @Post('documents/upload')
+  @RequireRole(ApiKeyRole.OPERATOR)
+  @ApiOperation({ summary: 'Upload a PDF, DOCX, DOC, or TXT file as a knowledge document' })
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('file', { limits: { fileSize: 10 * 1024 * 1024 }, storage: undefined }))
+  async uploadFile(
+    @UploadedFile() file: Express.Multer.File,
+    @Query('employeeId') employeeId?: string,
+  ) {
+    if (!file) throw new BadRequestException('No file uploaded');
+    return this.service.uploadFileDocument(file, employeeId);
   }
 
   @Get('documents/:id')
