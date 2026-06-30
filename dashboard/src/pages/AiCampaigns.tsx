@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
-  Plus, Trash2, Users, Send, BarChart2, Upload, Wand2,
+  Plus, Trash2, Users, Send, Upload, Wand2,
   Play, Pause, CheckCircle, ArrowRight, ChevronDown, ChevronUp,
-  AlertCircle, Bot, Link,
+  AlertCircle, Bot,
 } from 'lucide-react';
 import { apiRequest } from '../services/api';
 import './AiCampaigns.css';

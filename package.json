@@ -64,7 +64,6 @@
     "@nestjs/throttler": "^6.5.0",
     "@nestjs/typeorm": "^11.0.2",
     "@nestjs/websockets": "^11.1.27",
-    "@whiskeysockets/baileys": "6.7.23",
     "archiver": "5.3.2",
     "bullmq": "^5.78.1",
     "class-transformer": "^0.5.1",
@@ -115,6 +114,10 @@
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.61.0"
+  },
+  "overrides": {
+    "libsignal": "6.0.0",
+    "@whiskeysockets/eslint-config": "1.0.0"
   },
   "jest": {
     "moduleFileExtensions": [
