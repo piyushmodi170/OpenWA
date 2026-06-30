@@ -1,0 +1,69 @@
+Last login: Tue Jun 30 11:26:06 2026 from 172.18.0.11
+root@srv1752749:~# cat > /etc/docker/daemon.json << 'EOF'
+{
+  "features": {
+    "buildkit": false
+  }
+}
+EOF
+root@srv1752749:~# systemctl restart docker
+root@srv1752749:~# apt-get update
+Get:1 https://download.docker.com/linux/ubuntu noble InRelease [48.5 kB]
+Hit:2 http://archive.ubuntu.com/ubuntu noble InRelease                                   
+Get:3 http://security.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+Get:4 http://archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+Hit:5 http://archive.ubuntu.com/ubuntu noble-backports InRelease   
+Get:6 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1041 kB]
+Get:7 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 c-n-f Metadata [17.5 kB]
+Get:8 http://archive.ubuntu.com/ubuntu noble-updates/universe amd64 c-n-f Metadata [34.8 kB]
+Get:9 http://security.ubuntu.com/ubuntu noble-security/main amd64 c-n-f Metadata [11.6 kB]
+Fetched 1405 kB in 1s (1744 kB/s)           
+Reading package lists... Done
+root@srv1752749:~# apt-get install -y ca-certificates curl
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+ca-certificates is already the newest version (20260601~24.04.1).
+curl is already the newest version (8.5.0-2ubuntu10.9).
+The following packages were automatically installed and are no longer required:
+  libfwupd2 libgusb2
+Use 'apt autoremove' to remove them.
+0 upgraded, 0 newly installed, 0 to remove and 1 not upgraded.
+root@srv1752749:~# install -m 0755 -d /etc/apt/keyrings
+root@srv1752749:~# curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+root@srv1752749:~# chmod a+r /etc/apt/keyrings/docker.asc
+root@srv1752749:~# echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | tee /etc/apt/sources.list.d/docker.list
+deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu noble stable
+root@srv1752749:~# apt-get update
+Hit:1 https://download.docker.com/linux/ubuntu noble InRelease
+Hit:2 http://security.ubuntu.com/ubuntu noble-security InRelease
+Hit:3 http://archive.ubuntu.com/ubuntu noble InRelease
+Hit:4 http://archive.ubuntu.com/ubuntu noble-updates InRelease
+Hit:5 http://archive.ubuntu.com/ubuntu noble-backports InRelease
+Reading package lists... Done
+W: Target Packages (stable/binary-amd64/Packages) is configured multiple times in /etc/apt/sources.list.d/docker.list:1 and /etc/apt/sources.list.d/docker.sources:1
+W: Target Packages (stable/binary-all/Packages) is configured multiple times in /etc/apt/sources.list.d/docker.list:1 and /etc/apt/sources.list.d/docker.sources:1
+W: Target Translations (stable/i18n/Translation-en) is configured multiple times in /etc/apt/sources.list.d/docker.list:1 and /etc/apt/sources.list.d/docker.sources:1
+W: Target DEP-11 (stable/dep11/Components-amd64.yml) is configured multiple times in /etc/apt/sources.list.d/docker.list:1 and /etc/apt/sources.list.d/docker.sources:1
+W: Target DEP-11 (stable/dep11/Components-all.yml) is configured multiple times in /etc/apt/sources.list.d/docker.list:1 and /etc/apt/sources.list.d/docker.sources:1
+W: Target CNF (stable/cnf/Commands-amd64) is configured multiple times in /etc/apt/sources.list.d/docker.list:1 and /etc/apt/sources.list.d/docker.sources:1
+W: Target CNF (stable/cnf/Commands-all) is configured multiple times in /etc/apt/sources.list.d/docker.list:1 and /etc/apt/sources.list.d/docker.sources:1
+W: Target Packages (stable/binary-amd64/Packages) is configured multiple times in /etc/apt/sources.list.d/docker.list:1 and /etc/apt/sources.list.d/docker.sources:1
+W: Target Packages (stable/binary-all/Packages) is configured multiple times in /etc/apt/sources.list.d/docker.list:1 and /etc/apt/sources.list.d/docker.sources:1
+W: Target Translations (stable/i18n/Translation-en) is configured multiple times in /etc/apt/sources.list.d/docker.list:1 and /etc/apt/sources.list.d/docker.sources:1
+W: Target DEP-11 (stable/dep11/Components-amd64.yml) is configured multiple times in /etc/apt/sources.list.d/docker.list:1 and /etc/apt/sources.list.d/docker.sources:1
+W: Target DEP-11 (stable/dep11/Components-all.yml) is configured multiple times in /etc/apt/sources.list.d/docker.list:1 and /etc/apt/sources.list.d/docker.sources:1
+W: Target CNF (stable/cnf/Commands-amd64) is configured multiple times in /etc/apt/sources.list.d/docker.list:1 and /etc/apt/sources.list.d/docker.sources:1
+W: Target CNF (stable/cnf/Commands-all) is configured multiple times in /etc/apt/sources.list.d/docker.list:1 and /etc/apt/sources.list.d/docker.sources:1
+root@srv1752749:~# apt-get install -y docker-buildx-plugin
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+docker-buildx-plugin is already the newest version (0.35.0-1~ubuntu.24.04~noble).
+The following packages were automatically installed and are no longer required:
+  libfwupd2 libgusb2
+Use 'apt autoremove' to remove them.
+0 upgraded, 0 newly installed, 0 to remove and 1 not upgraded.
+root@srv1752749:~# docker buildx version
+github.com/docker/buildx v0.35.0 a319e5b15052cf6557ceb666eb8ff6e32380b782
+root@srv1752749:~# 
