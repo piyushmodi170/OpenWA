@@ -33,9 +33,15 @@ export class CreateAiCampaignDto {
   @IsString()
   sessionId?: string;
 
-  @ApiProperty({ description: 'Base message template (use {{name}} for lead name, {{custom}} for custom fields)' })
+  @ApiProperty({ description: 'AI Employee ID to use for writing messages', required: false })
+  @IsOptional()
   @IsString()
-  messageTemplate: string;
+  employeeId?: string;
+
+  @ApiProperty({ description: 'Base message template (use {{name}} for lead name, {{custom}} for custom fields)', default: '' })
+  @IsOptional()
+  @IsString()
+  messageTemplate?: string;
 
   @ApiProperty({ description: 'Use AI to personalize each message', default: true })
   @IsOptional()
@@ -79,6 +85,7 @@ export class UpdateAiCampaignDto {
   @IsOptional() @IsString() name?: string;
   @IsOptional() @IsString() goal?: string;
   @IsOptional() @IsString() sessionId?: string;
+  @IsOptional() @IsString() employeeId?: string;
   @IsOptional() @IsString() messageTemplate?: string;
   @IsOptional() @IsBoolean() useAiPersonalization?: boolean;
   @IsOptional() @IsIn(['openai', 'gemini']) aiProvider?: string;
