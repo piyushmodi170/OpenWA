@@ -1,0 +1,42 @@
+79
+https://docs.docker.com/go/buildx/
+2026-Jun-30 11:27:43.384725
+========================================
+2026-Jun-30 11:27:43.394096
+Deployment failed: Command execution failed (exit code 1): docker exec ih7nwv2eli8rtr787d3bunfb bash -c 'bash /artifacts/build.sh'
+2026-Jun-30 11:27:43.394096
+Error: ERROR: BuildKit is enabled but the buildx component is missing or broken.
+2026-Jun-30 11:27:43.394096
+Install the buildx component to build images with BuildKit:
+2026-Jun-30 11:27:43.394096
+https://docs.docker.com/go/buildx/
+2026-Jun-30 11:27:43.405711
+Error type: App\Exceptions\DeploymentException
+2026-Jun-30 11:27:43.420755
+Error code: 0
+2026-Jun-30 11:27:43.432195
+Location: /var/www/html/app/Traits/ExecuteRemoteCommand.php:242
+2026-Jun-30 11:27:43.442196
+Stack trace (first 5 lines):
+2026-Jun-30 11:27:43.451679
+#0 /var/www/html/app/Traits/ExecuteRemoteCommand.php(106): App\Jobs\ApplicationDeploymentJob->executeCommandWithProcess()
+2026-Jun-30 11:27:43.459767
+#1 /var/www/html/vendor/laravel/framework/src/Illuminate/Collections/Traits/EnumeratesValues.php(275): App\Jobs\ApplicationDeploymentJob->{closure:App\Traits\ExecuteRemoteCommand::execute_remote_command():72}()
+2026-Jun-30 11:27:43.467926
+#2 /var/www/html/app/Traits/ExecuteRemoteCommand.php(72): Illuminate\Support\Collection->each()
+2026-Jun-30 11:27:43.475971
+#3 /var/www/html/app/Jobs/ApplicationDeploymentJob.php(3821): App\Jobs\ApplicationDeploymentJob->execute_remote_command()
+2026-Jun-30 11:27:43.484104
+#4 /var/www/html/app/Jobs/ApplicationDeploymentJob.php(912): App\Jobs\ApplicationDeploymentJob->build_image()
+2026-Jun-30 11:27:43.493239
+========================================
+2026-Jun-30 11:27:43.502469
+Deployment failed. Removing the new version of your application.
+2026-Jun-30 11:27:44.081069
+Gracefully shutting down build container: ih7nwv2eli8rtr787d3bunfb
+2026-Jun-30 11:27:44.232416
+[CMD]: docker stop --time=30 ih7nwv2eli8rtr787d3bunfb
+2026-Jun-30 11:27:44.232416
+Flag --time has been deprecated, use --timeout instead
+2026-Jun-30 11:27:44.473447
+ih7nwv2eli8rtr787d3bunfb
