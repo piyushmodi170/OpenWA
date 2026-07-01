@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+.brain-map-container {
+  font-family: 'Inter', sans-serif;
+  background-color: #050505;
+  background-image: radial-gradient(circle at center, #111 0%, #000 100%), url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.03"/></svg>');
+  color: #fff;
+}
+
+.font-display {
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+@keyframes pulse-core {
+  0% { box-shadow: 0 0 40px 10px rgba(139, 92, 246, 0.4), inset 0 0 20px rgba(139, 92, 246, 0.8); }
+  50% { box-shadow: 0 0 60px 20px rgba(139, 92, 246, 0.6), inset 0 0 30px rgba(139, 92, 246, 1); }
+  100% { box-shadow: 0 0 40px 10px rgba(139, 92, 246, 0.4), inset 0 0 20px rgba(139, 92, 246, 0.8); }
+}
+
+@keyframes float {
+  0% { transform: translate(0px, 0px); }
+  50% { transform: translate(0px, -10px); }
+  100% { transform: translate(0px, 0px); }
+}
+
+.core-node {
+  animation: pulse-core 4s ease-in-out infinite;
+  background: radial-gradient(circle at 30% 30%, #a78bfa, #6d28d9);
+}
+
+.node-doc {
+  background: radial-gradient(circle at 30% 30%, #60a5fa, #1d4ed8);
+  box-shadow: 0 0 20px rgba(37, 99, 235, 0.4);
+  transition: all 0.3s ease;
+}
+.node-doc:hover {
+  box-shadow: 0 0 30px rgba(37, 99, 235, 0.8);
+  transform: scale(1.1);
+}
+
+.node-example {
+  background: radial-gradient(circle at 30% 30%, #fbbf24, #b45309);
+  box-shadow: 0 0 15px rgba(217, 119, 6, 0.4);
+  transition: all 0.3s ease;
+}
+.node-example:hover {
+  box-shadow: 0 0 25px rgba(217, 119, 6, 0.8);
+  transform: scale(1.1);
+}
+
+.node-rule {
+  background: radial-gradient(circle at 30% 30%, #f87171, #b91c1c);
+  box-shadow: 0 0 15px rgba(220, 38, 38, 0.4);
+  transition: all 0.3s ease;
+}
+.node-rule:hover {
+  box-shadow: 0 0 25px rgba(220, 38, 38, 0.8);
+  transform: scale(1.1);
+}
+
+.node-ghost {
+  background: rgba(255,255,255,0.05);
+  border: 1px dashed rgba(255,255,255,0.2);
+  box-shadow: none;
+}
+
+.connection-line {
+  stroke: rgba(255,255,255,0.1);
+  stroke-width: 1.5;
+  fill: none;
+  transition: stroke 0.3s ease;
+}
+.connection-line.active {
+  stroke: rgba(255,255,255,0.4);
+  stroke-width: 2;
+}
