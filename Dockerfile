@@ -44,33 +44,45 @@ RUN npm run build && npm run dashboard:ci && npm run dashboard:build
 # ===== Stage 2: Production =====
 FROM docker.io/node:22-slim AS production
 
-# Install Chrome/Chromium and required dependencies
-RUN apt-get update && apt-get install -y \
-    chromium \
-    fonts-liberation \
-    libappindicator3-1 \
-    libasound2 \
-    libatk-bridge2.0-0 \
-    libatk1.0-0 \
-    libcups2 \
-    libdbus-1-3 \
-    libdrm2 \
-    libgbm1 \
-    libgtk-3-0 \
-    libnspr4 \
-    libnss3 \
-    libx11-xcb1 \
-    libxcomposite1 \
-    libxdamage1 \
-    libxrandr2 \
-    xdg-utils \
+# Build arg to control Chromium installation.
+# Set INSTALL_CHROMIUM=true in your Coolify/Docker build args if you use the
+# Puppeteer-based engine. The default (false) skips Chromium to keep the image
+# lean and the build fast — Baileys-based sessions do not require a browser.
+ARG INSTALL_CHROMIUM=false
+
+# Always install minimal runtime utilities (fast — only 4 small packages).
+RUN apt-get update && apt-get install -y --no-install-recommends \
     dumb-init \
     gosu \
     curl \
     procps \
     && rm -rf /var/lib/apt/lists/*
 
-# Set Chrome executable path for Puppeteer
+# Conditionally install Chromium and its GUI dependencies only when requested.
+RUN if [ "$INSTALL_CHROMIUM" = "true" ]; then \
+      apt-get update && apt-get install -y --no-install-recommends \
+        chromium \
+        fonts-liberation \
+        libappindicator3-1 \
+        libasound2 \
+        libatk-bridge2.0-0 \
+        libatk1.0-0 \
+        libcups2 \
+        libdbus-1-3 \
+        libdrm2 \
+        libgbm1 \
+        libgtk-3-0 \
+        libnspr4 \
+        libnss3 \
+        libx11-xcb1 \
+        libxcomposite1 \
+        libxdamage1 \
+        libxrandr2 \
+        xdg-utils \
+      && rm -rf /var/lib/apt/lists/*; \
+    fi
+
+# Set Chrome executable path for Puppeteer (only relevant when INSTALL_CHROMIUM=true)
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 
