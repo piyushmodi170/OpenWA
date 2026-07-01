@@ -1,10 +1,11 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, Optional } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import OpenAI from 'openai';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { ConversationAnalysis } from './entities/conversation-analysis.entity';
 import { AnalyzeConversationDto } from './dto/conversation-intelligence.dto';
+import { AiBotService } from '../ai-bot/ai-bot.service';
 
 @Injectable()
 export class ConversationIntelligenceService {
@@ -13,6 +14,7 @@ export class ConversationIntelligenceService {
   constructor(
     @InjectRepository(ConversationAnalysis, 'data')
     private readonly repo: Repository<ConversationAnalysis>,
+    @Optional() private readonly aiBotService: AiBotService,
   ) {}
 
   async findAll(sessionId?: string): Promise<ConversationAnalysis[]> {
@@ -25,8 +27,10 @@ export class ConversationIntelligenceService {
   }
 
   async analyze(dto: AnalyzeConversationDto): Promise<ConversationAnalysis> {
-    const apiKey = process.env.OPENAI_API_KEY || '';
     const provider = dto.aiProvider || 'openai';
+    const apiKey = this.aiBotService
+      ? await this.aiBotService.getProviderApiKey(provider)
+      : (process.env.OPENAI_API_KEY || '');
     const model = dto.model || 'gpt-4o-mini';
 
     let analysis: {

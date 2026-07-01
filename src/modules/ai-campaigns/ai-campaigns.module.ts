@@ -7,11 +7,13 @@ import { AiCampaignsController } from './ai-campaigns.controller';
 import { MessageModule } from '../message/message.module';
 import { AiEmployeesModule } from '../ai-employees/ai-employees.module';
 import { AiTrainingModule } from '../ai-training/ai-training.module';
+import { AiBotModule } from '../ai-bot/ai-bot.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([AiCampaign, CampaignLead], 'data'),
     forwardRef(() => MessageModule),
+    forwardRef(() => AiBotModule),
     AiEmployeesModule,
     AiTrainingModule,
   ],

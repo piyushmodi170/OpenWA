@@ -9,6 +9,7 @@ import { CreateAiCampaignDto, UpdateAiCampaignDto, ImportLeadsDto } from './dto/
 import { MessageService } from '../message/message.service';
 import { AiEmployeesService } from '../ai-employees/ai-employees.service';
 import { AiTrainingService } from '../ai-training/ai-training.service';
+import { AiBotService } from '../ai-bot/ai-bot.service';
 
 @Injectable()
 export class AiCampaignsService {
@@ -23,6 +24,7 @@ export class AiCampaignsService {
     private readonly messageService: MessageService,
     @Optional() private readonly employeesService: AiEmployeesService,
     @Optional() private readonly trainingService: AiTrainingService,
+    @Optional() private readonly aiBotService: AiBotService,
   ) {}
 
   // ─── Campaigns ────────────────────────────────────────────────────────────
@@ -178,7 +180,9 @@ export class AiCampaignsService {
   async personalizeLeads(campaignId: string, apiKey?: string): Promise<{ personalized: number; failed: number }> {
     const campaign = await this.findOne(campaignId);
     const leads = await this.leadRepo.find({ where: { campaignId, status: 'pending' } });
-    const key = apiKey || process.env.OPENAI_API_KEY || '';
+    const provider = campaign.aiProvider || 'openai';
+    const savedKey = this.aiBotService ? await this.aiBotService.getProviderApiKey(provider) : '';
+    const key = apiKey || savedKey || process.env.OPENAI_API_KEY || '';
     let personalized = 0;
     let failed = 0;
 

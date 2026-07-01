@@ -65,8 +65,8 @@ export function AiTraining() {
       const form = new FormData();
       form.append('file', file);
       const url = `/api/ai-training/documents/upload${eid ? `?employeeId=${eid}` : ''}`;
-      const token = localStorage.getItem('apiKey') || '';
-      const res = await fetch(url, { method: 'POST', headers: { 'x-api-key': token }, body: form });
+      const token = sessionStorage.getItem('openwa_api_key') || '';
+      const res = await fetch(url, { method: 'POST', headers: { 'X-API-Key': token }, body: form });
       if (!res.ok) {
         const err = await res.json().catch(() => ({ message: res.statusText })) as { message?: string };
         throw new Error(err.message || 'Upload failed');
