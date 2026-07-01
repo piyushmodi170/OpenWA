@@ -74,7 +74,6 @@ export class AiTrainingService {
   async fetchUrlDocument(dto: { url: string; title?: string; employeeId?: string }): Promise<KnowledgeDocument> {
     const { url, title, employeeId } = dto;
 
-    // Validate URL
     let parsed: URL;
     try {
       parsed = new URL(url);
@@ -87,14 +86,18 @@ export class AiTrainingService {
 
     this.logger.log(`Fetching URL for knowledge base: ${url}`);
 
-    let content = '';
+    let raw = '';
     try {
       const response = await fetch(url, {
         headers: {
-          'User-Agent': 'Mozilla/5.0 (compatible; OpenWA-KnowledgeBot/1.0)',
-          'Accept': 'text/html,text/plain',
+          'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+          'Accept-Language': 'en-US,en;q=0.9',
+          'Accept-Encoding': 'gzip, deflate, br',
+          'Cache-Control': 'no-cache',
         },
-        signal: AbortSignal.timeout(10_000),
+        signal: AbortSignal.timeout(15_000),
+        redirect: 'follow',
       });
 
       if (!response.ok) {
@@ -102,37 +105,144 @@ export class AiTrainingService {
       }
 
       const contentType = response.headers.get('content-type') || '';
-      const raw = await response.text();
+      raw = await response.text();
 
-      if (contentType.includes('text/html')) {
-        content = this.stripHtml(raw);
-      } else {
-        content = raw;
-      }
-
-      // Truncate to 10k chars to avoid huge documents
-      if (content.length > 10_000) {
-        content = content.slice(0, 10_000) + '\n\n[Content truncated at 10,000 characters]';
-      }
-
-      if (content.trim().length < 50) {
-        throw new BadRequestException('Page content is too short or could not be extracted');
+      if (!contentType.includes('text/html')) {
+        const plain = raw.trim();
+        if (plain.length < 50) throw new BadRequestException('Page content is too short or could not be extracted');
+        return this.createDocument({
+          title: (title?.trim() || parsed.hostname).slice(0, 199),
+          content: plain.slice(0, 50_000),
+          type: 'text',
+          source: url,
+          employeeId: employeeId || undefined,
+        });
       }
     } catch (err) {
       if (err instanceof BadRequestException) throw err;
       throw new BadRequestException(`Could not fetch URL: ${(err as Error).message}`);
     }
 
-    // Derive title from URL if not provided
-    const docTitle = title?.trim() || parsed.hostname + parsed.pathname;
+    const content = this.extractHtmlContent(raw);
+
+    if (content.trim().length < 50) {
+      throw new BadRequestException(
+        'Page content is too short or could not be extracted. ' +
+        'This may be a JavaScript-rendered site. Try pasting the text content directly instead.',
+      );
+    }
+
+    const pageTitle = title?.trim() || this.extractHtmlTitle(raw) || parsed.hostname + parsed.pathname;
 
     return this.createDocument({
-      title: docTitle.slice(0, 199),
-      content,
+      title: pageTitle.slice(0, 199),
+      content: content.slice(0, 50_000),
       type: 'text',
       source: url,
       employeeId: employeeId || undefined,
     });
+  }
+
+  private extractHtmlTitle(html: string): string {
+    const og = html.match(/<meta[^>]+property=["']og:title["'][^>]+content=["']([^"']+)["']/i)?.[1];
+    if (og) return og.trim();
+    const t = html.match(/<title[^>]*>([^<]+)<\/title>/i)?.[1];
+    return t ? t.replace(/\s+/g, ' ').trim() : '';
+  }
+
+  private extractHtmlContent(html: string): string {
+    const parts: string[] = [];
+
+    // 1. JSON-LD structured data (richest machine-readable content)
+    const jsonLdMatches = html.matchAll(/<script[^>]+type=["']application\/ld\+json["'][^>]*>([\s\S]*?)<\/script>/gi);
+    for (const m of jsonLdMatches) {
+      try {
+        const obj = JSON.parse(m[1]) as Record<string, unknown>;
+        const texts = this.extractJsonLdText(obj);
+        if (texts) parts.push(texts);
+      } catch { /* skip malformed */ }
+    }
+
+    // 2. Open Graph / meta tags
+    const ogTitle = html.match(/<meta[^>]+property=["']og:title["'][^>]+content=["']([^"']+)["']/i)?.[1] || '';
+    const ogDesc = html.match(/<meta[^>]+property=["']og:description["'][^>]+content=["']([^"']+)["']/i)?.[1] || '';
+    const metaDesc = html.match(/<meta[^>]+name=["']description["'][^>]+content=["']([^"']+)["']/i)?.[1] || '';
+    const keywords = html.match(/<meta[^>]+name=["']keywords["'][^>]+content=["']([^"']+)["']/i)?.[1] || '';
+    const title = html.match(/<title[^>]*>([^<]+)<\/title>/i)?.[1]?.replace(/\s+/g, ' ').trim() || '';
+
+    const meta: string[] = [];
+    if (title) meta.push(`Title: ${title}`);
+    if (ogTitle && ogTitle !== title) meta.push(`Page Title: ${ogTitle}`);
+    if (ogDesc) meta.push(`Description: ${ogDesc}`);
+    else if (metaDesc) meta.push(`Description: ${metaDesc}`);
+    if (keywords) meta.push(`Keywords: ${keywords}`);
+    if (meta.length) parts.push(meta.join('\n'));
+
+    // 3. Remove noise tags entirely
+    let cleaned = html
+      .replace(/<script[\s\S]*?<\/script>/gi, '')
+      .replace(/<style[\s\S]*?<\/style>/gi, '')
+      .replace(/<nav[\s\S]*?<\/nav>/gi, '')
+      .replace(/<header[\s\S]*?<\/header>/gi, '')
+      .replace(/<footer[\s\S]*?<\/footer>/gi, '')
+      .replace(/<aside[\s\S]*?<\/aside>/gi, '')
+      .replace(/<!--[\s\S]*?-->/g, '');
+
+    // 4. Prefer semantic content containers
+    const semantic = (
+      cleaned.match(/<article[\s\S]*?<\/article>/gi)?.[0] ||
+      cleaned.match(/<main[\s\S]*?<\/main>/gi)?.[0] ||
+      cleaned.match(/<section[\s\S]*?<\/section>/gi)?.[0]
+    );
+    if (semantic) {
+      const semText = this.stripHtml(semantic);
+      if (semText.trim().length > 100) {
+        parts.push(semText);
+        return this.collapseWhitespace(parts.join('\n\n'));
+      }
+    }
+
+    // 5. Extract all <p> and heading tags
+    const paragraphMatches = cleaned.matchAll(/<(p|h[1-6]|li|td|th|blockquote)[^>]*>([\s\S]*?)<\/\1>/gi);
+    const paragraphs: string[] = [];
+    for (const m of paragraphMatches) {
+      const text = this.stripHtml(m[2]).trim();
+      if (text.length > 20) paragraphs.push(text);
+    }
+    if (paragraphs.length > 0) {
+      parts.push(paragraphs.join('\n'));
+      return this.collapseWhitespace(parts.join('\n\n'));
+    }
+
+    // 6. Last resort: strip all HTML tags from the whole body
+    const bodyMatch = cleaned.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+    const bodyText = this.stripHtml(bodyMatch ? bodyMatch[1] : cleaned);
+    if (bodyText.trim().length > 0) parts.push(bodyText);
+
+    return this.collapseWhitespace(parts.join('\n\n'));
+  }
+
+  private extractJsonLdText(obj: Record<string, unknown>, depth = 0): string {
+    if (depth > 3) return '';
+    const interesting = ['name', 'description', 'headline', 'text', 'articleBody', 'about',
+      'contentUrl', 'caption', 'alternateName', 'slogan', 'disambiguatingDescription'];
+    const parts: string[] = [];
+    for (const key of interesting) {
+      if (typeof obj[key] === 'string' && (obj[key] as string).length > 10) {
+        parts.push(`${key}: ${obj[key]}`);
+      }
+    }
+    for (const val of Object.values(obj)) {
+      if (val && typeof val === 'object' && !Array.isArray(val)) {
+        const sub = this.extractJsonLdText(val as Record<string, unknown>, depth + 1);
+        if (sub) parts.push(sub);
+      }
+    }
+    return parts.join('\n');
+  }
+
+  private collapseWhitespace(text: string): string {
+    return text.replace(/[ \t]+/g, ' ').replace(/\n{3,}/g, '\n\n').trim();
   }
 
   async uploadFileDocument(file: Express.Multer.File, employeeId?: string): Promise<KnowledgeDocument> {
