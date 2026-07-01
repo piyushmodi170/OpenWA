@@ -86,53 +86,64 @@ export class AiTrainingService {
 
     this.logger.log(`Fetching URL for knowledge base: ${url}`);
 
-    let raw = '';
+    // Step 1: Quick static fetch to detect content type
+    let staticRaw = '';
+    let isHtml = true;
     try {
       const response = await fetch(url, {
         headers: {
           'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
           'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
           'Accept-Language': 'en-US,en;q=0.9',
-          'Accept-Encoding': 'gzip, deflate, br',
-          'Cache-Control': 'no-cache',
         },
-        signal: AbortSignal.timeout(15_000),
+        signal: AbortSignal.timeout(10_000),
         redirect: 'follow',
       });
-
-      if (!response.ok) {
-        throw new BadRequestException(`Failed to fetch URL: HTTP ${response.status}`);
+      if (response.ok) {
+        const ct = response.headers.get('content-type') || '';
+        staticRaw = await response.text();
+        isHtml = ct.includes('text/html');
       }
+    } catch { /* fall through to puppeteer */ }
 
-      const contentType = response.headers.get('content-type') || '';
-      raw = await response.text();
-
-      if (!contentType.includes('text/html')) {
-        const plain = raw.trim();
-        if (plain.length < 50) throw new BadRequestException('Page content is too short or could not be extracted');
-        return this.createDocument({
-          title: (title?.trim() || parsed.hostname).slice(0, 199),
-          content: plain.slice(0, 50_000),
-          type: 'text',
-          source: url,
-          employeeId: employeeId || undefined,
-        });
-      }
-    } catch (err) {
-      if (err instanceof BadRequestException) throw err;
-      throw new BadRequestException(`Could not fetch URL: ${(err as Error).message}`);
+    // For plain text / non-HTML files
+    if (!isHtml && staticRaw.trim().length > 50) {
+      return this.createDocument({
+        title: (title?.trim() || parsed.hostname).slice(0, 199),
+        content: staticRaw.trim().slice(0, 50_000),
+        type: 'text',
+        source: url,
+        employeeId: employeeId || undefined,
+      });
     }
 
-    const content = this.extractHtmlContent(raw);
+    // Step 2: Try static extraction first (fast, works for server-rendered sites)
+    const staticContent = staticRaw ? this.extractHtmlContent(staticRaw) : '';
+    const staticTitle = staticRaw ? this.extractHtmlTitle(staticRaw) : '';
+
+    // Step 3: If static content is thin (JS-rendered site), use Puppeteer
+    let content = staticContent;
+    let pageTitle = title?.trim() || staticTitle || parsed.hostname + parsed.pathname;
+
+    if (content.trim().length < 200) {
+      this.logger.log(`Static fetch got only ${content.trim().length} chars — using headless browser for ${url}`);
+      try {
+        const result = await this.fetchWithPuppeteer(url);
+        if (result.content.length > content.length) {
+          content = result.content;
+          if (!title?.trim() && result.title) pageTitle = result.title;
+        }
+      } catch (puppeteerErr) {
+        this.logger.warn(`Puppeteer fetch failed for ${url}: ${(puppeteerErr as Error).message}`);
+        // Keep static content if puppeteer fails
+      }
+    }
 
     if (content.trim().length < 50) {
       throw new BadRequestException(
-        'Page content is too short or could not be extracted. ' +
-        'This may be a JavaScript-rendered site. Try pasting the text content directly instead.',
+        'Could not extract content from this URL. The page may require login or block automated access.',
       );
     }
-
-    const pageTitle = title?.trim() || this.extractHtmlTitle(raw) || parsed.hostname + parsed.pathname;
 
     return this.createDocument({
       title: pageTitle.slice(0, 199),
@@ -141,6 +152,69 @@ export class AiTrainingService {
       source: url,
       employeeId: employeeId || undefined,
     });
+  }
+
+  private async fetchWithPuppeteer(url: string): Promise<{ title: string; content: string }> {
+    const puppeteer = await import('puppeteer-core');
+    const executablePath = process.env.PUPPETEER_EXECUTABLE_PATH || '/usr/bin/chromium-browser';
+
+    const browser = await puppeteer.launch({
+      executablePath,
+      headless: true,
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-gpu',
+        '--single-process',
+        '--no-zygote',
+      ],
+    });
+
+    try {
+      const page = await browser.newPage();
+      await page.setUserAgent(
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+      );
+      await page.setViewport({ width: 1280, height: 800 });
+
+      // Block images, fonts, media to speed up loading
+      await page.setRequestInterception(true);
+      page.on('request', (req) => {
+        const type = req.resourceType();
+        if (['image', 'media', 'font', 'stylesheet'].includes(type)) {
+          req.abort();
+        } else {
+          req.continue();
+        }
+      });
+
+      await page.goto(url, { waitUntil: 'networkidle2', timeout: 25_000 });
+
+      // Wait a bit more for lazy-loaded content
+      await new Promise(r => setTimeout(r, 1500));
+
+      const result = await page.evaluate(() => {
+        // Remove noise elements
+        const noise = document.querySelectorAll('script, style, noscript, iframe, svg, img, video, audio, nav, footer, .cookie-banner, [aria-hidden="true"]');
+        noise.forEach(el => el.remove());
+
+        const title = document.title || '';
+
+        // Try to get main content area first
+        const main = document.querySelector('main, [role="main"], article, #content, #main, .content, .main') as HTMLElement | null;
+        const bodyText = (main || document.body)?.innerText || '';
+
+        return { title, content: bodyText };
+      });
+
+      return {
+        title: result.title,
+        content: this.collapseWhitespace(result.content),
+      };
+    } finally {
+      await browser.close();
+    }
   }
 
   private extractHtmlTitle(html: string): string {
