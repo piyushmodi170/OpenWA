@@ -4,6 +4,8 @@ import { Plus, Pencil, Trash2, Users, Bot, Target, ToggleLeft, ToggleRight, Chev
 import { apiRequest } from '../services/api';
 import './AiEmployees.css';
 
+interface Session { id: string; status: string; }
+
 const ROLE_LABELS: Record<string, string> = {
   sales_rep: '💼 Sales Representative',
   support_agent: '🎧 Support Agent',
@@ -17,8 +19,8 @@ const ROLE_LABELS: Record<string, string> = {
 const TONE_OPTIONS = ['friendly', 'professional', 'formal', 'casual', 'empathetic'];
 const PROVIDER_OPTIONS = ['openai', 'gemini'];
 const MODEL_OPTIONS: Record<string, string[]> = {
-  openai: ['gpt-4o-mini', 'gpt-4o', 'gpt-4-turbo', 'gpt-3.5-turbo'],
-  gemini: ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-pro'],
+  openai: ['gpt-4o-mini', 'gpt-4o', 'gpt-4.1', 'gpt-4.1-mini', 'gpt-4-turbo', 'gpt-3.5-turbo', 'o1-mini', 'o1-preview', 'o3-mini'],
+  gemini: ['gemini-2.5-pro', 'gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-2.0-flash-lite', 'gemini-1.5-pro', 'gemini-1.5-flash', 'gemini-1.0-pro'],
 };
 
 const AVATARS = ['🤖', '👩‍💼', '👨‍💼', '🧑‍💻', '👩‍🔬', '👨‍🎓', '🦾', '🧠', '⚡', '🎯', '🌟', '💡'];
@@ -68,6 +70,11 @@ export function AiEmployees() {
   const { data: employees = [], isLoading } = useQuery<Employee[]>({
     queryKey: ['ai-employees'],
     queryFn: () => apiRequest('/ai-employees'),
+  });
+
+  const { data: sessions = [] } = useQuery<Session[]>({
+    queryKey: ['sessions'],
+    queryFn: () => apiRequest('/sessions'),
   });
 
   const createMut = useMutation({
@@ -233,8 +240,13 @@ export function AiEmployees() {
             </div>
             <div className="form-group">
               <label>Session ID</label>
-              <input className="form-input" placeholder="* for all sessions"
-                value={form.sessionId} onChange={e => setForm(f => ({ ...f, sessionId: e.target.value }))} />
+              <select className="form-select" value={form.sessionId} onChange={e => setForm(f => ({ ...f, sessionId: e.target.value }))}>
+                <option value="*">* — All sessions</option>
+                {sessions.map(s => <option key={s.id} value={s.id}>{s.id} ({s.status})</option>)}
+              </select>
+              <small style={{ color: 'var(--text-secondary)', fontSize: '0.75rem' }}>
+                {sessions.length === 0 ? 'No sessions found — connect a WhatsApp account in Sessions first.' : 'Choose which WhatsApp session this employee handles.'}
+              </small>
             </div>
           </div>
           <div className="form-actions">

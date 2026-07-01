@@ -113,9 +113,35 @@ export function ConversationIntelligence() {
             </div>
             <div className="form-group">
               <label>AI Provider</label>
-              <select className="form-select" value={analyzeForm.aiProvider} onChange={e => setAnalyzeForm(f => ({ ...f, aiProvider: e.target.value }))}>
+              <select className="form-select" value={analyzeForm.aiProvider} onChange={e => setAnalyzeForm(f => ({ ...f, aiProvider: e.target.value, model: e.target.value === 'gemini' ? 'gemini-2.0-flash' : 'gpt-4o-mini' }))}>
                 <option value="openai">OpenAI</option>
                 <option value="gemini">Gemini</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <label>Model</label>
+              <select className="form-select" value={analyzeForm.model} onChange={e => setAnalyzeForm(f => ({ ...f, model: e.target.value }))}>
+                {analyzeForm.aiProvider === 'gemini' ? (
+                  <>
+                    <option value="gemini-2.5-pro">Gemini 2.5 Pro — most capable</option>
+                    <option value="gemini-2.5-flash">Gemini 2.5 Flash — fast & smart</option>
+                    <option value="gemini-2.0-flash">Gemini 2.0 Flash — latest, fast</option>
+                    <option value="gemini-2.0-flash-lite">Gemini 2.0 Flash Lite — cheap</option>
+                    <option value="gemini-1.5-pro">Gemini 1.5 Pro</option>
+                    <option value="gemini-1.5-flash">Gemini 1.5 Flash</option>
+                  </>
+                ) : (
+                  <>
+                    <option value="gpt-4o-mini">GPT-4o Mini — fast, cheap</option>
+                    <option value="gpt-4o">GPT-4o — multimodal flagship</option>
+                    <option value="gpt-4.1">GPT-4.1 — latest generation</option>
+                    <option value="gpt-4.1-mini">GPT-4.1 Mini — fast & affordable</option>
+                    <option value="gpt-4-turbo">GPT-4 Turbo</option>
+                    <option value="gpt-3.5-turbo">GPT-3.5 Turbo — legacy</option>
+                    <option value="o1-mini">o1 Mini — reasoning</option>
+                    <option value="o3-mini">o3 Mini — fast reasoning</option>
+                  </>
+                )}
               </select>
             </div>
             <div className="form-group full-width">

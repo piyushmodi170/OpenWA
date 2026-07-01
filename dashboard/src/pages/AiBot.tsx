@@ -32,14 +32,24 @@ const TONE_OPTIONS = [
 
 const OPENAI_MODELS = [
   { value: 'gpt-4o-mini', label: 'GPT-4o Mini — fast, cheap' },
-  { value: 'gpt-4o', label: 'GPT-4o — most capable' },
+  { value: 'gpt-4o', label: 'GPT-4o — multimodal flagship' },
+  { value: 'gpt-4.1', label: 'GPT-4.1 — latest generation' },
+  { value: 'gpt-4.1-mini', label: 'GPT-4.1 Mini — fast & affordable' },
+  { value: 'gpt-4-turbo', label: 'GPT-4 Turbo — high capability' },
   { value: 'gpt-3.5-turbo', label: 'GPT-3.5 Turbo — legacy' },
+  { value: 'o1-mini', label: 'o1 Mini — reasoning model' },
+  { value: 'o1-preview', label: 'o1 Preview — advanced reasoning' },
+  { value: 'o3-mini', label: 'o3 Mini — fast reasoning' },
 ];
 
 const GEMINI_MODELS = [
+  { value: 'gemini-2.5-pro', label: 'Gemini 2.5 Pro — most capable' },
+  { value: 'gemini-2.5-flash', label: 'Gemini 2.5 Flash — fast & smart' },
   { value: 'gemini-2.0-flash', label: 'Gemini 2.0 Flash — latest, fast' },
   { value: 'gemini-2.0-flash-lite', label: 'Gemini 2.0 Flash Lite — fast, cheap' },
-  { value: 'gemini-1.5-pro', label: 'Gemini 1.5 Pro — most capable' },
+  { value: 'gemini-1.5-pro', label: 'Gemini 1.5 Pro — high capability' },
+  { value: 'gemini-1.5-flash', label: 'Gemini 1.5 Flash — fast' },
+  { value: 'gemini-1.0-pro', label: 'Gemini 1.0 Pro — stable' },
 ];
 
 function resolveModel(model: string | null | undefined, provider: string): string {

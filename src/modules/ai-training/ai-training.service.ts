@@ -148,9 +148,11 @@ export class AiTrainingService {
     try {
       if (ext === '.pdf') {
         const { PDFParse } = await import('pdf-parse');
-        const parser = new PDFParse({ data: new Uint8Array(file.buffer) });
+        const parser = new PDFParse({ verbosity: 0, data: new Uint8Array(file.buffer) });
         const result = await parser.getText();
-        content = result.text;
+        content = typeof result === 'object' && result !== null && 'text' in result
+          ? (result as { text: string }).text
+          : String(result);
         await parser.destroy();
       } else if (ext === '.docx' || ext === '.doc') {
         const mammoth = await import('mammoth');
