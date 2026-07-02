@@ -1,3 +1,47 @@
+import { existsSync } from 'fs';
+import { execSync } from 'child_process';
+
+/**
+ * Resolve the best available Chromium/Chrome executable path at runtime.
+ * Priority:
+ *  1. PUPPETEER_EXECUTABLE_PATH env var — only if the file actually exists
+ *  2. Common system paths (distro packages, snap, nix store pattern)
+ *  3. `which chromium` / `which google-chrome-stable` / `which google-chrome`
+ *  4. undefined — lets Puppeteer/whatsapp-web.js use its own bundled binary
+ */
+function resolveChromiumPath(): string | undefined {
+  const envPath = process.env.PUPPETEER_EXECUTABLE_PATH?.trim();
+  if (envPath && existsSync(envPath)) return envPath;
+
+  const candidates = [
+    '/usr/bin/chromium-browser',
+    '/usr/bin/chromium',
+    '/usr/bin/google-chrome-stable',
+    '/usr/bin/google-chrome',
+    '/snap/bin/chromium',
+    '/usr/local/bin/chromium',
+  ];
+  for (const p of candidates) {
+    if (existsSync(p)) return p;
+  }
+
+  // Try nix store glob (path changes across rebuilds)
+  try {
+    const nixChrome = execSync('find /nix/store -maxdepth 4 -name chromium -type f 2>/dev/null | grep bin/chromium | head -1', { timeout: 3000 }).toString().trim();
+    if (nixChrome && existsSync(nixChrome)) return nixChrome;
+  } catch { /* ignore */ }
+
+  // Try `which`
+  for (const bin of ['chromium', 'chromium-browser', 'google-chrome-stable', 'google-chrome']) {
+    try {
+      const p = execSync(`which ${bin} 2>/dev/null`, { timeout: 2000 }).toString().trim();
+      if (p && existsSync(p)) return p;
+    } catch { /* ignore */ }
+  }
+
+  return undefined;
+}
+
 export default () => ({
   port: parseInt(process.env.PORT || '2785', 10),
 
@@ -66,7 +110,7 @@ export default () => ({
       // Optional path to a system Chromium/Chrome binary. When unset, whatsapp-web.js
       // uses Puppeteer's bundled Chromium. Required on hosts where the bundled binary
       // is missing or incompatible (Alpine, ARM, custom base images).
-      executablePath: process.env.PUPPETEER_EXECUTABLE_PATH || undefined,
+      executablePath: resolveChromiumPath(),
     },
     sessionDataPath: process.env.SESSION_DATA_PATH || './data/sessions',
     // Baileys engine (used when ENGINE_TYPE=baileys). Multi-file auth state base dir; each session
