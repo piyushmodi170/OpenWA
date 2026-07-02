@@ -50,6 +50,7 @@ build = ["npm", "run", "build:all"]
 [userenv]
 
 [userenv.development]
+PUPPETEER_EXECUTABLE_PATH = "/nix/store/qa9cnw4v5xkxyip6mb9kxqfq1z4x2dx1-chromium-138.0.7204.100/bin/chromium"
 
 [userenv.shared]
 NODE_ENV = "production"
@@ -86,4 +87,3 @@ QUEUE_ENABLED = "false"
 CACHE_ENABLED = "false"
 POSTGRES_BUILTIN = "false"
 MINIO_BUILTIN = "false"
-PUPPETEER_EXECUTABLE_PATH = "/nix/store/qa9cnw4v5xkxyip6mb9kxqfq1z4x2dx1-chromium-138.0.7204.100/bin/chromium"
