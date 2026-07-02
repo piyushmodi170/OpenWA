@@ -1,0 +1,24 @@
+[phases.setup]
+nixPkgs = ["nodejs_22", "chromium", "python3", "gcc", "gnumake"]
+
+[phases.install]
+cmds = [
+  "sed -i 's|http://package-firewall\\.replit\\.local/npm/|https://registry.npmjs.org/|g' package-lock.json",
+  "sed -i 's|http://package-firewall\\.replit\\.local/npm/|https://registry.npmjs.org/|g' dashboard/package-lock.json",
+  "npm ci",
+  "cd dashboard && NODE_ENV=development npm ci"
+]
+
+[phases.build]
+cmds = [
+  "npm run build",
+  "cd dashboard && npm run build"
+]
+
+[start]
+cmd = "node dist/main"
+
+[variables]
+NODE_ENV = "production"
+PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "true"
+PUPPETEER_EXECUTABLE_PATH = "/run/current-system/sw/bin/chromium"
