@@ -1,61 +1,23 @@
-# OpenWA - Dockerfile
-# Multi-stage build for production-ready image
-
-# ===== Stage 1: Builder =====
-FROM docker.io/node:22-slim AS builder
-
-WORKDIR /app
-
-# Install build dependencies
-RUN apt-get update && apt-get install -y \
-    python3 \
-    make \
-    g++ \
-    && rm -rf /var/lib/apt/lists/*
-
-# Copy package files
-COPY package*.json ./
-# Copy dashboard package files early (before COPY . .) so we can rewrite their
-# lock file in the same layer and still benefit from Docker cache on npm ci.
-COPY dashboard/package*.json ./dashboard/
-
-# Rewrite Replit-internal registry URLs in BOTH lock files to the public npm registry.
-# package-lock.json files may contain http://package-firewall.replit.local URLs baked in
-# from development; that host doesn't exist outside Replit → npm ci fails with EAI_AGAIN.
-RUN sed -i 's|http://package-firewall\.replit\.local/npm/|https://registry.npmjs.org/|g' package-lock.json && \
-    sed -i 's|http://package-firewall\.replit\.local/npm/|https://registry.npmjs.org/|g' dashboard/package-lock.json
-
-# Force development mode so npm ci installs ALL deps including devDependencies.
-# Coolify injects NODE_ENV=production as a build arg which skips devDeps and breaks
-# the build (nest CLI, typescript, etc. are devDeps but required to compile).
-ENV NODE_ENV=development
-
-# Install all dependencies (including devDependencies for build)
-RUN npm ci
-
-# Copy source code
-COPY . .
-
-# Build the API (dist/) and the dashboard SPA (dashboard/dist/). The root `npm ci` above
-# ran before the dashboard source was copied, so its postinstall hook skipped the dashboard
-# deps - install them explicitly here (npm ci, reproducible from dashboard/package-lock.json).
-RUN npm run build && npm run dashboard:ci && npm run dashboard:build
-
-# ===== Stage 2: Production =====
-FROM docker.io/node:22-slim AS production
+# OpenWA - Dockerfile (single-stage, no BuildKit/buildx required)
+FROM docker.io/node:22-slim
 
 # Build arg to control Chromium installation.
 # Set INSTALL_CHROMIUM=true in your Coolify/Docker build args if you use the
 # Puppeteer-based engine. The default (false) skips Chromium to keep the image
-# lean and the build fast — Baileys-based sessions do not require a browser.
+# lean — Baileys-based sessions do not require a browser.
 ARG INSTALL_CHROMIUM=false
 
-# Always install minimal runtime utilities (fast — only 4 small packages).
+# Install runtime utilities + build tools (needed to compile native modules).
+# build-essential/python3/make/g++ are only used during `npm ci` / `npm run build`;
+# they stay in the image (single-stage trade-off) but add ~200 MB.
 RUN apt-get update && apt-get install -y --no-install-recommends \
     dumb-init \
     gosu \
     curl \
     procps \
+    python3 \
+    make \
+    g++ \
     && rm -rf /var/lib/apt/lists/*
 
 # Conditionally install Chromium and its GUI dependencies only when requested.
@@ -91,36 +53,42 @@ RUN groupadd -r openwa && useradd -r -g openwa openwa
 
 WORKDIR /app
 
-# Copy package files
+# Copy package files first for better layer caching
 COPY package*.json ./
+COPY dashboard/package*.json ./dashboard/
 
-# Rewrite Replit-internal registry URLs (same fix as builder stage)
-RUN sed -i 's|http://package-firewall\.replit\.local/npm/|https://registry.npmjs.org/|g' package-lock.json
+# Rewrite Replit-internal registry URLs in BOTH lock files to the public npm registry.
+# package-lock.json files may contain http://package-firewall.replit.local URLs baked in
+# from development; that host doesn't exist outside Replit → npm ci fails with EAI_AGAIN.
+RUN sed -i 's|http://package-firewall\.replit\.local/npm/|https://registry.npmjs.org/|g' package-lock.json && \
+    sed -i 's|http://package-firewall\.replit\.local/npm/|https://registry.npmjs.org/|g' dashboard/package-lock.json
 
-# Install production dependencies only
-RUN npm ci --omit=dev && npm cache clean --force
+# Force development mode so npm ci installs ALL deps including devDependencies.
+# Coolify injects NODE_ENV=production as a build arg which skips devDeps and breaks
+# the build (nest CLI, typescript, etc. are devDeps but required to compile).
+ENV NODE_ENV=development
 
-# Copy built application from builder stage
-COPY --from=builder /app/dist ./dist
+# Install all dependencies (including devDependencies needed to compile)
+RUN npm ci
 
-# Copy the bundled dashboard SPA; ServeStaticModule serves it from this same process/port
-# (app.module.ts resolves dashboard/dist relative to dist/). Single container, single port.
-COPY --from=builder /app/dashboard/dist ./dashboard/dist
+# Copy source and build
+COPY . .
+
+# Build the API (dist/) and the dashboard SPA (dashboard/dist/).
+# dashboard:ci installs dashboard deps from its own lock file.
+RUN npm run build && npm run dashboard:ci && npm run dashboard:build
+
+# Prune devDependencies after build — keeps the image lean without a second stage.
+RUN npm prune --omit=dev && npm cache clean --force
+
+# Switch back to production mode for runtime
+ENV NODE_ENV=production
 
 # Create data directories with correct ownership.
-# Only chown /app/data — the entrypoint already does this at runtime too.
-# Chowning all of /app (including node_modules) is extremely slow and causes
-# build timeouts in Coolify / self-hosted Docker environments.
 RUN mkdir -p ./data/sessions ./data/media ./data/plugins && \
     chown -R openwa:openwa /app/data
 
-# The non-root openwa user has no home of its own (`useradd -r`, no -m). Chromium resolves the home
-# dir from the passwd entry via glib's getpwuid() — it IGNORES $HOME — so it tries to read/write
-# /home/openwa, which does not exist. On hardened/read-only hosts that makes the browser HARD-CRASH
-# at launch (SIGTRAP/int3, logged as "chrome_crashpad_handler: --database is required"). The robust
-# fix is to point Chromium's config + cache at writable, pre-created dirs via XDG_* (honored directly,
-# bypassing the passwd lookup); docker-entrypoint.sh creates them owned by openwa. On a read_only
-# rootfs these live on the tmpfs /tmp. HOME is kept for any other HOME-relative tooling. See #254/#242.
+# Chromium config/cache dirs — see comment in multi-stage version re: XDG_* bypass.
 ENV HOME=/app/data
 ENV XDG_CONFIG_HOME=/tmp/.config
 ENV XDG_CACHE_HOME=/tmp/.cache
@@ -137,7 +105,5 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
     CMD curl -f http://localhost:2785/api/health/ready || exit 1
 
 # dumb-init is PID 1 and handles signal forwarding.
-# It execs docker-entrypoint.sh (as root), which fixes volume ownership and
-# then drops to the openwa user via gosu before starting the node process.
 ENTRYPOINT ["dumb-init", "--", "/usr/local/bin/docker-entrypoint.sh"]
 CMD ["node", "dist/main"]
